@@ -1,0 +1,19 @@
+# place to /etc/systemd/system/togetherness.service
+# or, better, create with
+# sudo systemctl edit --full --force togetherness.service
+
+[Unit]
+Description=Togetherness backend and database
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=3
+WorkingDirectory=/srv/togetherness
+ExecStart=/usr/bin/docker-compose -f docker-compose.yml up
+ExecStop=/usr/bin/docker-compose -f docker-compose.yml down
+
+[Install]
+WantedBy=default.target

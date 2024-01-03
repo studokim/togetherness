@@ -1,0 +1,64 @@
+version: '3.4'
+services:
+  back:
+    build:
+      dockerfile: deploy/Dockerfile-back
+      context: ..
+    container_name: togetherness_back
+    environment:
+      - DATABASE_URL=postgres://togetherness:Edinenie2@db/togetherness?sslmode=disable
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/"]
+      start_period: 20s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - togetherness
+    ports:
+      - "0.0.0.0:8080:8080"
+  db:
+    image: postgres:latest
+    container_name: togetherness_db
+    environment:
+      - POSTGRES_DB=togetherness
+      - POSTGRES_USER=togetherness
+      - POSTGRES_PASSWORD=Edinenie2
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "togetherness"]
+      start_period: 20s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - togetherness
+    volumes:
+      - ./tmp/togetherness_db:/var/lib/postgresql/data
+  pgadmin:
+    build:
+      dockerfile: Dockerfile-pgadmin
+      context: .
+    container_name: togetherness_pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=togetherness@example.com
+      - PGADMIN_DEFAULT_PASSWORD=Edinenie2
+      - PGADMIN_SERVER_JSON_FILE=/pgadmin4/pgadmin-servers.json
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:80/"]
+      start_period: 20s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - togetherness
+    ports:
+      - "0.0.0.0:8081:80"
+
+networks:
+  togetherness:

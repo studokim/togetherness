@@ -1,0 +1,14 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "Togetherness",
+            "Group": "Servers",
+            "Port": 5432,
+            "Username": "togetherness",
+            "Password": "Edinenie2",
+            "Host": "db",
+            "SSLMode": "disable",
+            "MaintenanceDB": "postgres"
+        }
+    }
+}
