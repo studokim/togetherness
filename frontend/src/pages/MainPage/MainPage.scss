@@ -1,0 +1,75 @@
+// <div className='MainPage'>
+// <div className='timer'>XX:XX</div>
+// <div className='avatar'>
+//     <div className='qr-code'></div>
+// </div>
+// <div className='goldCount'></div>
+// <CustomButton>Взаимодействовать</CustomButton>
+// </div>
+
+.MainPage {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+
+    .timer {
+        width: 100%;
+        text-align: center;
+    }
+
+    .avatar {
+        width: 100%;
+        height: 50%;
+        background: center / contain no-repeat url(../../../public/images/unicorn.jpg);
+        display: flex;
+        justify-content: end;
+
+        .qr-code-btn {
+            height: 100px;
+            width: 100px;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+
+    .goldCount {
+        height: 50px;
+        width: 80%;
+        text-align: center;
+        background: goldenrod;
+        border: 2px solid silver;
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        span {
+            height: auto;
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+
+    .qr-code-substrate {
+        position: fixed;
+        background-color: rgba(0, 0, 0, 0.384);
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .qr-code {
+            width: 100%;
+            height: 50%;
+            background: center / contain no-repeat url(../../../public/images/unicorn.jpg);
+        }
+    }
+}

@@ -1,0 +1,20 @@
+@import "./varables.scss";
+
+.App {
+  text-align: center;
+  background-color: $main-c;
+  height: 100%;
+  width: 100%;
+  min-width: 320px;
+  min-height: 640px;
+  max-width: 900px;
+  max-height: 900px;
+}
+
+@font-face {
+  font-family: "BadScript";
+  src: url("./font/BadScript-Regular.ttf");
+  font-style: normal;
+  font-weight: 200;
+  /* font-variation-settings: "wdth" 1000; */
+}

@@ -1,0 +1,19 @@
+@import "../../varables.scss";
+
+.CustomButton{
+    margin: 5px;
+    background-color: $main-c;
+    width: 50%;
+    min-width: 100px;
+    height: 35px;
+    font-size: 30px;
+    border: 1px solid $sub-main-c;
+    border-radius: 10px;
+    outline: none;
+    font-size: 20px;
+    font-family: BadScript;
+
+    &:disabled{
+        background: red;
+    }
+}
