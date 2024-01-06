@@ -61,7 +61,7 @@ export default function MainPage() {
             //     backgroundPosition: 'center',
             // }}
             >
-                <img src={`${avatars[selectedAvatar]}`} />
+                <img className='avatarImage' src={`${avatars[selectedAvatar]}`} />
 
                 <div className='qr-code-btn' onClick={() => { setQRCodeVisible(true) }}>
                     <img src={'./images/qrCodeIcon.svg'} />
