@@ -6,13 +6,19 @@ import { useNavigate } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 
 import { QrScanner } from '@yudiel/react-qr-scanner';
+import { useSelector } from 'react-redux';
+// import imageFilename from '/images/avatars/avatar-svgrepo-com.svg';
 
 
 export default function MainPage() {
 
     const [qrCodeVisible, setQRCodeVisible] = useState(false);
     const [qrScanerVisible, setQrScanerVisible] = useState(false);
+    const name = useSelector((state) => state.status.name);
+    const avatars = useSelector((state) => state.status.avatars);
+    const selectedAvatar = useSelector((state) => state.status.selectedAvatar);
 
+    const url1 = '/images/avatars/avatar-svgrepo-com (1).svg'
 
     const navigator = useNavigate();
 
@@ -43,8 +49,21 @@ export default function MainPage() {
             }
 
             <div className='timer'>XX:XX</div>
-            <div className='avatar'>
-                <div className='qr-code-btn' onClick={() => { setQRCodeVisible(true) }}> 
+            <h1>{name}</h1>
+            <div className='avatar'
+            // style={{ backgroundImage: `center / contain no-repeat url(../../../public/${avatars[selectedAvatar]})` }}
+            // style={{
+            //     // backgroundImage: `center / contain no-repeat url(${url1})`,
+            //     backgroundImage: `url(${imageFilename})`,
+            //     // backgroundImage: `url('/images/avatars/avatar-svgrepo-com (1).svg')`,
+            //     backgroundSize: 'contain',
+            //     backgroundRepeat: 'no-repeat',
+            //     backgroundPosition: 'center',
+            // }}
+            >
+                <img src={`${avatars[selectedAvatar]}`} />
+
+                <div className='qr-code-btn' onClick={() => { setQRCodeVisible(true) }}>
                     <img src={'./images/qrCodeIcon.svg'} />
                 </div>
             </div>

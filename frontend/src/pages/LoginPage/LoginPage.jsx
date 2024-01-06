@@ -33,6 +33,6 @@ export function LoginPage() {
                 <button className='arrow' onClick={() => incrementAvatar()}></button>
             </div>
             <CustomButton onClick={() => { if (name !== "") navigator("fraction") }} disabled={name === ""}>Далее</CustomButton>
-        </div>
+        </div >
     )
 }

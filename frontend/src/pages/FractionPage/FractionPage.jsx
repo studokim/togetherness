@@ -13,10 +13,10 @@ const FractionPage = () => {
         <div className='FractionPage'>
             <div className='header'>Выберите фракцию</div>
             <div className='fractionContainer'>
-                <OneFraction fraction={1} selected={fraction === 1} url={'/images/dog.jpg'} />
-                <OneFraction fraction={2} selected={fraction === 2} url={'/images/nothing.png'} />
-                <OneFraction fraction={3} selected={fraction === 3} url={'/images/crash.jpeg'} />
-                <OneFraction fraction={4} selected={fraction === 4} url={'/images/cat.jpg'} />
+                <OneFraction fraction={1} selected={fraction === 1} url={'/images/fractions/dog.jpg'} />
+                <OneFraction fraction={2} selected={fraction === 2} url={'/images/fractions/nothing.png'} />
+                <OneFraction fraction={3} selected={fraction === 3} url={'/images/fractions/crash.jpeg'} />
+                <OneFraction fraction={4} selected={fraction === 4} url={'/images/fractions/cat.jpg'} />
             </div>
             <CustomButton onClick={() => { if (fraction !== null) navigator("/main") }}>Далее</CustomButton>
         </div>
