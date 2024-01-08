@@ -5,6 +5,7 @@ use std::{
 };
 
 mod log;
+mod model;
 mod rest;
 
 #[derive(Parser, Debug)]

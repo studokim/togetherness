@@ -1,7 +1,15 @@
-use axum::{routing::get, Router};
+use axum::{middleware, routing::get, Router};
 
 use super::handlers;
+use super::layers;
 
 pub fn new() -> Router {
-    Router::new().route("/", get(handlers::index))
+    let api = Router::new()
+        .route("/act", get(handlers::act))
+        .route("/player", get(handlers::player))
+        .layer(middleware::from_fn(layers::auth));
+
+    Router::new()
+        .route("/", get(handlers::index))
+        .nest("/api", api)
 }
