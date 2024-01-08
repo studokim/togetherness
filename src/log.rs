@@ -1,4 +1,4 @@
-pub use tracing::{error, info, warn};
+pub use tracing::{debug, error, info, warn};
 
 use time::UtcOffset;
 use tracing_subscriber::{fmt::time::OffsetTime, FmtSubscriber};
