@@ -5,20 +5,26 @@ use axum::{
 };
 use tower_http::cors::CorsLayer;
 
-use super::handlers;
+use super::handlers::{admin, api, html};
 use super::layers;
 
 pub fn new() -> Router {
     let api = Router::new()
-        .route("/player", post(handlers::post_player))
-        .route("/player/:id", get(handlers::get_player))
-        .route("/action", post(handlers::post_action))
-        .route("/action/:id", get(handlers::get_action))
-        .route("/gold/:id", get(handlers::get_gold))
+        .route("/player", post(api::post_player))
+        .route("/player/:id", get(api::get_player))
+        .route("/action", post(api::post_action))
+        .route("/action/:id", get(api::get_action))
+        .route("/gold/:id", get(api::get_gold))
+        .layer(CorsLayer::permissive())
+        .layer(middleware::from_fn(layers::auth));
+
+    let admin = Router::new()
+        .route("/startgame", get(admin::startgame))
         .layer(CorsLayer::permissive())
         .layer(middleware::from_fn(layers::auth));
 
     Router::new()
-        .route("/", get(handlers::index))
+        .route("/", get(html::index))
         .nest("/api", api)
+        .nest("/admin", admin)
 }

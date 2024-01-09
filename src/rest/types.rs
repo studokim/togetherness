@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use serde::{Deserialize, Serialize};
 
 use crate::model;
@@ -13,20 +15,20 @@ pub enum Error {
 pub struct DefaultResponse {
     pub ok: bool,
     pub error: Error,
-    pub timer: String,
+    pub timer: Duration,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct PlayerResponse {
     pub player: model::Player,
     pub error: Error,
-    pub timer: String,
+    pub timer: Duration,
 }
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ActionResponse {
     pub actions: Vec<model::Action>,
     pub error: Error,
-    pub timer: String,
+    pub timer: Duration,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

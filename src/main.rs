@@ -4,9 +4,11 @@ use std::{
     str::FromStr,
 };
 
+mod db;
 mod log;
 mod model;
 mod rest;
+mod timer;
 
 #[derive(Parser, Debug)]
 #[command(version, about = "Приложение к празднику Единения 2024", long_about = None)]

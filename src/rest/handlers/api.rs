@@ -1,34 +1,31 @@
-use axum::{extract::Path, response::Html, Json};
+use axum::{extract::Path, Json};
 
-use super::types;
+use crate::db::repository;
+use crate::rest::types;
 use crate::{log, model};
 
-pub async fn index() -> Html<&'static str> {
-    log::debug!("index.html");
-    // Include an utf-8 file contents as `&'static str` in compile time.
-    // This macro is relative to current `handlers.rs` file.
-    Html(include_str!("index.html"))
-}
-
 pub async fn post_player(player: Json<types::PlayerRequest>) -> Json<types::DefaultResponse> {
+    let repo = repository::Repository::new();
     log::debug!("Registering player: name={}, id={}", player.name, player.id);
     Json(types::DefaultResponse {
         ok: true,
-        timer: "Now".to_string(),
+        timer: repo.get_timer().remaining(),
         error: types::Error::None,
     })
 }
 
 pub async fn get_player(Path(id): Path<String>) -> Json<types::PlayerResponse> {
+    let repo = repository::Repository::new();
     log::debug!("Returning player: id={}", id);
     Json(types::PlayerResponse {
         player: model::Player::new(&id, "John", 0, 11),
         error: types::Error::None,
-        timer: "Now".to_string(),
+        timer: repo.get_timer().remaining(),
     })
 }
 
 pub async fn post_action(action: Json<types::ActionRequest>) -> Json<types::DefaultResponse> {
+    let repo = repository::Repository::new();
     log::debug!(
         "Making action: id={}, subject={}, object={}",
         action.action_id,
@@ -37,12 +34,13 @@ pub async fn post_action(action: Json<types::ActionRequest>) -> Json<types::Defa
     );
     Json(types::DefaultResponse {
         ok: true,
-        timer: "Now".to_string(),
+        timer: repo.get_timer().remaining(),
         error: types::Error::None,
     })
 }
 
 pub async fn get_action(Path(id): Path<String>) -> Json<types::ActionResponse> {
+    let repo = repository::Repository::new();
     log::debug!("Returning actions of player: id={}", id);
     Json(types::ActionResponse {
         actions: vec![
@@ -58,7 +56,7 @@ pub async fn get_action(Path(id): Path<String>) -> Json<types::ActionResponse> {
             },
         ],
         error: types::Error::None,
-        timer: "Now".to_string(),
+        timer: repo.get_timer().remaining(),
     })
 }
 
