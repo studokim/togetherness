@@ -3,11 +3,13 @@ import "./FractionPage.scss";
 import CustomButton from '../../UI/CustomButton/CustomButton';
 import { useNavigate } from 'react-router-dom';
 import OneFraction from './OneFraction';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { createPerson, setTimer, setId } from '../../redux/status'
 
 const FractionPage = () => {
     const navigator = useNavigate();
     const fraction = useSelector((state) => state.status.fraction);
+    const dispatch = useDispatch()
 
     return (
         <div className='FractionPage'>
@@ -18,7 +20,7 @@ const FractionPage = () => {
                 <OneFraction fraction={3} selected={fraction === 3} url={'/images/fractions/crash.jpeg'} />
                 <OneFraction fraction={4} selected={fraction === 4} url={'/images/fractions/cat.jpg'} />
             </div>
-            <CustomButton onClick={() => { if (fraction !== null) navigator("/main") }}>Далее</CustomButton>
+            <CustomButton onClick={() => { if (fraction !== null) dispatch(createPerson({ callback: (timer, id) => { navigator("/main"); dispatch(setTimer(timer)); dispatch(setId(id)); } })) }}>Далее</CustomButton>
         </div>
     );
 }

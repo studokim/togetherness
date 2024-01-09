@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import "./LoginPage.scss"
 import CustomInput from '../../UI/CustomInput/CustomInput'
 import CustomButton from '../../UI/CustomButton/CustomButton';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'
-import { setName, setAvatar } from '../../redux/status'
+import { setName, setAvatar, getPerson } from '../../redux/status'
+import { getCookie } from "../../helpers/cookies.js"
 
 export function LoginPage() {
     const navigator = useNavigate();
@@ -13,9 +14,11 @@ export function LoginPage() {
     const selectedAvatar = useSelector(state => state.status.selectedAvatar);
     const dispatch = useDispatch();
 
+    useEffect(() => { if (getCookie("id")) { dispatch(getPerson(getCookie("id"))); console.log("d[jl"); } }, [])
+
     function decrementAvatar() {
-        if (selectedAvatar === 0) dispatch(setAvatar(avatars.length - 1))
-        else dispatch(setAvatar(selectedAvatar - 1))
+        if (selectedAvatar === 0) dispatch(setAvatar(avatars.length - 1));
+        else dispatch(setAvatar(selectedAvatar - 1));
     }
 
     function incrementAvatar() {

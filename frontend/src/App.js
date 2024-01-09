@@ -7,6 +7,7 @@ import InteractionPage from './pages/InteractionPage/InteractionPage';
 
 
 function App() {
+
   return (
     <div className="App">
       <BrowserRouter>
