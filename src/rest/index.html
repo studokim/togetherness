@@ -8,7 +8,23 @@
 </head>
 
 <body>
-    <a>This server doesn't provide any HTML pages. For API, refer to <a href=/api>/api</a>.</a>
+    <h1>Togetherness back</h1>
+    <p>This server doesn't provide any HTML pages. For API, refer to <a href=/api>/api</a>.</p>
+
+    <h2>Available API</h2>
+    <ul>
+        <li><code>GET /api/player/:name -> {player={name, avatar_id, faction_id}, error}</code>
+            — проверяем в реальном времени, что имя не занято;
+            пока «занято», не разрешаем переходить на экран выбора фракции</li>
+        <li><code>POST /api/player {player} -> {ok, error, timer}</code>
+            — регистрируем игрока</li>
+        <li><code>POST /api/action {action={subject_name, object_name, action_id}} -> {ok, error, timer}</code>
+            — взаимодействуем, в qr-коде было зашифровано имя игрока-объекта</li>
+        <li><code>GET /api/action/:name -> {[action], error, timer}</code>
+            — показываем взаимодействия с участием игрока как в роли субъекта, так и объекта</li>
+        <li><code>GET /api/gold/:name -> {int, error}</code>
+            — показываем количество золота, надо обновлять каждые несколько секунд</li>
+    </ul>
 </body>
 
 </html>
