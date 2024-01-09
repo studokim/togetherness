@@ -13,8 +13,8 @@ pub struct Player {
 }
 
 impl Player {
-    pub fn new(id: &str, name: &str, avatar_id: u32, faction_id: u32) -> Player {
-        Player {
+    pub fn new(id: &str, name: &str, avatar_id: u32, faction_id: u32) -> Self {
+        Self {
             id: id.to_string(),
             name: name.to_string(),
             avatar_id,
