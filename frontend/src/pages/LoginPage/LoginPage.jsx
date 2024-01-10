@@ -14,7 +14,7 @@ export function LoginPage() {
     const selectedAvatar = useSelector(state => state.status.selectedAvatar);
     const dispatch = useDispatch();
 
-    useEffect(() => { if (getCookie("id")) { dispatch(getPerson(getCookie("id"))); console.log("d[jl"); } }, [])
+
 
     function decrementAvatar() {
         if (selectedAvatar === 0) dispatch(setAvatar(avatars.length - 1));

@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { getCookie, setCookie } from "../helpers/cookies.js"
 
+const ADDR = 'http://127.0.0.1:8080/api';
 
 export const status = createSlice({
   name: 'counter',
@@ -43,7 +44,7 @@ export const status = createSlice({
       state.id = action.payload.id;
     },
     checkName: (name) => {
-      axios.get(`http://127.0.0.1:8080/api/player/${name}`)
+      axios.get(`${ADDR}/player/${name}`)
 
         .then(res => {
           const persons = res.data;
@@ -55,8 +56,8 @@ export const status = createSlice({
 
     },
     createPerson: (state, action) => {
-      const id = new Date().getTime();
-      axios.post(`http://127.0.0.1:8080/api/player`,
+      const id = new Date().getTime().toString();
+      axios.post(`${ADDR}/player`,
         {
           name: state.name,
           avatar_id: state.selectedAvatar,
@@ -67,18 +68,18 @@ export const status = createSlice({
           console.log(res.data);
           if (res.data.ok) {
             action.payload.callback(res.data.timer, id);
-            setCookie("id", id)
+            setCookie("togethernessId", id)
           }
         })
     },
-
+    //_______ При обновлении страницы запрашивает данные игрока и передаёт результат в callback в котором все сеттеры на имя, аватар, фракцию и прочее ___________//
     getPerson: (state, action) => {
-      console.log(action.payload.id)
-      axios.get(`http://127.0.0.1:8080/api/player/${action.payload.id}`)
-
+      console.log(action.payload)
+      axios.get(`${ADDR}/player/${action.payload.id}`)
         .then(res => {
           const persons = res.data;
           console.log(persons);
+          action.payload.callback(res.data.player.name, res.data.player.id, res.data.player.avatar_id, res.data.player.faction_id)
         })
         .catch(error => {
           console.log(error);
