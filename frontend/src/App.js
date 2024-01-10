@@ -36,7 +36,7 @@ function App() {
           <Route path='/' element={<LoginPage />} />
           <Route path='/fraction' element={<FractionPage />} />
           <Route path='/main' element={<MainPage />} />
-          <Route path='/interaction' element={<InteractionPage />} />
+          {/* <Route path='/interaction' element={<InteractionPage />} /> */}
           <Route path='/status' element={<LoginPage />} />
         </Routes>
       </BrowserRouter>

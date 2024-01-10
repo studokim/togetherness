@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./MainPage.scss"
 import CustomButton from '../../UI/CustomButton/CustomButton'
 import { useNavigate } from 'react-router-dom';
@@ -7,73 +7,80 @@ import { QRCodeSVG } from 'qrcode.react';
 
 import { QrScanner } from '@yudiel/react-qr-scanner';
 import { useSelector } from 'react-redux';
-// import imageFilename from '/images/avatars/avatar-svgrepo-com.svg';
+import InteractionPage from '../InteractionPage/InteractionPage';
+import { Timer } from './Timer/Timer';
 
 
 export default function MainPage() {
 
-    const [qrCodeVisible, setQRCodeVisible] = useState(false);
-    const [qrScanerVisible, setQrScanerVisible] = useState(false);
+    const [visibility, setVisibility] = useState({
+        qrCode: false,
+        qrScaner: false,
+        // ineraction: false,
+    })
+    const id = useSelector((state) => state.status.id);
     const name = useSelector((state) => state.status.name);
     const avatars = useSelector((state) => state.status.avatars);
     const selectedAvatar = useSelector((state) => state.status.selectedAvatar);
-
-    const url1 = '/images/avatars/avatar-svgrepo-com (1).svg'
+    const [targetId, setTargetId] = useState(null);
 
     const navigator = useNavigate();
 
+    useEffect(() => {
+        console.log("ID", id)
+    }, [id])
+
     return (
         <div className='MainPage'>
-            {
-                qrCodeVisible ?
-                    <div className='qr-code-substrate' onClick={(e) => { e.stopPropagation(); setQRCodeVisible(false); }}>
-                        {/* <div className='qr-code'></div> */}
-                        <QRCodeSVG value="https://pikabu.ru/story/belaya_vorona_1999_memnyiy_film_populyarnyiy_v_rf_v_nachale_nulevyikh__smotrim_v_1080_10672321" />
-                    </div>
-                    :
-                    null
-            }
-
-            {
-                qrScanerVisible
+            {//_______ ОТОБРАЖАЕМ ЛИБО СТРАНИЦУ ВЗАИМОДЕЙСТВИЯ ЛИБО ГЛАВНУЮ СТРАНИЦУ _________//
+                targetId !== null   //если получили шв другого игроока
                     ?
-                    <div className='qr-code-substrate' onClick={(e) => { e.stopPropagation(); setQrScanerVisible(false); }}>
-                        <QrScanner
-                            containerStyle={{ position: "absolute", height: "100%", width: "100%" }}
-                            onDecode={(result) => { alert(result); navigator('/interaction'); }}
-                            onError={(error) => { console.log(error?.message); alert("Ошибка. Попробуйте еще раз.."); navigator('/interaction'); }}
-                        />
-                    </div>
+                    <InteractionPage
+                        targetId={targetId}
+                        close={() => { setTargetId(null); setVisibility({ qrCode: false, qrScaner: false }) }}
+                        id={id}
+                    />
                     :
-                    null
-            }
+                    <>
+                        {
+                            visibility.qrCode ?
+                                <div className='qr-code-substrate' onClick={(e) => { e.stopPropagation(); setVisibility({ ...visibility, qrCode: false }); }}>
+                                    <QRCodeSVG value={id} />
+                                </div>
+                                :
+                                null
+                        }
 
-            <div className='timer'>XX:XX</div>
-            <h1>{name}</h1>
-            <div className='avatar'
-            // style={{ backgroundImage: `center / contain no-repeat url(../../../public/${avatars[selectedAvatar]})` }}
-            // style={{
-            //     // backgroundImage: `center / contain no-repeat url(${url1})`,
-            //     backgroundImage: `url(${imageFilename})`,
-            //     // backgroundImage: `url('/images/avatars/avatar-svgrepo-com (1).svg')`,
-            //     backgroundSize: 'contain',
-            //     backgroundRepeat: 'no-repeat',
-            //     backgroundPosition: 'center',
-            // }}
-            >
-                <img className='avatarImage' src={`${avatars[selectedAvatar]}`} />
+                        {
+                            visibility.qrScaner
+                                ?
+                                <div className='qr-code-substrate' onClick={(e) => { e.stopPropagation(); setVisibility({ ...visibility, qrScaner: false }); }}>
+                                    <QrScanner
+                                        containerStyle={{ position: "absolute", height: "100%", width: "100%" }}
+                                        onDecode={(result) => { console.log(result); setTargetId(result); }}
+                                        onError={(error) => { console.log(error?.message); setTargetId("1704886751234"); }}
+                                    />
+                                </div>
+                                :
+                                null
+                        }
 
-                <div className='qr-code-btn' onClick={() => { setQRCodeVisible(true) }}>
-                    <img src={'./images/qrCodeIcon.svg'} />
-                </div>
-            </div>
-            <div className='goldCount'><span>120 G</span></div>
-            <CustomButton onClick={() => {
-                setQrScanerVisible(true);
-                // navigator('/interaction')
-            }}>
-                Взаимодействовать
-            </CustomButton>
+                        <Timer />
+                        <h1>{name}</h1>
+                        <div className='avatar'>
+                            <img className='avatarImage' src={`${avatars[selectedAvatar]}`} />
+
+                            <div className='qr-code-btn' onClick={() => { setVisibility({ ...visibility, qrCode: true }); }}>
+                                <img src={'./images/qrCodeIcon.svg'} />
+                            </div>
+                        </div>
+                        <div className='goldCount'><span>120 G</span></div>
+                        <CustomButton onClick={() => { setVisibility({ ...visibility, qrScaner: true }); }}>
+                            Взаимодействовать
+                        </CustomButton>
+                        <CustomButton onClick={() => { console.log("subgect", id) }}>STATUS</CustomButton>
+                    </>}
         </div>
+
     )
 }

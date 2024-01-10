@@ -9,7 +9,7 @@ import { createPerson, setTimer, setId } from '../../redux/status'
 const FractionPage = () => {
     const navigator = useNavigate();
     const fraction = useSelector((state) => state.status.fraction);
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     return (
         <div className='FractionPage'>

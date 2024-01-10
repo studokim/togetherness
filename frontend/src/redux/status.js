@@ -8,7 +8,7 @@ export const status = createSlice({
   name: 'counter',
   initialState: {
     id: '111111',
-    timer: null,
+    timer: 3600,
     name: "",
     fraction: null,
     avatars: [
@@ -37,11 +37,11 @@ export const status = createSlice({
     },
     setTimer: (state, action) => {
       console.log(action.payload)
-      state.timer = action.payload.timer;
+      state.timer = action.payload;
     },
     setId: (state, action) => {
       console.log(action.payload)
-      state.id = action.payload.id;
+      state.id = action.payload;
     },
     checkName: (name) => {
       axios.get(`${ADDR}/player/${name}`)
@@ -74,22 +74,37 @@ export const status = createSlice({
     },
     //_______ При обновлении страницы запрашивает данные игрока и передаёт результат в callback в котором все сеттеры на имя, аватар, фракцию и прочее ___________//
     getPerson: (state, action) => {
-      console.log(action.payload)
+      // console.log(action.payload)
       axios.get(`${ADDR}/player/${action.payload.id}`)
         .then(res => {
           const persons = res.data;
-          console.log(persons);
+          console.log("getPerson", persons);
           action.payload.callback(res.data.player.name, res.data.player.id, res.data.player.avatar_id, res.data.player.faction_id)
         })
         .catch(error => {
           console.log(error);
         })
-
     },
 
+    //_______ Взаимодействие с другим персонажем ___________//
+    createAction: (state, action) => {
+      const id = new Date().getTime().toString();
+      axios.post(`${ADDR}/action`,
+        {
+          subject_id: state.id,
+          object_id: action.payload.targetId,
+          action_id: action.payload.actionId,
+        })
+        .then(res => {
+          console.log(res.data);
+          if (res.data.ok) {
+            action.payload.callback(res.data.timer);
+          }
+        })
+    },
   },
 })
 
-export const { setName, setFraction, setAvatar, createPerson, setTimer, setId, getPerson } = status.actions
+export const { setName, setFraction, setAvatar, createPerson, setTimer, setId, getPerson, createAction } = status.actions
 
 export default status.reducer
