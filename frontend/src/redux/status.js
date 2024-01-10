@@ -2,7 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { setCookie } from "../helpers/cookies.js"
 
-const ADDR = process.env.ADDR ? process.env.ADDR : 'http://127.0.0.1:8080/api';
+const ADDR = process.env.REACT_APP_ADDR ? process.env.REACT_APP_ADDR : 'http://127.0.0.1:8080/api';
+if (!process.env.REACT_APP_ADDR) console.warn("Не обнаружена переменная океружения");
 
 export const status = createSlice({
   name: 'counter',

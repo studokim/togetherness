@@ -31,6 +31,8 @@ function App() {
     }
   }, [])
 
+  console.log(process.env.REACT_APP_ADDR);
+
   return (
     <div className="App">
       <BrowserRouter>
