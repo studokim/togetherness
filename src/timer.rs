@@ -14,7 +14,7 @@ impl Timer {
         }
     }
 
-    pub fn remaining(&self) -> std::time::Duration {
-        (time::OffsetDateTime::now_utc() - self.started - self.duration).unsigned_abs()
+    pub fn remaining(&self) -> i64 {
+        (time::OffsetDateTime::now_utc() - self.started + self.duration).whole_seconds()
     }
 }
