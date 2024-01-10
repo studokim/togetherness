@@ -15,8 +15,8 @@ services:
   #     - togetherness
   #   ports:
   #     - "0.0.0.0:8079:3000"
-  # environment:
-  #   - ADDR='http://127.0.0.1:8080/api'
+  #   environment:
+  #     - ADDR='http://127.0.0.1:8080/api'
 
   back:
     build:
