@@ -21,7 +21,7 @@ const InteractionPage = ({ targetId, close, id }) => {
     }, [targetId])
 
     function action(actionId) {
-        dispatch(createAction({ targetId, actionId, callback: (timer) => setTimer(timer) }));
+        dispatch(createAction({ targetId, actionId, callback: (timer) => dispatch(setTimer(timer)) }));
         close();
     }
 

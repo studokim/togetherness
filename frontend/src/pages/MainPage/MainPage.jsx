@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import "./MainPage.scss"
 import CustomButton from '../../UI/CustomButton/CustomButton'
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 import { QRCodeSVG } from 'qrcode.react';
 
@@ -78,7 +78,7 @@ export default function MainPage() {
                         <CustomButton onClick={() => { setVisibility({ ...visibility, qrScaner: true }); }}>
                             Взаимодействовать
                         </CustomButton>
-                        <CustomButton onClick={() => { console.log("subgect", id) }}>STATUS</CustomButton>
+                        <CustomButton onClick={() => { navigator("/status") }}>STATUS</CustomButton>
                     </>}
         </div>
 

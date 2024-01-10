@@ -15,6 +15,6 @@
 
 ## Предпросмотр фронта
 
-https://6599e62f482624297a19b621--tourmaline-gnome-44c32e.netlify.app/
+https://659ebaeb272ad10800eaf3ed--tourmaline-gnome-44c32e.netlify.app/
 
 Задел под мобильные экраны. Адаптивной верстки нет.

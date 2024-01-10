@@ -7,7 +7,8 @@ import InteractionPage from './pages/InteractionPage/InteractionPage';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { getCookie } from './helpers/cookies';
-import { getPerson, setAvatar, setFraction, setId, setName } from './redux/status';
+import { getPerson, setAvatar, setFraction, setId, setName, setTimer } from './redux/status';
+import { StatusPage } from './pages/StatusPage/StatusPage';
 
 function App() {
 
@@ -18,11 +19,12 @@ function App() {
     //Если в куках есть id
     if (id !== undefined) {
       dispatch(getPerson({
-        id, callback: (name, id, avatarId, fractionId) => {
+        id, callback: (name, id, avatarId, fractionId, timer) => {
           dispatch(setName(name));
           dispatch(setId(id));
           dispatch(setFraction(fractionId));
           dispatch(setAvatar(avatarId));
+          dispatch(setTimer(timer))
         }
       }));
       console.log("Обновление");
@@ -37,7 +39,7 @@ function App() {
           <Route path='/fraction' element={<FractionPage />} />
           <Route path='/main' element={<MainPage />} />
           {/* <Route path='/interaction' element={<InteractionPage />} /> */}
-          <Route path='/status' element={<LoginPage />} />
+          <Route path='/status' element={<StatusPage />} />
         </Routes>
       </BrowserRouter>
     </div>
