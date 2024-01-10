@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-import { getCookie, setCookie } from "../helpers/cookies.js"
+import { setCookie } from "../helpers/cookies.js"
 
-const ADDR = 'http://127.0.0.1:8080/api';
+const ADDR = process.env.ADDR ? process.env.ADDR : 'http://127.0.0.1:8080/api';
 
 export const status = createSlice({
   name: 'counter',
