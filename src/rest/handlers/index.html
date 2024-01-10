@@ -15,11 +15,11 @@
     <ul>
         <li><code>POST /api/player {player={id, name, avatar_id, faction_id}} -> {ok, error, timer}</code>
             — регистрируем игрока</li>
-        <li><code>GET /api/player/:id -> {player, error}</code>
+        <li><code>GET /api/player/:id -> {player, error, timer}</code>
             — получаем данные игрока-объекта при взаимодействии</li>
-        <li><code>POST /api/action {action={subject_id, object_id, action_id}} -> {ok, error, timer}</code>
+        <li><code>POST /api/action {action={subject_id, object_id, action}} -> {ok, error, timer}</code>
             — взаимодействуем, в qr-коде был зашифрован id игрока-объекта</li>
-        <li><code>GET /api/action/:id -> {[action], error, timer}</code>
+        <li><code>GET /api/action/:id -> {[{action, as_subject, as_object}], error, timer}</code>
             — показываем взаимодействия с участием игрока как в роли субъекта, так и объекта</li>
         <li><code>GET /api/gold/:id -> {int, error}</code>
             — показываем количество золота, надо обновлять каждые несколько секунд</li>

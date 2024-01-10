@@ -44,15 +44,15 @@ pub async fn get_action(Path(id): Path<String>) -> Json<types::ActionResponse> {
     log::debug!("Returning actions of player: id={}", id);
     Json(types::ActionResponse {
         actions: vec![
-            model::Action {
-                action: model::ActionType::Blackmail,
-                subject_id: id.clone(),
-                object_id: "Miserable Johnny".to_string(),
+            types::ActionsCount {
+                action: u32::from(model::ActionType::Blackmail),
+                as_subject: 8,
+                as_object: 19,
             },
-            model::Action {
-                action: model::ActionType::Crime,
-                subject_id: "Mighty Arthur".to_string(),
-                object_id: id.clone(),
+            types::ActionsCount {
+                action: u32::from(model::ActionType::Gossip),
+                as_subject: 5,
+                as_object: 2,
             },
         ],
         error: types::Error::None,
