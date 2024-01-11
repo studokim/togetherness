@@ -67,5 +67,5 @@ pub struct PlayerRequest {
 pub struct ActionRequest {
     pub subject_id: String,
     pub object_id: String,
-    pub action_id: u32,
+    pub action: u32,
 }

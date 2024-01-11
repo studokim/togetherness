@@ -8,6 +8,8 @@ mod db;
 mod log;
 mod model;
 mod rest;
+mod router;
+mod static_server;
 mod timer;
 
 #[derive(Parser, Debug)]
@@ -39,7 +41,7 @@ async fn main() {
         .expect("Cannot bind the requested address");
     log::info!("Listening on {} ...", addr);
 
-    let router = rest::router::new();
+    let router = router::new();
     axum::serve(listener, router)
         .await
         .expect("Cannot start the axum server");

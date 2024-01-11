@@ -11,7 +11,7 @@ After=docker.service
 Type=simple
 Restart=always
 RestartSec=3
-WorkingDirectory=/srv/togetherness
+WorkingDirectory=/srv/togetherness/deploy
 ExecStart=/usr/bin/docker-compose -f docker-compose.yml up
 ExecStop=/usr/bin/docker-compose -f docker-compose.yml down
 

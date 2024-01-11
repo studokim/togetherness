@@ -28,7 +28,7 @@ pub async fn post_action(action: Json<types::ActionRequest>) -> Json<types::Defa
     let repo = repository::Repository::new();
     log::debug!(
         "Making action: id={}, subject={}, object={}",
-        action.action_id,
+        action.action,
         action.subject_id,
         action.object_id
     );

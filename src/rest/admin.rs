@@ -4,7 +4,7 @@ use crate::db::repository;
 use crate::log;
 use crate::rest::types;
 
-pub async fn startgame() -> Json<types::DefaultResponse> {
+pub async fn get_startgame() -> Json<types::DefaultResponse> {
     let repo = repository::Repository::new();
     log::debug!("Game started");
     Json(types::DefaultResponse {
