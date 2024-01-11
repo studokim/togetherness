@@ -15,6 +15,7 @@ export function Timer() {
 
         const interval = setInterval(() => {
             if (timer !== null) {
+
                 let tempTimer = timer
                 console.log(timer)
                 dispatch(setTimer(tempTimer - 1));
