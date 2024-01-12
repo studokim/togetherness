@@ -37,7 +37,7 @@ impl From<model::ActionType> for u32 {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ActionsCount {
-    pub action: u32,
+    pub action_id: u32,
     pub as_subject: u32,
     pub as_object: u32,
 }
@@ -67,5 +67,5 @@ pub struct PlayerRequest {
 pub struct ActionRequest {
     pub subject_id: String,
     pub object_id: String,
-    pub action: u32,
+    pub action_id: u32,
 }

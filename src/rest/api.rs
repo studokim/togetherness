@@ -28,7 +28,7 @@ pub async fn post_action(action: Json<types::ActionRequest>) -> Json<types::Defa
     let repo = repository::Repository::new();
     log::debug!(
         "Making action: id={}, subject={}, object={}",
-        action.action,
+        action.action_id,
         action.subject_id,
         action.object_id
     );
@@ -45,12 +45,12 @@ pub async fn get_action(Path(id): Path<String>) -> Json<types::ActionResponse> {
     Json(types::ActionResponse {
         actions: vec![
             types::ActionsCount {
-                action: u32::from(model::ActionType::Blackmail),
+                action_id: u32::from(model::ActionType::Blackmail),
                 as_subject: 8,
                 as_object: 19,
             },
             types::ActionsCount {
-                action: u32::from(model::ActionType::Gossip),
+                action_id: u32::from(model::ActionType::Gossip),
                 as_subject: 5,
                 as_object: 2,
             },
