@@ -23,8 +23,12 @@ pub fn new() -> Router {
         .layer(CorsLayer::permissive())
         .layer(middleware::from_fn(rest::layers::auth));
 
+    let react = static_server::react::assets();
+
     Router::new()
-        .route("/api", get(static_server::api::index))
+        .route("/favicon.ico", get(static_server::html::favicon))
+        .route("/api", get(static_server::html::api))
         .nest("/api", api)
         .nest("/admin", admin)
+        .nest_service("/", react)
 }
