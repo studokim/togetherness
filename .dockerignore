@@ -3,4 +3,3 @@
 !Cargo.toml
 !Cargo.lock
 !frontend
-!deploy/nginx.conf

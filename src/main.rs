@@ -1,6 +1,7 @@
 use clap::Parser;
 use std::{
     net::{IpAddr, SocketAddr},
+    path::PathBuf,
     str::FromStr,
 };
 
@@ -13,17 +14,20 @@ mod static_server;
 mod timer;
 
 #[derive(Parser, Debug)]
-#[command(version, about = "Приложение к празднику Единения 2024", long_about = None)]
-struct Args {
-    #[arg(env, long, default_value_t = IpAddr::from_str("127.0.0.1")
+#[command(version, about = "Приложение к празднику Единения 2024")]
+pub struct Args {
+    #[arg(env="TOGETHERNESS_IP", short, long, default_value_t = IpAddr::from_str("127.0.0.1")
     .expect("Invalid default IP set. Need to recompile the program."))]
-    api_ip: IpAddr,
+    ip: IpAddr,
 
-    #[arg(env, short = 'p', long, value_parser = clap::value_parser!(u16).range(1024..65535))]
-    api_port: u16,
+    #[arg(env="TOGETHERNESS_PORT", short, long, value_parser = clap::value_parser!(u16).range(1024..65535))]
+    port: u16,
 
     #[arg(env, short, long)]
     database_url: Option<String>,
+
+    #[arg(env, short, long, help = "directory with the compiled React frontend")]
+    front_dir: PathBuf,
 }
 
 #[tokio::main]
@@ -34,7 +38,7 @@ async fn main() {
     if args.database_url == None {
         log::warn!("DATABASE_URL is not set, limited functionality")
     }
-    let addr = SocketAddr::from((args.api_ip, args.api_port));
+    let addr = SocketAddr::from((args.ip, args.port));
 
     let listener = tokio::net::TcpListener::bind(addr)
         .await

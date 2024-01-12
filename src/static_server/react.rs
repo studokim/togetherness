@@ -1,10 +1,11 @@
-use std::path::Path;
+use clap::Parser;
 use tower_http::services::ServeDir;
 
 use crate::log;
+use crate::Args;
 
 pub fn assets() -> ServeDir {
-    let dir = Path::new("react");
+    let dir = Args::parse().front_dir;
     log::debug!(
         "Serving assets from {}",
         dir.canonicalize()
