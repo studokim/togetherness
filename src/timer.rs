@@ -1,5 +1,7 @@
 use time::Duration;
 
+pub type Seconds = i64;
+
 pub struct Timer {
     // we're interested in durations only, so using UTC
     started: time::OffsetDateTime,
@@ -14,7 +16,7 @@ impl Timer {
         }
     }
 
-    pub fn remaining(&self) -> i64 {
+    pub fn remaining(&self) -> Seconds {
         (time::OffsetDateTime::now_utc() - self.started + self.duration).whole_seconds()
     }
 }

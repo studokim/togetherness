@@ -1,6 +1,9 @@
 use serde::{Deserialize, Serialize};
 
-use crate::model;
+use crate::{
+    model::{self, AvatarId, FactionId, PlayerId},
+    timer::Seconds,
+};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub enum Error {
@@ -13,17 +16,19 @@ pub enum Error {
 pub struct DefaultResponse {
     pub ok: bool,
     pub error: Error,
-    pub timer: i64,
+    pub timer: Seconds,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct PlayerResponse {
     pub player: model::Player,
     pub error: Error,
-    pub timer: i64,
+    pub timer: Seconds,
 }
 
-impl From<model::ActionType> for u32 {
+pub type ActionId = u8;
+
+impl From<model::ActionType> for ActionId {
     fn from(action: model::ActionType) -> Self {
         match action {
             model::ActionType::Hug => 0,
@@ -37,7 +42,7 @@ impl From<model::ActionType> for u32 {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ActionsCount {
-    pub action_id: u32,
+    pub action_id: ActionId,
     pub as_subject: u32,
     pub as_object: u32,
 }
@@ -46,7 +51,7 @@ pub struct ActionsCount {
 pub struct ActionResponse {
     pub actions: Vec<ActionsCount>,
     pub error: Error,
-    pub timer: i64,
+    pub timer: Seconds,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -57,15 +62,15 @@ pub struct GoldResponse {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct PlayerRequest {
-    pub id: String,
+    pub id: PlayerId,
     pub name: String,
-    pub avatar_id: u32,
-    pub faction_id: u32,
+    pub avatar_id: AvatarId,
+    pub faction_id: FactionId,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ActionRequest {
-    pub subject_id: String,
-    pub object_id: String,
-    pub action_id: u32,
+    pub subject_id: PlayerId,
+    pub object_id: PlayerId,
+    pub action_id: ActionId,
 }

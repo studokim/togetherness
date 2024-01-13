@@ -45,12 +45,12 @@ pub async fn get_action(Path(id): Path<String>) -> Json<types::ActionResponse> {
     Json(types::ActionResponse {
         actions: vec![
             types::ActionsCount {
-                action_id: u32::from(model::ActionType::Blackmail),
+                action_id: types::ActionId::from(model::ActionType::Blackmail),
                 as_subject: 8,
                 as_object: 19,
             },
             types::ActionsCount {
-                action_id: u32::from(model::ActionType::Gossip),
+                action_id: types::ActionId::from(model::ActionType::Gossip),
                 as_subject: 5,
                 as_object: 2,
             },
