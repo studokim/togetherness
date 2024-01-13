@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { setCookie } from "../helpers/cookies.js"
+import { action } from '../API/API.js';
 
 const ADDR = process.env.REACT_APP_ADDR ? process.env.REACT_APP_ADDR : 'http://127.0.0.1:8080/api';
 if (!process.env.REACT_APP_ADDR) console.warn("Не обнаружена переменная океружения");
@@ -44,17 +45,8 @@ export const status = createSlice({
       console.log(action.payload)
       state.id = action.payload;
     },
-    checkName: (name) => {
-      axios.get(`${ADDR}/player/${name}`)
-
-        .then(res => {
-          const persons = res.data;
-          console.log(persons);
-        })
-        .catch(error => {
-          console.log(error);
-        })
-
+    setGold: (state, action) => {
+      state.gold = action.payload;
     },
     createPerson: (state, action) => {
       const id = new Date().getTime().toString();
@@ -68,7 +60,7 @@ export const status = createSlice({
         .then(res => {
           console.log(res.data);
           if (res.data.ok) {
-            action.payload.callback(res.data.timer, id);
+            action.payload.callback(id, res.data.timer);
             setCookie("togethernessId", id)
           }
         })
@@ -89,7 +81,6 @@ export const status = createSlice({
 
     //_______ Взаимодействие с другим персонажем ___________//
     createAction: (state, action) => {
-      const id = new Date().getTime().toString();
       axios.post(`${ADDR}/action`,
         {
           subject_id: state.id,
@@ -100,13 +91,34 @@ export const status = createSlice({
           console.log(res.data);
           if (res.data.ok) {
             console.log("action success", action.payload)
-            action.payload.callback(res.data.timer);
+            // action.payload.callback(res.data.timer);
           }
+        })
+    },
+    getGold: (state, action) => {
+      axios.get(`${ADDR}/gold/${state.id}`)
+        .then(res => {
+          const gold = res.data.gold;
+          action.payload.callback(gold);
+        })
+        .catch(error => {
+          console.log(error);
+        })
+    },
+    getTimer: (state, action) => {
+      axios.get(`${ADDR}/timer`)
+        .then(res => {
+          const timer = res.data.seconds;
+          console.log(timer)
+          action.payload.callback(timer);
+        })
+        .catch(error => {
+          console.log(error);
         })
     },
   },
 })
 
-export const { setName, setFraction, setAvatar, createPerson, setTimer, setId, getPerson, createAction } = status.actions
+export const { setName, setFraction, setAvatar, createPerson, setTimer, setId, getPerson, createAction, getGold, setGold, getTimer } = status.actions
 
 export default status.reducer

@@ -9,6 +9,7 @@ import { QrScanner } from '@yudiel/react-qr-scanner';
 import { useSelector } from 'react-redux';
 import InteractionPage from '../InteractionPage/InteractionPage';
 import { Timer } from './Timer/Timer';
+import {useGold} from './useGold';
 
 
 export default function MainPage() {
@@ -23,6 +24,7 @@ export default function MainPage() {
     const avatars = useSelector((state) => state.status.avatars);
     const selectedAvatar = useSelector((state) => state.status.selectedAvatar);
     const [targetId, setTargetId] = useState(null);
+    const gold = useGold();
 
     const navigator = useNavigate();
 
@@ -58,7 +60,7 @@ export default function MainPage() {
                                     <QrScanner
                                         containerStyle={{ position: "absolute", height: "100%", width: "100%" }}
                                         onDecode={(result) => { console.log(result); setTargetId(result); }}
-                                        onError={(error) => { console.log(error?.message); setTargetId("1704886751234"); }}
+                                        onError={(error) => { console.log(error?.message); console.log(error); setTargetId("1704886751234"); }}
                                     />
                                 </div>
                                 :
@@ -66,7 +68,9 @@ export default function MainPage() {
                         }
 
                         <Timer />
+
                         <h1>{name}</h1>
+
                         <div className='avatar'>
                             <img className='avatarImage' src={`${avatars[selectedAvatar]}`} />
 
@@ -74,11 +78,15 @@ export default function MainPage() {
                                 <img src={'./images/qrCodeIcon.svg'} />
                             </div>
                         </div>
-                        <div className='goldCount'><span>120 G</span></div>
+
+                        <div className='goldCount'><span>{gold === null ? "...и ваши карманы пусты" : gold + " g"}</span></div>
+
                         <CustomButton onClick={() => { setVisibility({ ...visibility, qrScaner: true }); }}>
                             Взаимодействовать
                         </CustomButton>
+
                         <CustomButton onClick={() => { navigator("/status") }}>STATUS</CustomButton>
+
                     </>}
         </div>
 

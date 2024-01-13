@@ -20,7 +20,7 @@ const FractionPage = () => {
                 <OneFraction fraction={3} selected={fraction === 3} url={'/images/fractions/crash.jpeg'} />
                 <OneFraction fraction={4} selected={fraction === 4} url={'/images/fractions/cat.jpg'} />
             </div>
-            <CustomButton onClick={() => { if (fraction !== null) dispatch(createPerson({ callback: (timer, id) => { navigator("/main"); dispatch(setTimer(timer)); dispatch(setId(id)); } })) }}>Далее</CustomButton>
+            <CustomButton onClick={() => { if (fraction !== null) dispatch(createPerson({ callback: (id) => { navigator("/main"); dispatch(setId(id)); } })) }}>Далее</CustomButton>
         </div>
     );
 }

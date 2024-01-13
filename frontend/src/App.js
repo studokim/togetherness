@@ -37,10 +37,10 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<LoginPage />} />
+          <Route path='*' element={<LoginPage />} />
+          <Route path='/*' element={<LoginPage />} />
           <Route path='/fraction' element={<FractionPage />} />
           <Route path='/main' element={<MainPage />} />
-          {/* <Route path='/interaction' element={<InteractionPage />} /> */}
           <Route path='/status' element={<StatusPage />} />
         </Routes>
       </BrowserRouter>
