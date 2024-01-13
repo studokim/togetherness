@@ -13,13 +13,15 @@
 
     <h2>Available API</h2>
     <ul>
-        <li><code>POST /api/player {player={id, name, avatar_id, faction_id}} -> {ok, error, timer}</code>
+        <li><code>GET /api/timer -> {seconds, error}</code>
+            — получаем время до окончания игры либо ошибку, если игра ещё не началась</li>
+        <li><code>POST /api/player {player={id, name, avatar_id, faction_id}} -> {ok, error}</code>
             — регистрируем игрока</li>
-        <li><code>GET /api/player/:id -> {player, error, timer}</code>
+        <li><code>GET /api/player/:id -> {player, error}</code>
             — получаем данные игрока-объекта при взаимодействии</li>
-        <li><code>POST /api/action {action={subject_id, object_id, action_id}} -> {ok, error, timer}</code>
+        <li><code>POST /api/action {action={subject_id, object_id, action_id}} -> {ok, error}</code>
             — взаимодействуем, в qr-коде был зашифрован id игрока-объекта</li>
-        <li><code>GET /api/action/:id -> {[{action_id, as_subject, as_object}], error, timer}</code>
+        <li><code>GET /api/action/:id -> {[{action_id, as_subject, as_object}], error}</code>
             — показываем взаимодействия с участием игрока как в роли субъекта, так и объекта</li>
         <li><code>GET /api/gold/:id -> {int, error}</code>
             — показываем количество золота, надо обновлять каждые несколько секунд</li>

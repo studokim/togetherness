@@ -5,7 +5,6 @@ use std::{
     str::FromStr,
 };
 
-mod db;
 mod log;
 mod model;
 mod rest;

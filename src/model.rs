@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use std::hash::{Hash, Hasher};
 
 use crate::log;
 
@@ -19,7 +20,7 @@ pub struct Player {
 impl Player {
     pub fn new(id: &PlayerId, name: &str, avatar_id: AvatarId, faction_id: FactionId) -> Self {
         Self {
-            id: id.to_string(),
+            id: id.clone(),
             name: name.to_string(),
             avatar_id,
             faction_id,
@@ -34,6 +35,32 @@ impl Player {
             object_id,
             action,
         );
+    }
+}
+
+impl Clone for Player {
+    fn clone(&self) -> Self {
+        Self {
+            id: self.id.clone(),
+            name: self.name.clone(),
+            avatar_id: self.avatar_id,
+            faction_id: self.faction_id,
+            gold: self.gold,
+        }
+    }
+}
+
+impl PartialEq for Player {
+    fn eq(&self, other: &Self) -> bool {
+        self.id == other.id
+    }
+}
+
+impl Eq for Player {}
+
+impl Hash for Player {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.id.hash(state);
     }
 }
 

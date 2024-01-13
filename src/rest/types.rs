@@ -8,22 +8,28 @@ use crate::{
 #[derive(Serialize, Deserialize, Debug)]
 pub enum Error {
     None,
-    NoDatabase,
+    NotFound,
+    NotSet,
     AlreadyExists,
+    MultiThread(String),
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct DefaultResponse {
     pub ok: bool,
     pub error: Error,
-    pub timer: Seconds,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct TimerResponse {
+    pub seconds: Option<Seconds>,
+    pub error: Error,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct PlayerResponse {
-    pub player: model::Player,
+    pub player: Option<model::Player>,
     pub error: Error,
-    pub timer: Seconds,
 }
 
 pub type ActionId = u8;
@@ -49,14 +55,13 @@ pub struct ActionsCount {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ActionResponse {
-    pub actions: Vec<ActionsCount>,
+    pub actions: Option<Vec<ActionsCount>>,
     pub error: Error,
-    pub timer: Seconds,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct GoldResponse {
-    pub gold: u32,
+    pub gold: Option<u32>,
     pub error: Error,
 }
 

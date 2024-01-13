@@ -7,13 +7,14 @@ use std::sync::Arc;
 use tower_http::trace::TraceLayer;
 
 use crate::rest;
-use crate::state::SharedState;
+use crate::rest::state::SharedState;
 use crate::static_server;
 
 pub fn new() -> Router {
     let state = SharedState::default();
 
     let api = Router::new()
+        .route("/timer", get(rest::api::get_timer))
         .route("/player", post(rest::api::post_player))
         .route("/player/:id", get(rest::api::get_player))
         .route("/action", post(rest::api::post_action))

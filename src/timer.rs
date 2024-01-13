@@ -4,19 +4,34 @@ pub type Seconds = i64;
 
 pub struct Timer {
     // we're interested in durations only, so using UTC
-    started: time::OffsetDateTime,
+    started: Option<time::OffsetDateTime>,
     duration: Duration,
 }
 
 impl Timer {
-    pub fn new(duration: Duration) -> Self {
-        Self {
-            started: time::OffsetDateTime::now_utc(),
-            duration: duration,
-        }
+    pub fn set(&mut self, duration: Duration) {
+        self.duration = duration;
     }
 
-    pub fn remaining(&self) -> Seconds {
-        (time::OffsetDateTime::now_utc() - self.started + self.duration).whole_seconds()
+    pub fn start(&mut self) {
+        self.started = Some(time::OffsetDateTime::now_utc());
+    }
+
+    pub fn remaining(&self) -> Option<Seconds> {
+        match self.started {
+            Some(started) => {
+                Some((time::OffsetDateTime::now_utc() - started + self.duration).whole_seconds())
+            }
+            None => None,
+        }
+    }
+}
+
+impl Default for Timer {
+    fn default() -> Self {
+        Self {
+            started: None,
+            duration: Default::default(), // zero
+        }
     }
 }
