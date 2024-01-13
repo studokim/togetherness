@@ -7,7 +7,7 @@ use std::sync::Arc;
 use tower_http::trace::TraceLayer;
 
 use crate::rest;
-use crate::rest::state::SharedState;
+use crate::rest::shared_state::SharedState;
 use crate::static_server;
 
 pub fn new() -> Router {

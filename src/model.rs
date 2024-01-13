@@ -6,6 +6,7 @@ use crate::log;
 pub type PlayerId = String;
 pub type FactionId = u32;
 pub type AvatarId = u32;
+pub type Count = usize;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Player {
@@ -14,7 +15,7 @@ pub struct Player {
     pub avatar_id: AvatarId,
     pub faction_id: FactionId,
     #[serde(skip)]
-    pub gold: u32,
+    pub gold: Count,
 }
 
 impl Player {
@@ -24,17 +25,53 @@ impl Player {
             name: name.to_string(),
             avatar_id,
             faction_id,
-            gold: u32::MAX,
+            gold: 0,
         }
     }
 
-    pub fn act(&mut self, action: ActionType, object_id: PlayerId) {
+    pub fn act(&mut self, action: &ActionType, object: &mut Player) {
         log::debug!(
-            "Acting: player={}, object_id={:?}, action={:?}",
-            self.name,
-            object_id,
+            "Acted: player={}, object_id={}, action={:?}",
+            self.id,
+            object.id,
             action,
         );
+        match action {
+            ActionType::Hug => {
+                self.give_gold(1);
+                object.give_gold(1);
+            }
+            ActionType::Eavesdropping => {
+                self.give_gold(2);
+            }
+            ActionType::Blackmail => {
+                self.give_gold(3);
+                object.take_gold(1);
+            }
+            ActionType::Gossip => {
+                self.give_gold(3);
+            }
+            ActionType::Crime => {
+                self.give_gold(4);
+                object.take_gold(2);
+            }
+        }
+    }
+
+    fn give_gold(&mut self, value: Count) {
+        self.gold = if self.gold > Count::MAX - value {
+            Count::MAX
+        } else {
+            self.gold + value
+        }
+    }
+
+    fn take_gold(&mut self, value: Count) {
+        self.gold = if self.gold < value {
+            0
+        } else {
+            self.gold - value
+        }
     }
 }
 
@@ -64,7 +101,12 @@ impl Hash for Player {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+pub enum Role {
+    Subject,
+    Object,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Hash, Clone)]
 pub enum ActionType {
     Hug,
     Eavesdropping,
@@ -73,7 +115,7 @@ pub enum ActionType {
     Crime,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Hash, Clone)]
 pub struct Action {
     pub subject_id: PlayerId,
     pub object_id: PlayerId,

@@ -1,8 +1,9 @@
 use axum::extract::State;
 use axum::{extract::Path, Json};
 
-use crate::rest::state::SharedState;
+use crate::rest::shared_state::SharedState;
 use crate::rest::types;
+use crate::state::{ActResult, GetActionsResult, GetPlayerResult, RegisterResult};
 use crate::{log, model};
 
 pub async fn get_timer(State(state): State<SharedState>) -> Json<types::TimerResponse> {
@@ -30,20 +31,19 @@ pub async fn post_player(
     player: Json<types::PlayerRequest>,
 ) -> Json<types::DefaultResponse> {
     log::debug!("Registering player: name={}, id={}", player.name, player.id);
-    let player = model::Player {
-        id: player.id.clone(),
-        name: player.name.clone(),
-        avatar_id: player.avatar_id,
-        faction_id: player.faction_id,
-        gold: 0,
-    };
+    let player = model::Player::new(
+        &player.id,
+        &player.name,
+        player.avatar_id,
+        player.faction_id,
+    );
     match state.write() {
         Ok(mut state) => match state.register(player) {
-            crate::state::Error::None => Json(types::DefaultResponse {
+            RegisterResult::Ok => Json(types::DefaultResponse {
                 ok: true,
                 error: types::Error::None,
             }),
-            crate::state::Error::AlreadyExists => Json(types::DefaultResponse {
+            RegisterResult::AlreadyExists => Json(types::DefaultResponse {
                 ok: false,
                 error: types::Error::AlreadyExists,
             }),
@@ -62,11 +62,11 @@ pub async fn get_player(
     log::debug!("Returning player: id={}", id);
     match state.read() {
         Ok(state) => match state.get_player(&id) {
-            Some(player) => Json(types::PlayerResponse {
+            GetPlayerResult::Ok(player) => Json(types::PlayerResponse {
                 player: Some(player),
                 error: types::Error::None,
             }),
-            None => Json(types::PlayerResponse {
+            GetPlayerResult::NotFound => Json(types::PlayerResponse {
                 player: None,
                 error: types::Error::NotFound,
             }),
@@ -90,10 +90,27 @@ pub async fn post_action(
         action.subject_id,
         action.object_id
     );
-    Json(types::DefaultResponse {
-        ok: true,
-        error: types::Error::None,
-    })
+    let action = model::Action {
+        action: action.action_id.into(),
+        object_id: action.object_id.clone(),
+        subject_id: action.subject_id.clone(),
+    };
+    match state.write() {
+        Ok(mut state) => match state.act(&action) {
+            ActResult::Ok => Json(types::DefaultResponse {
+                ok: true,
+                error: types::Error::None,
+            }),
+            ActResult::NotFound => Json(types::DefaultResponse {
+                ok: false,
+                error: types::Error::NotFound,
+            }),
+        },
+        Err(err) => Json(types::DefaultResponse {
+            ok: false,
+            error: types::Error::MultiThread(err.to_string()),
+        }),
+    }
 }
 
 pub async fn get_action(
@@ -101,21 +118,22 @@ pub async fn get_action(
     Path(id): Path<String>,
 ) -> Json<types::ActionResponse> {
     log::debug!("Returning actions of player: id={}", id);
-    Json(types::ActionResponse {
-        actions: Some(vec![
-            types::ActionsCount {
-                action_id: types::ActionId::from(model::ActionType::Blackmail),
-                as_subject: 8,
-                as_object: 19,
-            },
-            types::ActionsCount {
-                action_id: types::ActionId::from(model::ActionType::Gossip),
-                as_subject: 5,
-                as_object: 2,
-            },
-        ]),
-        error: types::Error::None,
-    })
+    match state.write() {
+        Ok(state) => match state.get_actions(&id) {
+            GetActionsResult::Ok(actions) => Json(types::ActionResponse {
+                actions: Some(types::ActionsCounted::new(&id, actions)),
+                error: types::Error::None,
+            }),
+            GetActionsResult::NotFound => Json(types::ActionResponse {
+                actions: None,
+                error: types::Error::NotFound,
+            }),
+        },
+        Err(err) => Json(types::ActionResponse {
+            actions: None,
+            error: types::Error::MultiThread(err.to_string()),
+        }),
+    }
 }
 
 pub async fn get_gold(
@@ -123,8 +141,22 @@ pub async fn get_gold(
     Path(id): Path<String>,
 ) -> Json<types::GoldResponse> {
     log::debug!("Returning gold of player: id={}", id);
-    Json(types::GoldResponse {
-        gold: None,
-        error: types::Error::NotFound,
-    })
+    match state.read() {
+        Ok(state) => match state.get_player(&id) {
+            GetPlayerResult::Ok(player) => Json(types::GoldResponse {
+                gold: Some(player.gold),
+                error: types::Error::None,
+            }),
+            GetPlayerResult::NotFound => Json(types::GoldResponse {
+                gold: None,
+                error: types::Error::NotFound,
+            }),
+        },
+        Err(err) => {
+            return Json(types::GoldResponse {
+                gold: None,
+                error: types::Error::MultiThread(err.to_string()),
+            })
+        }
+    }
 }
