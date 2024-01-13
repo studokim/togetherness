@@ -2,7 +2,7 @@ use axum::{extract::Request, middleware::Next, response::Response};
 
 use crate::log;
 
-pub async fn auth(request: Request, next: Next) -> Response {
+pub async fn admin_auth(request: Request, next: Next) -> Response {
     // do something with `request`...
     log::debug!("authorized access to {}", request.uri());
 

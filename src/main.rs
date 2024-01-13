@@ -10,6 +10,7 @@ mod log;
 mod model;
 mod rest;
 mod router;
+mod state;
 mod static_server;
 mod timer;
 

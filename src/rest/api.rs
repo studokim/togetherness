@@ -1,10 +1,16 @@
+use axum::extract::State;
 use axum::{extract::Path, Json};
 
 use crate::db::repository;
 use crate::rest::types;
+use crate::state::SharedState;
 use crate::{log, model};
 
-pub async fn post_player(player: Json<types::PlayerRequest>) -> Json<types::DefaultResponse> {
+pub async fn post_player(
+    State(state): State<SharedState>,
+    player: Json<types::PlayerRequest>,
+) -> Json<types::DefaultResponse> {
+    state.write().unwrap().new_request();
     let repo = repository::Repository::new();
     log::debug!("Registering player: name={}, id={}", player.name, player.id);
     Json(types::DefaultResponse {
@@ -14,7 +20,11 @@ pub async fn post_player(player: Json<types::PlayerRequest>) -> Json<types::Defa
     })
 }
 
-pub async fn get_player(Path(id): Path<String>) -> Json<types::PlayerResponse> {
+pub async fn get_player(
+    State(state): State<SharedState>,
+    Path(id): Path<String>,
+) -> Json<types::PlayerResponse> {
+    state.write().unwrap().new_request();
     let repo = repository::Repository::new();
     log::debug!("Returning player: id={}", id);
     Json(types::PlayerResponse {
@@ -24,7 +34,11 @@ pub async fn get_player(Path(id): Path<String>) -> Json<types::PlayerResponse> {
     })
 }
 
-pub async fn post_action(action: Json<types::ActionRequest>) -> Json<types::DefaultResponse> {
+pub async fn post_action(
+    State(state): State<SharedState>,
+    action: Json<types::ActionRequest>,
+) -> Json<types::DefaultResponse> {
+    state.write().unwrap().new_request();
     let repo = repository::Repository::new();
     log::debug!(
         "Making action: id={}, subject={}, object={}",
@@ -39,7 +53,11 @@ pub async fn post_action(action: Json<types::ActionRequest>) -> Json<types::Defa
     })
 }
 
-pub async fn get_action(Path(id): Path<String>) -> Json<types::ActionResponse> {
+pub async fn get_action(
+    State(state): State<SharedState>,
+    Path(id): Path<String>,
+) -> Json<types::ActionResponse> {
+    state.write().unwrap().new_request();
     let repo = repository::Repository::new();
     log::debug!("Returning actions of player: id={}", id);
     Json(types::ActionResponse {
@@ -60,7 +78,11 @@ pub async fn get_action(Path(id): Path<String>) -> Json<types::ActionResponse> {
     })
 }
 
-pub async fn get_gold(Path(id): Path<String>) -> Json<types::GoldResponse> {
+pub async fn get_gold(
+    State(state): State<SharedState>,
+    Path(id): Path<String>,
+) -> Json<types::GoldResponse> {
+    state.write().unwrap().new_request();
     log::debug!("Returning gold of player: id={}", id);
     Json(types::GoldResponse {
         gold: id
