@@ -34,6 +34,6 @@ pub fn new() -> Router {
         .route("/api", get(static_server::html::api))
         .nest("/api", api)
         .nest("/admin", admin)
-        .nest_service("/", react)
+        .nest("/", react)
         .layer(TraceLayer::new_for_http())
 }
