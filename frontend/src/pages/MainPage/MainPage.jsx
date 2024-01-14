@@ -9,7 +9,7 @@ import { QrScanner } from '@yudiel/react-qr-scanner';
 import { useSelector } from 'react-redux';
 import InteractionPage from '../InteractionPage/InteractionPage';
 import { Timer } from './Timer/Timer';
-import {useGold} from './useGold';
+import { useGold } from './useGold';
 
 
 export default function MainPage() {
@@ -60,7 +60,7 @@ export default function MainPage() {
                                     <QrScanner
                                         containerStyle={{ position: "absolute", height: "100%", width: "100%" }}
                                         onDecode={(result) => { console.log(result); setTargetId(result); }}
-                                        onError={(error) => { console.log(error?.message); console.log(error); setTargetId("1704886751234"); }}
+                                        onError={(error) => { console.log(error?.message); console.log(error); setTargetId("SCANER ERROR"); }}
                                     />
                                 </div>
                                 :
@@ -86,6 +86,8 @@ export default function MainPage() {
                         </CustomButton>
 
                         <CustomButton onClick={() => { navigator("/status") }}>STATUS</CustomButton>
+
+                        <div>{targetId}</div>
 
                     </>}
         </div>

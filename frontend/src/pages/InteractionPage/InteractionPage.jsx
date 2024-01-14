@@ -27,6 +27,7 @@ const InteractionPage = ({ targetId, close, id }) => {
 
     return (
         <div className='InteractionPage'>
+            <div>{targetId}</div>
             <div className='targetName'>{target.name}</div>
             <img className='targetAvatar' src={`/images/unicorn.jpg`} />
             <div className='interractions'>
