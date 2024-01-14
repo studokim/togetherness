@@ -4,7 +4,7 @@ import CustomButton from '../../UI/CustomButton/CustomButton';
 import { useNavigate } from 'react-router-dom';
 import OneFraction from './OneFraction';
 import { useDispatch, useSelector } from 'react-redux';
-import { createPerson, setTimer, setId } from '../../redux/status'
+import { createPerson, setId } from '../../redux/status'
 
 const FractionPage = () => {
     const navigator = useNavigate();

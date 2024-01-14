@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import "./InteractionPage.scss"
 import CustomButton from '../../UI/CustomButton/CustomButton';
 import { useDispatch } from 'react-redux';
-import { createAction, getPerson, setTimer } from '../../redux/status';
+import { createAction, getPerson } from '../../redux/status';
 
 const InteractionPage = ({ targetId, close, id }) => {
 
@@ -21,7 +21,7 @@ const InteractionPage = ({ targetId, close, id }) => {
     }, [targetId])
 
     function action(actionId) {
-        dispatch(createAction({ targetId, actionId, callback: (timer) => dispatch(setTimer(timer)) }));
+        dispatch(createAction({ targetId, actionId }));
         close();
     }
 

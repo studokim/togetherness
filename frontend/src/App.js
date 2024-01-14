@@ -3,11 +3,10 @@ import './App.scss';
 import { LoginPage } from './pages/LoginPage/LoginPage';
 import MainPage from './pages/MainPage/MainPage';
 import FractionPage from './pages/FractionPage/FractionPage';
-import InteractionPage from './pages/InteractionPage/InteractionPage';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { getCookie } from './helpers/cookies';
-import { getPerson, setAvatar, setFraction, setId, setName, setTimer } from './redux/status';
+import { getPerson, setAvatar, setFraction, setId, setName } from './redux/status';
 import { StatusPage } from './pages/StatusPage/StatusPage';
 
 function App() {
@@ -24,7 +23,6 @@ function App() {
           dispatch(setId(id));
           dispatch(setFraction(fractionId));
           dispatch(setAvatar(avatarId));
-          dispatch(setTimer(timer))
         }
       }));
       console.log("Обновление");

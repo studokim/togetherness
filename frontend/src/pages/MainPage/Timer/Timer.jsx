@@ -13,24 +13,22 @@ export function Timer() {
     useEffect(() => {
 
         const interval = setInterval(() => {
-            // if (timer !== null) {
+
             console.log(timer)
 
             dispatch(getTimer({ callback: (timer) => setTimer(timer) }));
             if (timer !== null) {
+                console.log("timer !== null")
                 let tempTimer = timer;
-                // console.log(timer)
-                // dispatch(setTimer(tempTimer - 1));
-                const minutes = Math.floor(tempTimer / 60);
+                const minutes = Math.floor(tempTimer / 60) < 10 ? "0" + Math.floor(tempTimer / 60) : Math.floor(tempTimer / 60);
                 const seconds = tempTimer % 60 < 10 ? "0" + tempTimer % 60 : tempTimer % 60;
                 setTimerString({ minutes: minutes, seconds: seconds });
             }
-            // else setTimerString({ minutes: minutes, seconds: seconds });
 
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [timer]);
+    }, []);
 
     return (
         <div className='Timer'>

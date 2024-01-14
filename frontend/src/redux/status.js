@@ -38,7 +38,7 @@ export const status = createSlice({
       state.selectedAvatar = action.payload;
     },
     setTimer: (state, action) => {
-      console.log("TIMER", action.payload)
+      console.log("setTimer", action.payload)
       state.timer = action.payload;
     },
     setId: (state, action) => {
@@ -72,7 +72,7 @@ export const status = createSlice({
         .then(res => {
           const persons = res.data;
           console.log("getPerson", persons);
-          action.payload.callback(res.data.player.name, res.data.player.id, res.data.player.avatar_id, res.data.player.faction_id, res.data.timer)
+          action.payload.callback(res.data.player.name, res.data.player.id, res.data.player.avatar_id, res.data.player.faction_id)
         })
         .catch(error => {
           console.log(error);
@@ -91,7 +91,6 @@ export const status = createSlice({
           console.log(res.data);
           if (res.data.ok) {
             console.log("action success", action.payload)
-            // action.payload.callback(res.data.timer);
           }
         })
     },
