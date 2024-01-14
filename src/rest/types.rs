@@ -125,6 +125,16 @@ pub struct GoldResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+pub struct StatsResponse {
+    pub hugs: Count,
+    pub eavesdrops: Count,
+    pub blackmails: Count,
+    pub crimes: Count,
+    pub gossips: Count,
+    pub error: Error,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 pub struct PlayerRequest {
     pub id: PlayerId,
     pub name: String,
