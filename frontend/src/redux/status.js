@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { setCookie } from "../helpers/cookies.js"
-import { action } from '../API/API.js';
 
 const ADDR = process.env.REACT_APP_ADDR ? process.env.REACT_APP_ADDR : 'http://127.0.0.1:8080/api';
 if (!process.env.REACT_APP_ADDR) console.warn("Не обнаружена переменная океружения");
@@ -38,7 +37,7 @@ export const status = createSlice({
       state.selectedAvatar = action.payload;
     },
     setTimer: (state, action) => {
-      console.log("setTimer", action.payload)
+      // console.log("setTimer", action.payload)
       state.timer = action.payload;
     },
     setId: (state, action) => {
@@ -108,7 +107,6 @@ export const status = createSlice({
       axios.get(`${ADDR}/timer`)
         .then(res => {
           const timer = res.data.seconds;
-          console.log(timer)
           action.payload.callback(timer);
         })
         .catch(error => {
