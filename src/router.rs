@@ -27,7 +27,8 @@ pub fn new() -> Router {
         .with_state(Arc::clone(&state));
 
     let admin = Router::new()
-        .route("/startgame", get(rest::admin::get_startgame))
+        .route("/start", get(rest::admin::get_start))
+        .route("/stats", get(rest::admin::get_stats))
         .layer(middleware::from_fn(rest::layers::admin_auth))
         .with_state(Arc::clone(&state));
 

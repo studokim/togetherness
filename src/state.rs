@@ -22,6 +22,10 @@ pub enum GetActionsResult<'a> {
     NotFound,
 }
 
+pub enum GetActionStatsResult {
+    Ok([(ActionType, Count); 5]),
+}
+
 #[derive(Default)]
 pub struct AppState {
     pub timer: Timer,
@@ -101,5 +105,47 @@ impl AppState {
                 GetActionsResult::NotFound
             }
         }
+    }
+
+    pub fn get_action_stats(&self) -> GetActionStatsResult {
+        log::debug!("Got all action stats");
+
+        GetActionStatsResult::Ok([
+            (
+                ActionType::Hug,
+                self.actions
+                    .iter()
+                    .filter(|action| -> bool { action.action == ActionType::Hug })
+                    .count(),
+            ),
+            (
+                ActionType::Eavesdropping,
+                self.actions
+                    .iter()
+                    .filter(|action| -> bool { action.action == ActionType::Eavesdropping })
+                    .count(),
+            ),
+            (
+                ActionType::Blackmail,
+                self.actions
+                    .iter()
+                    .filter(|action| -> bool { action.action == ActionType::Blackmail })
+                    .count(),
+            ),
+            (
+                ActionType::Gossip,
+                self.actions
+                    .iter()
+                    .filter(|action| -> bool { action.action == ActionType::Gossip })
+                    .count(),
+            ),
+            (
+                ActionType::Crime,
+                self.actions
+                    .iter()
+                    .filter(|action| -> bool { action.action == ActionType::Crime })
+                    .count(),
+            ),
+        ])
     }
 }
