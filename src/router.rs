@@ -12,6 +12,7 @@ use crate::static_server;
 
 pub fn new() -> Router {
     let state = SharedState::default();
+    state.write().unwrap().timer.start(); // TODO: remove
 
     let api = Router::new()
         .route("/timer", get(rest::api::get_timer))
