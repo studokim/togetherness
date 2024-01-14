@@ -20,7 +20,7 @@ impl Timer {
     pub fn remaining(&self) -> Option<Seconds> {
         match self.started {
             Some(started) => {
-                Some((time::OffsetDateTime::now_utc() - started + self.duration).whole_seconds())
+                Some((started + self.duration - time::OffsetDateTime::now_utc()).whole_seconds())
             }
             None => None,
         }

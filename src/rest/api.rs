@@ -7,7 +7,7 @@ use crate::state::{ActResult, GetActionsResult, GetPlayerResult, RegisterResult}
 use crate::{log, model};
 
 pub async fn get_timer(State(state): State<SharedState>) -> Json<types::TimerResponse> {
-    log::debug!("Returning timer");
+    // log::debug!("Returning timer");
     match state.read() {
         Ok(state) => match state.timer.remaining() {
             Some(seconds) => Json(types::TimerResponse {

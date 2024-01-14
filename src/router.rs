@@ -4,6 +4,7 @@ use axum::{
     Router,
 };
 use std::sync::Arc;
+use time::Duration;
 use tower_http::trace::TraceLayer;
 
 use crate::rest;
@@ -12,6 +13,8 @@ use crate::static_server;
 
 pub fn new() -> Router {
     let state = SharedState::default();
+
+    state.write().unwrap().timer.set(Duration::minutes(20)); // TODO: remove
     state.write().unwrap().timer.start(); // TODO: remove
 
     let api = Router::new()
