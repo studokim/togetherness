@@ -57,16 +57,16 @@ export default function MainPage() {
                         {
                             visibility.qrScaner
                                 ?
-                                // <div className='qr-code-substrate' onClick={(e) => { e.stopPropagation(); setVisibility({ ...visibility, qrScaner: false }); }}>
-                                //     <QrScanner
-                                //         containerStyle={{ position: "absolute", height: "100%", width: "100%" }}
-                                //         onDecode={(result) => { console.log(result); setTargetId(result); }}
-                                //         onError={(error) => { console.log(error?.message); console.log(error); setTargetId("SCANER ERROR"); }}
-                                //     />
-                                // </div>
                                 <div className='qr-code-substrate' onClick={(e) => { e.stopPropagation(); setVisibility({ ...visibility, qrScaner: false }); }}>
-                                    <QrCodeScanner setData={setTargetId}/>
+                                    <QrScanner
+                                        containerStyle={{ position: "absolute", height: "100%", width: "100%" }}
+                                        onDecode={(result) => { console.log(result); setTargetId(result); }}
+                                        onError={(error) => { console.log(error?.message); console.log(error); setTargetId("SCANER ERROR"); }}
+                                    />
                                 </div>
+                                // <div className='qr-code-substrate' onClick={(e) => { e.stopPropagation(); setVisibility({ ...visibility, qrScaner: false }); }}>
+                                //     <QrCodeScanner setData={setTargetId}/>
+                                // </div>
                                 :
                                 null
                         }
