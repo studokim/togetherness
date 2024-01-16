@@ -10,11 +10,12 @@ export const useGold = () => {
     // const [gold, setGold] = useState(null);
 
     useEffect(() => {
+
         console.log("GOLD");
         const interval = setInterval(() => {
-            dispatch(getGold({id, callback: (val)=>{dispatch(setGold(val))}}))
+            dispatch(getGold({ id, callback: (val) => { dispatch(setGold(val)) } }))
             console.log("gold", gold);
-        }, 5000);
+        }, 1000);
 
         return () => clearInterval(interval);
     }, []);

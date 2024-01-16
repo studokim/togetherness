@@ -20,8 +20,15 @@ export const status = createSlice({
       'images/avatars/avatar-svgrepo-com (6).svg',
       'images/avatars/avatar-svgrepo-com.svg',
     ],
+    fractionsImgs: [
+      'images/fractions/cat.jpg',
+      'images/fractions/crash.jpeg',
+      'images/fractions/dog.jpg',
+      'images/fractions/nothing.png',
+    ],
     selectedAvatar: 0,
     gold: null,
+    actions: null,
   },
   reducers: {
     setName: (state, action) => {
@@ -46,6 +53,10 @@ export const status = createSlice({
     },
     setGold: (state, action) => {
       state.gold = action.payload;
+    },
+    setActions: (state, action) => {
+      console.log(action.payload)
+      state.actions = action.payload;
     },
     createPerson: (state, action) => {
       const id = new Date().getTime().toString();
@@ -113,9 +124,20 @@ export const status = createSlice({
           console.log(error);
         })
     },
+    getActions: (state, action) => {
+      axios.get(`${ADDR}/action/${state.id}`)
+        .then(res => {
+          const actions = res.data.actions;
+          console.log(actions)
+          action.payload.callback(actions);
+        })
+        .catch(error => {
+          console.log(error);
+        })
+    },
   },
 })
 
-export const { setName, setFraction, setAvatar, createPerson, setTimer, setId, getPerson, createAction, getGold, setGold, getTimer } = status.actions
+export const { setName, setFraction, setAvatar, createPerson, setTimer, setId, getPerson, createAction, getGold, setGold, getTimer, getActions, setActions } = status.actions
 
 export default status.reducer

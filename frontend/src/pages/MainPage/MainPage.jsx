@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import "./MainPage.scss"
 import CustomButton from '../../UI/CustomButton/CustomButton'
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { QRCodeSVG } from 'qrcode.react';
 
 import { QrScanner } from '@yudiel/react-qr-scanner';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import InteractionPage from '../InteractionPage/InteractionPage';
 import { Timer } from './Timer/Timer';
 import { useGold } from './useGold';
-import { QrCodeScanner } from './QrCodeScanner';
+import { getActions, setActions } from '../../redux/status';
 
 
 export default function MainPage() {
@@ -26,6 +26,7 @@ export default function MainPage() {
     const selectedAvatar = useSelector((state) => state.status.selectedAvatar);
     const [targetId, setTargetId] = useState(null);
     const gold = useGold();
+    const dispatch = useDispatch();
 
     const navigator = useNavigate();
 
@@ -36,7 +37,7 @@ export default function MainPage() {
     return (
         <div className='MainPage'>
             {//_______ ОТОБРАЖАЕМ ЛИБО СТРАНИЦУ ВЗАИМОДЕЙСТВИЯ ЛИБО ГЛАВНУЮ СТРАНИЦУ _________//
-                targetId !== null   //если получили шв другого игроока
+                targetId === null   //если получили шв другого игроока
                     ?
                     <InteractionPage
                         targetId={targetId}
@@ -48,7 +49,9 @@ export default function MainPage() {
                         {
                             visibility.qrCode ?
                                 <div className='qr-code-substrate' onClick={(e) => { e.stopPropagation(); setVisibility({ ...visibility, qrCode: false }); }}>
-                                    <QRCodeSVG value={id} />
+                                    <div className='qr-code-substrate2'>
+                                        <QRCodeSVG value={id} size={256} />
+                                    </div>
                                 </div>
                                 :
                                 null
@@ -64,9 +67,6 @@ export default function MainPage() {
                                         onError={(error) => { console.log(error?.message); console.log(error); setTargetId("SCANER ERROR"); }}
                                     />
                                 </div>
-                                // <div className='qr-code-substrate' onClick={(e) => { e.stopPropagation(); setVisibility({ ...visibility, qrScaner: false }); }}>
-                                //     <QrCodeScanner setData={setTargetId}/>
-                                // </div>
                                 :
                                 null
                         }
@@ -76,11 +76,12 @@ export default function MainPage() {
                         <h1>{name}</h1>
 
                         <div className='avatar'>
-                            <img className='avatarImage' src={`${avatars[selectedAvatar]}`} />
 
+                            <img className='avatarImage' src={`${avatars[selectedAvatar]}`} />
                             <div className='qr-code-btn' onClick={() => { setVisibility({ ...visibility, qrCode: true }); }}>
                                 <img src={'./images/qrCodeIcon.svg'} />
                             </div>
+
                         </div>
 
                         <div className='goldCount'><span>{gold === null ? "...и ваши карманы пусты" : gold + " g"}</span></div>
@@ -89,9 +90,14 @@ export default function MainPage() {
                             Взаимодействовать
                         </CustomButton>
 
-                        <CustomButton onClick={() => { navigator("/status") }}>STATUS</CustomButton>
-
-                        <div>{targetId}</div>
+                        <CustomButton
+                            onClick={() => {
+                                dispatch(getActions({ callback: (actions) => dispatch(setActions(actions)) }));
+                                navigator("/status");
+                            }}
+                        >
+                            STATUS
+                        </CustomButton>
 
                     </>}
         </div>

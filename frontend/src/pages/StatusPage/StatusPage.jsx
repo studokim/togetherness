@@ -1,23 +1,48 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import "./StatusPage.scss"
 import Tr from './Tr'
+import { useSelector } from 'react-redux'
 
-export function StatusPage(props) {
-    const [results, setResults] = useState(null)
-    useEffect(() => { }, [])
+function getStringAction(id){
+    switch(id){
+        case 0: return "Объятий";
+        case 1: return "Подслушано";
+        case 2: return "Шантаж";
+        case 3: return "Слухов пущено";
+        case 4: return "Преступления";
+        default: "Неизвестное действие";
+    }
+
+}
+
+export function StatusPage() {
+
+    const name = useSelector(state => state.status.name);
+    const gold = useSelector(state => state.status.gold);
+    const actions = useSelector(state => state.status.actions);
+    useEffect(() => { }, []);
+
     return (
         <div className='StatusPage'>
-            <div className='name'></div>
-            <div className='gold'></div>
-            <table>
+            <h1 className='name'>{name}</h1>
+            <p className='gold'>Вы заработали:</p>
+            <p className='gold'>{gold}</p>
+            <table className='statusTable' rules="All">
                 <tbody>
-                    {results !== null
-                        ?
-                        results.map(el => <Tr actionId={el.action_id} objectNum={el.object} subjectNum />)
 
+                    <tr>
+                        <td>Action_id</td>
+                        <td>Вы</td>
+                        <td>Вас</td>
+                    </tr>
+
+                    {actions !== null
+                        ?
+                        actions.map(el => <Tr actionId={getStringAction(el.action_id)} objectNum={el.as_object} subjectNum={el.as_subject} />)
                         :
                         null
                     }
+                    
                 </tbody>
             </table>
         </div>

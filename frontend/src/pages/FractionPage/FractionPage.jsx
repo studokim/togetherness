@@ -10,6 +10,7 @@ const FractionPage = () => {
     const navigator = useNavigate();
     const fraction = useSelector((state) => state.status.fraction);
     const dispatch = useDispatch();
+    // const currentFraction = useSelector((state)=>state.status.fraction)
 
     return (
         <div className='FractionPage'>
@@ -20,7 +21,19 @@ const FractionPage = () => {
                 <OneFraction fraction={3} selected={fraction === 3} url={'/images/fractions/crash.jpeg'} />
                 <OneFraction fraction={4} selected={fraction === 4} url={'/images/fractions/cat.jpg'} />
             </div>
-            <CustomButton onClick={() => {navigator("/main");  if (fraction !== null) dispatch(createPerson({ callback: (id) => { dispatch(setId(id)); } })) }}>Далее</CustomButton>
+            <CustomButton
+                onClick={() => {
+                    //если запускаем в ДОКЕР(есть переменная окружения), то есть проверка выбора фракции.
+                    if (process.env.REACT_APP_ADDR) {
+                        if (fraction !== null) navigator("/main"); dispatch(createPerson({ callback: (id) => { dispatch(setId(id)); } }))
+                    }
+                    //если запускаем локально или на хостинге, то просто перходим в main
+                    else navigator("/main");
+                }}
+                disabled={fraction === null && !process.env.REACT_APP_ADDR}
+            >
+                Далее
+            </CustomButton>
         </div>
     );
 }

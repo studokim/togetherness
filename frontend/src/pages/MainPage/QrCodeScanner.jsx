@@ -1,14 +1,15 @@
 import React from 'react'
 // import { QrReader } from 'react-qr-reader';
-import { QrScanner } from 'react-scan-qr-code';
+// import { QrScanner } from 'react-scan-qr-code';
+import QrReader from 'react-qr-scanner'
 // import {QrScanner} from "react-qrcode-scanner";
 
 export function QrCodeScanner(setData) {
 
     return (
-        <QrScanner
-        onScan={(result) => { console.log(result) }}
-        onError={(error) => { console.log(error) }}
+        // <QrScanner
+        // onScan={(result) => { console.log(result) }}
+        // onError={(error) => { console.log(error) }}
 
         /** Default props
         onError = (error) => console.log({error}),
@@ -31,7 +32,16 @@ export function QrCodeScanner(setData) {
             height: '250px'
         }
         */
-    />
+        // />
+        <QrReader
+            delay={false}
+            style={{
+                height: 240,
+                width: 320,
+            }}
+            onError={(er) => console.log(er)}
+            onScan={(res) => console.log(res)}
+        />
         // <QrReader
         //     delay={300}
         //     onError={(error) => { console.log(error) }}
