@@ -3,14 +3,14 @@ import "./StatusPage.scss"
 import Tr from './Tr'
 import { useSelector } from 'react-redux'
 
-function getStringAction(id){
-    switch(id){
+function getStringAction(id) {
+    switch (id) {
         case 0: return "Объятий";
         case 1: return "Подслушано";
         case 2: return "Шантаж";
         case 3: return "Слухов пущено";
         case 4: return "Преступления";
-        default: "Неизвестное действие";
+        default: return "Неизвестное действие";
     }
 
 }
@@ -42,7 +42,7 @@ export function StatusPage() {
                         :
                         null
                     }
-                    
+
                 </tbody>
             </table>
         </div>
