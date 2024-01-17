@@ -17,15 +17,6 @@ pub enum ActResult {
     NotFound,
 }
 
-pub enum GetActionsResult<'a> {
-    Ok(Vec<&'a Action>),
-    NotFound,
-}
-
-pub enum GetActionStatsResult {
-    Ok([(ActionType, Count); 5]),
-}
-
 #[derive(Default)]
 pub struct AppState {
     pub timer: Timer,
@@ -87,65 +78,26 @@ impl AppState {
         }
     }
 
-    pub fn get_actions(&self, id: &PlayerId) -> GetActionsResult {
-        match self.registered_players.get(id) {
-            Some(_) => {
-                log::debug!("Got actions of player id={}", id);
-                GetActionsResult::Ok(
-                    self.actions
-                        .iter()
-                        .filter(|action| -> bool {
-                            action.subject_id == *id || action.object_id == *id
-                        })
-                        .collect(),
-                )
-            }
-            None => {
-                log::debug!("No actions: player id={} not found", id);
-                GetActionsResult::NotFound
-            }
-        }
+    pub fn count_actions_of_type(&self, action_type: ActionType) -> Count {
+        self.actions
+            .iter()
+            .filter(|action| action.action == action_type)
+            .count()
     }
 
-    pub fn get_action_stats(&self) -> GetActionStatsResult {
-        log::debug!("Got all action stats");
-
-        GetActionStatsResult::Ok([
-            (
-                ActionType::Hug,
-                self.actions
-                    .iter()
-                    .filter(|action| -> bool { action.action == ActionType::Hug })
-                    .count(),
-            ),
-            (
-                ActionType::Eavesdropping,
-                self.actions
-                    .iter()
-                    .filter(|action| -> bool { action.action == ActionType::Eavesdropping })
-                    .count(),
-            ),
-            (
-                ActionType::Blackmail,
-                self.actions
-                    .iter()
-                    .filter(|action| -> bool { action.action == ActionType::Blackmail })
-                    .count(),
-            ),
-            (
-                ActionType::Gossip,
-                self.actions
-                    .iter()
-                    .filter(|action| -> bool { action.action == ActionType::Gossip })
-                    .count(),
-            ),
-            (
-                ActionType::Crime,
-                self.actions
-                    .iter()
-                    .filter(|action| -> bool { action.action == ActionType::Crime })
-                    .count(),
-            ),
-        ])
+    pub fn count_actions(
+        &self,
+        subject_id: Option<PlayerId>,
+        object_id: Option<PlayerId>,
+        action_type: Option<ActionType>,
+    ) -> Count {
+        self.actions
+            .iter()
+            .filter(|action| {
+                (subject_id.is_none() || action.subject_id == subject_id.clone().unwrap())
+                    && (object_id.is_none() || action.object_id == object_id.clone().unwrap())
+                    && (action_type.is_none() || action.action == action_type.clone().unwrap())
+            })
+            .count()
     }
 }

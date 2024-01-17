@@ -51,70 +51,14 @@ impl Into<ActionType> for ActionId {
             2 => ActionType::Blackmail,
             3 => ActionType::Gossip,
             4 => ActionType::Crime,
-            _ => panic!("There are only 5 available actions"),
+            _ => panic!("There are only 5 available actions"), // TODO: use ActionType::Undefined instead
         }
     }
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-struct ActionCounted {
-    pub action_id: ActionId,
-    pub as_subject: Count,
-    pub as_object: Count,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct ActionsCounted([ActionCounted; 5]);
-
-impl ActionsCounted {
-    pub fn new(id: &PlayerId, actions: Vec<&Action>) -> Self {
-        let count =
-            |id: &PlayerId, actions: &Vec<&Action>, action_type: ActionType, role: Role| -> Count {
-                actions
-                    .iter()
-                    .filter(|action| -> bool {
-                        action.action == action_type
-                            && match role {
-                                Role::Subject => action.subject_id == *id,
-                                Role::Object => action.object_id == *id,
-                            }
-                    })
-                    .count()
-            };
-
-        Self([
-            ActionCounted {
-                action_id: ActionType::Hug.into(),
-                as_subject: count(id, &actions, ActionType::Hug, Role::Subject),
-                as_object: count(id, &actions, ActionType::Hug, Role::Object),
-            },
-            ActionCounted {
-                action_id: ActionType::Eavesdropping.into(),
-                as_subject: count(id, &actions, ActionType::Eavesdropping, Role::Subject),
-                as_object: count(id, &actions, ActionType::Eavesdropping, Role::Object),
-            },
-            ActionCounted {
-                action_id: ActionType::Blackmail.into(),
-                as_subject: count(id, &actions, ActionType::Blackmail, Role::Subject),
-                as_object: count(id, &actions, ActionType::Blackmail, Role::Object),
-            },
-            ActionCounted {
-                action_id: ActionType::Gossip.into(),
-                as_subject: count(id, &actions, ActionType::Gossip, Role::Subject),
-                as_object: count(id, &actions, ActionType::Gossip, Role::Object),
-            },
-            ActionCounted {
-                action_id: ActionType::Crime.into(),
-                as_subject: count(id, &actions, ActionType::Crime, Role::Subject),
-                as_object: count(id, &actions, ActionType::Crime, Role::Object),
-            },
-        ])
-    }
-}
-
-#[derive(Serialize, Deserialize, Debug)]
 pub struct ActionResponse {
-    pub actions: Option<ActionsCounted>,
+    pub count: Option<Count>,
     pub error: Error,
 }
 
@@ -126,16 +70,29 @@ pub struct GoldResponse {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct StatsResponse {
-    pub hugs: Count,
-    pub eavesdrops: Count,
-    pub blackmails: Count,
-    pub crimes: Count,
-    pub gossips: Count,
+    pub hug: Count,
+    pub eavesdropping: Count,
+    pub blackmail: Count,
+    pub gossip: Count,
+    pub crime: Count,
     pub error: Error,
 }
 
+impl StatsResponse {
+    pub fn default(error: Error) -> Self {
+        Self {
+            hug: 0,
+            eavesdropping: 0,
+            blackmail: 0,
+            gossip: 0,
+            crime: 0,
+            error,
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug)]
-pub struct PlayerRequest {
+pub struct PostPlayerRequest {
     pub id: PlayerId,
     pub name: String,
     pub avatar_id: AvatarId,
@@ -143,8 +100,15 @@ pub struct PlayerRequest {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct ActionRequest {
+pub struct PostActionRequest {
     pub subject_id: PlayerId,
     pub object_id: PlayerId,
     pub action_id: ActionId,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct GetActionRequest {
+    pub subject_id: Option<PlayerId>,
+    pub object_id: Option<PlayerId>,
+    pub action_id: Option<ActionId>,
 }

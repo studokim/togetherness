@@ -22,7 +22,7 @@ pub fn new() -> Router {
         .route("/player", post(rest::api::post_player))
         .route("/player/:id", get(rest::api::get_player))
         .route("/action", post(rest::api::post_action))
-        .route("/action/:id", get(rest::api::get_action))
+        .route("/action", get(rest::api::get_action))
         .route("/gold/:id", get(rest::api::get_gold))
         .with_state(Arc::clone(&state));
 

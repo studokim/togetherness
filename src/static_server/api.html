@@ -8,23 +8,33 @@
 </head>
 
 <body>
-    <h1>Togetherness back</h1>
-    <p>This server doesn't provide any HTML pages. For API, refer to <a href=/api>/api</a>.</p>
+    <h1>Togetherness: Back</h1>
 
     <h2>Available API</h2>
-    <ul>
+    <ol>
         <li><code>GET /api/timer -> {seconds, error}</code>
-            — получаем время до окончания игры либо ошибку, если игра ещё не началась</li>
+            — получаем время до окончания игры, либо ошибку, если игра ещё не началась или уже закончилась</li>
         <li><code>POST /api/player {player={id, name, avatar_id, faction_id}} -> {ok, error}</code>
             — регистрируем игрока</li>
         <li><code>GET /api/player/:id -> {player, error}</code>
             — получаем данные игрока-объекта при взаимодействии</li>
         <li><code>POST /api/action {action={subject_id, object_id, action_id}} -> {ok, error}</code>
-            — взаимодействуем, в qr-коде был зашифрован id игрока-объекта</li>
-        <li><code>GET /api/action/:id -> {[{action_id, as_subject, as_object}], error}</code>
-            — показываем взаимодействия с участием игрока как в роли субъекта, так и объекта</li>
-        <li><code>GET /api/gold/:id -> {int, error}</code>
-            — показываем количество золота, надо обновлять каждые несколько секунд</li>
+            — взаимодействуем</li>
+        <li><code>GET /api/action[?subject_id=id][&object_id=id][&action_id=id] -> {count, error}</code>
+            — показываем количество взаимодействий. Параметры <code>subject_id</code>, <code>object_id</code> и
+            <code>action_id</code> работают как фильтр пересечения (логическое «И»). Примеры использования:
+            <ul>
+                <li><code>?subject_id=id&object_id=id</code> — если <code>count=1</code>, значит игроки уже
+                    взаимодействовали и повторное взаимодействие (в этих же ролях) запрещено</li>
+                <li><code>?subject_id=id&action_id=id</code> — показать игроку, сколько раз он совершал действия этого
+                    типа</li>
+                <li><code>?object_id=id</code> — показать игроку, сколько раз он был жертвой действий любого типа</li>
+            </ul>
+        </li>
+        <li><code>GET /api/gold/:id -> {count, error}</code>
+            — показываем количество золота</li>
+    </ol>
+
     </ul>
 </body>
 
