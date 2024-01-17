@@ -4,25 +4,33 @@ use axum::{extract::Path, Json};
 use crate::rest::shared_state::SharedState;
 use crate::rest::types;
 use crate::state::{ActResult, GetPlayerResult, RegisterResult};
+use crate::timer::TimerResult;
 use crate::{log, model};
 
 pub async fn get_timer(State(state): State<SharedState>) -> Json<types::TimerResponse> {
     // log::debug!("Returning timer");
     match state.read() {
-        Ok(state) => match state.timer.remaining() {
-            Some(seconds) => Json(types::TimerResponse {
+        Ok(state) => match state.timer.get() {
+            TimerResult::Remaining(seconds) => Json(types::TimerResponse {
                 seconds: Some(seconds),
                 error: types::Error::None,
             }),
-            None => Json(types::TimerResponse {
+            TimerResult::NotStarted => Json(types::TimerResponse {
                 seconds: None,
-                error: types::Error::NotSet,
+                error: types::Error::NotStarted,
+            }),
+            TimerResult::Expired => Json(types::TimerResponse {
+                seconds: None,
+                error: types::Error::AlreadyFinished,
             }),
         },
-        Err(err) => Json(types::TimerResponse {
-            seconds: None,
-            error: types::Error::MultiThread(err.to_string()),
-        }),
+        Err(err) => {
+            log::debug!("Error::MultiThread: {}", err);
+            Json(types::TimerResponse {
+                seconds: None,
+                error: types::Error::MultiThread,
+            })
+        }
     }
 }
 
@@ -45,13 +53,16 @@ pub async fn post_player(
             }),
             RegisterResult::AlreadyExists => Json(types::DefaultResponse {
                 ok: false,
-                error: types::Error::AlreadyExists,
+                error: types::Error::PlayerAlreadyExists,
             }),
         },
-        Err(err) => Json(types::DefaultResponse {
-            ok: false,
-            error: types::Error::MultiThread(err.to_string()),
-        }),
+        Err(err) => {
+            log::debug!("Error::MultiThread: {}", err);
+            Json(types::DefaultResponse {
+                ok: false,
+                error: types::Error::MultiThread,
+            })
+        }
     }
 }
 
@@ -68,13 +79,14 @@ pub async fn get_player(
             }),
             GetPlayerResult::NotFound => Json(types::PlayerResponse {
                 player: None,
-                error: types::Error::NotFound,
+                error: types::Error::PlayerNotFound,
             }),
         },
         Err(err) => {
-            return Json(types::PlayerResponse {
+            log::debug!("Error::MultiThread: {}", err);
+            Json(types::PlayerResponse {
                 player: None,
-                error: types::Error::MultiThread(err.to_string()),
+                error: types::Error::MultiThread,
             })
         }
     }
@@ -96,20 +108,40 @@ pub async fn post_action(
         subject_id: action.subject_id.clone(),
     };
     match state.write() {
-        Ok(mut state) => match state.act(&action) {
-            ActResult::Ok => Json(types::DefaultResponse {
-                ok: true,
-                error: types::Error::None,
-            }),
-            ActResult::NotFound => Json(types::DefaultResponse {
+        Ok(mut state) => {
+            if state.count_actions(
+                Some(action.subject_id.clone()),
+                Some(action.object_id.clone()),
+                Some(action.action.clone()),
+            ) >= 1
+            {
+                return Json(types::DefaultResponse {
+                    ok: false,
+                    error: types::Error::AlreadyActed,
+                });
+            }
+            match state.act(&action) {
+                ActResult::Ok => Json(types::DefaultResponse {
+                    ok: true,
+                    error: types::Error::None,
+                }),
+                ActResult::SubjectNotFound => Json(types::DefaultResponse {
+                    ok: false,
+                    error: types::Error::SubjectNotFound,
+                }),
+                ActResult::ObjectNotFound => Json(types::DefaultResponse {
+                    ok: false,
+                    error: types::Error::ObjectNotFound,
+                }),
+            }
+        }
+        Err(err) => {
+            log::debug!("Error::MultiThread: {}", err);
+            Json(types::DefaultResponse {
                 ok: false,
-                error: types::Error::NotFound,
-            }),
-        },
-        Err(err) => Json(types::DefaultResponse {
-            ok: false,
-            error: types::Error::MultiThread(err.to_string()),
-        }),
+                error: types::Error::MultiThread,
+            })
+        }
     }
 }
 
@@ -135,7 +167,7 @@ pub async fn get_action(
                     GetPlayerResult::NotFound => {
                         return Json(types::ActionResponse {
                             count: None,
-                            error: types::Error::NotFound,
+                            error: types::Error::SubjectNotFound,
                         })
                     }
                 },
@@ -147,7 +179,7 @@ pub async fn get_action(
                     GetPlayerResult::NotFound => {
                         return Json(types::ActionResponse {
                             count: None,
-                            error: types::Error::NotFound,
+                            error: types::Error::ObjectNotFound,
                         })
                     }
                 },
@@ -158,10 +190,13 @@ pub async fn get_action(
                 error: types::Error::None,
             })
         }
-        Err(err) => Json(types::ActionResponse {
-            count: None,
-            error: types::Error::MultiThread(err.to_string()),
-        }),
+        Err(err) => {
+            log::debug!("Error::MultiThread: {}", err);
+            Json(types::ActionResponse {
+                count: None,
+                error: types::Error::MultiThread,
+            })
+        }
     }
 }
 
@@ -169,7 +204,7 @@ pub async fn get_gold(
     State(state): State<SharedState>,
     Path(id): Path<String>,
 ) -> Json<types::GoldResponse> {
-    log::debug!("Returning gold of player: id={}", id);
+    // log::debug!("Returning gold of player: id={}", id);
     match state.read() {
         Ok(state) => match state.get_player(&id) {
             GetPlayerResult::Ok(player) => Json(types::GoldResponse {
@@ -178,13 +213,14 @@ pub async fn get_gold(
             }),
             GetPlayerResult::NotFound => Json(types::GoldResponse {
                 gold: None,
-                error: types::Error::NotFound,
+                error: types::Error::PlayerNotFound,
             }),
         },
         Err(err) => {
-            return Json(types::GoldResponse {
+            log::debug!("Error::MultiThread: {}", err);
+            Json(types::GoldResponse {
                 gold: None,
-                error: types::Error::MultiThread(err.to_string()),
+                error: types::Error::MultiThread,
             })
         }
     }

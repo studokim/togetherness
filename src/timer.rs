@@ -2,6 +2,12 @@ use time::Duration;
 
 pub type Seconds = i64;
 
+pub enum TimerResult {
+    NotStarted,
+    Remaining(Seconds),
+    Expired,
+}
+
 pub struct Timer {
     // we're interested in durations only, so using UTC
     started: Option<time::OffsetDateTime>,
@@ -17,12 +23,18 @@ impl Timer {
         self.started = Some(time::OffsetDateTime::now_utc());
     }
 
-    pub fn remaining(&self) -> Option<Seconds> {
+    pub fn get(&self) -> TimerResult {
         match self.started {
             Some(started) => {
-                Some((started + self.duration - time::OffsetDateTime::now_utc()).whole_seconds())
+                let seconds =
+                    (started + self.duration - time::OffsetDateTime::now_utc()).whole_seconds();
+                if seconds > 0 {
+                    TimerResult::Remaining(seconds)
+                } else {
+                    TimerResult::Expired
+                }
             }
-            None => None,
+            None => TimerResult::NotStarted,
         }
     }
 }

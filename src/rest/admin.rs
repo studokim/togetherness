@@ -25,8 +25,9 @@ pub async fn get_stats(State(state): State<SharedState>) -> Json<types::StatsRes
             crime: state.count_actions_of_type(ActionType::Crime),
             error: types::Error::None,
         }),
-        Err(err) => Json(types::StatsResponse::default(types::Error::MultiThread(
-            err.to_string(),
-        ))),
+        Err(err) => {
+            log::debug!("Error::MultiThread: {}", err);
+            Json(types::StatsResponse::default(types::Error::MultiThread))
+        }
     }
 }

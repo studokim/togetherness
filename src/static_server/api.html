@@ -35,7 +35,61 @@
             — показываем количество золота</li>
     </ol>
 
-    </ul>
+    <h2>Possible Errors</h2>
+    <p>В случае успеха <code>error=None</code>.</p>
+    <ol>
+        <li>
+            <code>GET /api/timer</code>
+            <ul>
+                <li><code>NotStarted</code></li>
+                <li><code>AlreadyFinished</code></li>
+                <li><code>MultiThread</code> — внутренняя ошибка сервера,
+                    невозможно прочитать или записать состояние игры из-за проблем с потоками
+                </li>
+            </ul>
+        </li>
+        <li>
+            <code>POST /api/player</code>
+            <ul>
+                <li><code>PlayerAlreadyExists</code> — игрок с таким id уже зарегистрирован</li>
+                <li><code>MultiThread</code>
+            </ul>
+        </li>
+        <li>
+            <code>GET /api/player/:id</code>
+            <ul>
+                <li><code>PlayerNotFound</code></li>
+                <li><code>MultiThread</code>
+            </ul>
+        </li>
+        <li>
+            <code>POST /api/action</code>
+            <ul>
+                <li><code>SubjectNotFound</code> — игрок-субъект с таким id не зарегистрирован</li>
+                <li><code>ObjectNotFound</code> — игрок-объект с таким id не зарегистрирован</li>
+                <li><code>ActionNotFound</code> — некорректный id взаимодействия // пока не реализовано, вызывает
+                    падение сервера</li>
+                <li><code>AlreadyActed</code> — игроки уже взаимодействовали в этих ролях</li>
+                <li><code>MultiThread</code>
+            </ul>
+        </li>
+        <li>
+            <code>GET /api/action[?subject_id=id][&object_id=id][&action_id=id]</code>
+            <ul>
+                <li><code>SubjectNotFound</code></li>
+                <li><code>ObjectNotFound</code></li>
+                <li><code>ActionNotFound</code> // пока не реализовано, вызывает падение сервера</li>
+                <li><code>MultiThread</code>
+            </ul>
+        </li>
+        <li>
+            <code>GET /api/gold/:id</code>
+            <ul>
+                <li><code>PlayerNotFound</code></li>
+                <li><code>MultiThread</code>
+            </ul>
+        </li>
+    </ol>
 </body>
 
 </html>

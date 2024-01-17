@@ -14,7 +14,8 @@ pub enum GetPlayerResult {
 
 pub enum ActResult {
     Ok,
-    NotFound,
+    SubjectNotFound,
+    ObjectNotFound,
 }
 
 #[derive(Default)]
@@ -67,13 +68,13 @@ impl AppState {
                     }
                     None => {
                         log::debug!("Object id={} not found", action.object_id);
-                        ActResult::NotFound
+                        ActResult::ObjectNotFound
                     }
                 }
             }
             None => {
                 log::debug!("Subject id={} not found", action.subject_id);
-                ActResult::NotFound
+                ActResult::SubjectNotFound
             }
         }
     }

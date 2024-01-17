@@ -5,10 +5,15 @@ use crate::{model::*, timer::Seconds};
 #[derive(Serialize, Deserialize, Debug)]
 pub enum Error {
     None,
-    NotFound,
-    NotSet,
-    AlreadyExists,
-    MultiThread(String),
+    PlayerAlreadyExists,
+    PlayerNotFound,
+    SubjectNotFound,
+    ObjectNotFound,
+    ActionNotFound,
+    NotStarted,
+    AlreadyFinished,
+    AlreadyActed,
+    MultiThread,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
