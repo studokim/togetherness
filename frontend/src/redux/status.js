@@ -29,6 +29,8 @@ export const status = createSlice({
     selectedAvatar: 0,
     gold: null,
     actions: null,
+    subjectActions: null,       //действия совершенные игроком
+    objectActions: null,        //действия совершенные над игроком
   },
   reducers: {
     setName: (state, action) => {
@@ -54,9 +56,21 @@ export const status = createSlice({
     setGold: (state, action) => {
       state.gold = action.payload;
     },
+
+    //_______
     setActions: (state, action) => {
       console.log(action.payload)
       state.actions = action.payload;
+    },
+    //_______
+
+    setSubjectActions: (state, action) => {
+      console.log(action.payload)
+      state.subjectActions = action.payload;
+    },
+    setObjectActions: (state, action) => {
+      console.log(action.payload)
+      state.objectActions = action.payload;
     },
     createPerson: (state, action) => {
       const id = new Date().getTime().toString();
@@ -124,11 +138,48 @@ export const status = createSlice({
           console.log(error);
         })
     },
+
+    //_______
     getActions: (state, action) => {
-      axios.get(`${ADDR}/action/${state.id}`)
+      axios.get(`${ADDR}/status/${state.id}`)
         .then(res => {
-          const actions = res.data.actions;
+          const actions = res.data.status;
           console.log(actions)
+          action.payload.callback(actions);
+        })
+        .catch(error => {
+          console.log(error);
+        })
+    },
+    //_______
+
+    getObjectActions: (state, action) => {
+      axios.get(`${ADDR}/action?object_id=${state.id}`)
+        .then(res => {
+          const actions = res.data.count;
+          console.log("object ", actions)
+          action.payload.callback(actions);
+        })
+        .catch(error => {
+          console.log(error);
+        })
+    },
+    getSubjectActions: (state, action) => {
+      axios.get(`${ADDR}/action?subject_id=${state.id}`)
+        .then(res => {
+          const actions = res.data.count;
+          console.log("subject ", actions);
+          action.payload.callback(actions);
+        })
+        .catch(error => {
+          console.log(error);
+        })
+    },
+    actionEnabled: (state, action) => {
+      axios.get(`${ADDR}/action?subject_id=${state.id}&object_id=${action.payload.targetId}`)
+        .then(res => {
+          const actions = res.data.count;
+          console.log(actions);
           action.payload.callback(actions);
         })
         .catch(error => {
@@ -138,6 +189,9 @@ export const status = createSlice({
   },
 })
 
-export const { setName, setFraction, setAvatar, createPerson, setTimer, setId, getPerson, createAction, getGold, setGold, getTimer, getActions, setActions } = status.actions
+export const {
+  setName, setFraction, setAvatar, createPerson, setTimer, setId, getPerson, createAction, getGold, setGold, getTimer, getActions, setActions,
+  actionEnabled, getSubjectActions, getObjectActions, setSubjectActions, setObjectActions,
+} = status.actions
 
 export default status.reducer

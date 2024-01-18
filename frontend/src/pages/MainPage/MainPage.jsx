@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import InteractionPage from '../InteractionPage/InteractionPage';
 import { Timer } from './Timer/Timer';
 import { useGold } from './useGold';
-import { getActions, setActions } from '../../redux/status';
+import { getObjectActions, getSubjectActions, setObjectActions, setSubjectActions, getActions, setActions } from '../../redux/status';
 
 
 export default function MainPage() {
@@ -27,8 +27,9 @@ export default function MainPage() {
     const [targetId, setTargetId] = useState(null);
     const gold = useGold();
     const dispatch = useDispatch();
-
     const navigator = useNavigate();
+
+    const status = eval()
 
     useEffect(() => {
         console.log("ID", id)
@@ -93,6 +94,8 @@ export default function MainPage() {
                         <CustomButton
                             onClick={() => {
                                 dispatch(getActions({ callback: (actions) => dispatch(setActions(actions)) }));
+                                // dispatch(getSubjectActions({ callback: (actions) => dispatch(setSubjectActions(actions)) }));
+                                // dispatch(getObjectActions({ callback: (actions) => dispatch(setObjectActions(actions)) }));
                                 navigator("/status");
                             }}
                         >
