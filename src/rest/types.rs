@@ -97,6 +97,19 @@ impl StatsResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+pub struct PlayerStatusTuple {
+    pub action_id: ActionId,
+    pub as_subject: Count,
+    pub as_object: Count,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct PlayerStatusResponse {
+    pub status: Option<[PlayerStatusTuple; 5]>,
+    pub error: Error,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 pub struct PostPlayerRequest {
     pub id: PlayerId,
     pub name: String,

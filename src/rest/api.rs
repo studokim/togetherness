@@ -225,3 +225,59 @@ pub async fn get_gold(
         }
     }
 }
+
+fn new_player_status_tuple(
+    id: &model::PlayerId,
+    action: model::ActionType,
+    state: &crate::state::AppState,
+) -> types::PlayerStatusTuple {
+    types::PlayerStatusTuple {
+        action_id: model::ActionType::Crime.into(),
+        as_subject: state.count_actions(Some(id.clone()), None, Some(action.clone())),
+        as_object: state.count_actions(None, Some(id.clone()), Some(action.clone())),
+    }
+}
+
+fn new_player_status_response(
+    id: &model::PlayerId,
+    state: &crate::state::AppState,
+) -> types::PlayerStatusResponse {
+    types::PlayerStatusResponse {
+        status: Some([
+            new_player_status_tuple(id, model::ActionType::Hug, state),
+            new_player_status_tuple(id, model::ActionType::Eavesdropping, state),
+            new_player_status_tuple(id, model::ActionType::Blackmail, state),
+            new_player_status_tuple(id, model::ActionType::Gossip, state),
+            new_player_status_tuple(id, model::ActionType::Crime, state),
+        ]),
+        error: types::Error::None,
+    }
+}
+
+pub async fn get_status(
+    State(state): State<SharedState>,
+    Path(player_id): Path<String>,
+) -> Json<types::PlayerStatusResponse> {
+    match state.read() {
+        Ok(state) => {
+            match state.get_player(&player_id) {
+                GetPlayerResult::Ok(_) => {}
+                GetPlayerResult::NotFound => {
+                    return Json(types::PlayerStatusResponse {
+                        status: None,
+                        error: types::Error::PlayerNotFound,
+                    })
+                }
+            };
+
+            Json(new_player_status_response(&player_id, &state))
+        }
+        Err(err) => {
+            log::debug!("Error::MultiThread: {}", err);
+            Json(types::PlayerStatusResponse {
+                status: None,
+                error: types::Error::MultiThread,
+            })
+        }
+    }
+}

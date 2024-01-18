@@ -24,6 +24,7 @@ pub fn new() -> Router {
         .route("/action", post(rest::api::post_action))
         .route("/action", get(rest::api::get_action))
         .route("/gold/:id", get(rest::api::get_gold))
+        .route("/status/:id", get(rest::api::get_status))
         .with_state(Arc::clone(&state));
 
     let admin = Router::new()
