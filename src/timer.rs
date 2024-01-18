@@ -2,7 +2,22 @@ use time::Duration;
 
 pub type Seconds = i64;
 
-pub enum TimerResult {
+pub enum SetTimerResult {
+    Ok,
+    AlreadyStarted,
+}
+
+pub enum StartTimerResult {
+    Ok,
+    AlreadyStarted,
+}
+
+pub enum StopTimerResult {
+    Ok,
+    NotStarted,
+}
+
+pub enum GetTimerResult {
     NotStarted,
     Remaining(Seconds),
     Expired,
@@ -15,26 +30,48 @@ pub struct Timer {
 }
 
 impl Timer {
-    pub fn set(&mut self, duration: Duration) {
-        self.duration = duration;
+    pub fn set(&mut self, duration: Duration) -> SetTimerResult {
+        match self.started {
+            Some(_) => SetTimerResult::AlreadyStarted,
+            None => {
+                self.duration = duration;
+                SetTimerResult::Ok
+            }
+        }
     }
 
-    pub fn start(&mut self) {
-        self.started = Some(time::OffsetDateTime::now_utc());
+    pub fn start(&mut self) -> StartTimerResult {
+        match self.started {
+            Some(_) => StartTimerResult::AlreadyStarted,
+            None => {
+                self.started = Some(time::OffsetDateTime::now_utc());
+                StartTimerResult::Ok
+            }
+        }
     }
 
-    pub fn get(&self) -> TimerResult {
+    pub fn stop(&mut self) -> StopTimerResult {
+        match self.started {
+            Some(_) => {
+                self.started = None;
+                StopTimerResult::Ok
+            }
+            None => StopTimerResult::NotStarted,
+        }
+    }
+
+    pub fn get(&self) -> GetTimerResult {
         match self.started {
             Some(started) => {
                 let seconds =
                     (started + self.duration - time::OffsetDateTime::now_utc()).whole_seconds();
                 if seconds > 0 {
-                    TimerResult::Remaining(seconds)
+                    GetTimerResult::Remaining(seconds)
                 } else {
-                    TimerResult::Expired
+                    GetTimerResult::Expired
                 }
             }
-            None => TimerResult::NotStarted,
+            None => GetTimerResult::NotStarted,
         }
     }
 }

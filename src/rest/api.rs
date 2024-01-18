@@ -4,22 +4,22 @@ use axum::{extract::Path, Json};
 use crate::rest::shared_state::SharedState;
 use crate::rest::types;
 use crate::state::{ActResult, GetPlayerResult, RegisterResult};
-use crate::timer::TimerResult;
+use crate::timer::GetTimerResult;
 use crate::{log, model};
 
 pub async fn get_timer(State(state): State<SharedState>) -> Json<types::TimerResponse> {
     // log::debug!("Returning timer");
     match state.read() {
         Ok(state) => match state.timer.get() {
-            TimerResult::Remaining(seconds) => Json(types::TimerResponse {
+            GetTimerResult::Remaining(seconds) => Json(types::TimerResponse {
                 seconds: Some(seconds),
                 error: types::Error::None,
             }),
-            TimerResult::NotStarted => Json(types::TimerResponse {
+            GetTimerResult::NotStarted => Json(types::TimerResponse {
                 seconds: None,
                 error: types::Error::NotStarted,
             }),
-            TimerResult::Expired => Json(types::TimerResponse {
+            GetTimerResult::Expired => Json(types::TimerResponse {
                 seconds: None,
                 error: types::Error::AlreadyFinished,
             }),
@@ -232,7 +232,7 @@ fn new_player_status_tuple(
     state: &crate::state::AppState,
 ) -> types::PlayerStatusTuple {
     types::PlayerStatusTuple {
-        action_id: action.into(),
+        action_id: action.clone().into(),
         as_subject: state.count_actions(Some(id.clone()), None, Some(action.clone())),
         as_object: state.count_actions(None, Some(id.clone()), Some(action.clone())),
     }

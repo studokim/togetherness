@@ -13,9 +13,9 @@ pub async fn api() -> Html<&'static str> {
     Html(include_str!("api.html"))
 }
 
-pub async fn not_found() -> Html<&'static str> {
-    log::debug!("not_found.html");
-    Html(include_str!("not_found.html"))
+pub async fn admin() -> Html<&'static str> {
+    log::debug!("admin.html");
+    Html(include_str!("admin.html"))
 }
 
 pub async fn favicon() -> impl IntoResponse {

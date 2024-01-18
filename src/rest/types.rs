@@ -11,6 +11,7 @@ pub enum Error {
     ObjectNotFound,
     ActionNotFound,
     NotStarted,
+    AlreadyStarted,
     AlreadyFinished,
     AlreadyActed,
     MultiThread,

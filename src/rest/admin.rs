@@ -1,17 +1,83 @@
 use axum::extract::State;
 use axum::Json;
+use time::Duration;
 
 use crate::log;
 use crate::model::ActionType;
 use crate::rest::shared_state::SharedState;
 use crate::rest::types;
+use crate::timer::*;
 
-pub async fn get_start(State(state): State<SharedState>) -> Json<types::DefaultResponse> {
+pub async fn post_start(State(state): State<SharedState>) -> Json<types::DefaultResponse> {
     log::debug!("Game started");
-    Json(types::DefaultResponse {
-        ok: true,
-        error: types::Error::None,
-    })
+    match state.write() {
+        Ok(mut state) => match state.timer.start() {
+            StartTimerResult::Ok => Json(types::DefaultResponse {
+                ok: true,
+                error: types::Error::None,
+            }),
+            StartTimerResult::AlreadyStarted => Json(types::DefaultResponse {
+                ok: false,
+                error: types::Error::AlreadyStarted,
+            }),
+        },
+        Err(err) => {
+            log::debug!("Error::MultiThread: {}", err);
+            Json(types::DefaultResponse {
+                ok: false,
+                error: types::Error::MultiThread,
+            })
+        }
+    }
+}
+
+pub async fn post_stop(State(state): State<SharedState>) -> Json<types::DefaultResponse> {
+    log::debug!("Game stopped");
+    match state.write() {
+        Ok(mut state) => match state.timer.stop() {
+            StopTimerResult::Ok => Json(types::DefaultResponse {
+                ok: true,
+                error: types::Error::None,
+            }),
+            StopTimerResult::NotStarted => Json(types::DefaultResponse {
+                ok: false,
+                error: types::Error::NotStarted,
+            }),
+        },
+        Err(err) => {
+            log::debug!("Error::MultiThread: {}", err);
+            Json(types::DefaultResponse {
+                ok: false,
+                error: types::Error::MultiThread,
+            })
+        }
+    }
+}
+
+pub async fn post_duration(
+    State(state): State<SharedState>,
+    Json(minutes): Json<crate::timer::Seconds>,
+) -> Json<types::DefaultResponse> {
+    log::debug!("Set game duration={}", minutes);
+    match state.write() {
+        Ok(mut state) => match state.timer.set(Duration::minutes(minutes)) {
+            SetTimerResult::Ok => Json(types::DefaultResponse {
+                ok: true,
+                error: types::Error::None,
+            }),
+            SetTimerResult::AlreadyStarted => Json(types::DefaultResponse {
+                ok: false,
+                error: types::Error::AlreadyStarted,
+            }),
+        },
+        Err(err) => {
+            log::debug!("Error::MultiThread: {}", err);
+            Json(types::DefaultResponse {
+                ok: false,
+                error: types::Error::MultiThread,
+            })
+        }
+    }
 }
 
 pub async fn get_stats(State(state): State<SharedState>) -> Json<types::StatsResponse> {

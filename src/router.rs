@@ -4,7 +4,6 @@ use axum::{
     Router,
 };
 use std::sync::Arc;
-use time::Duration;
 use tower_http::trace::TraceLayer;
 
 use crate::rest;
@@ -13,9 +12,6 @@ use crate::static_server;
 
 pub fn new() -> Router {
     let state = SharedState::default();
-
-    state.write().unwrap().timer.set(Duration::minutes(20)); // TODO: remove
-    state.write().unwrap().timer.start(); // TODO: remove
 
     let api = Router::new()
         .route("/timer", get(rest::api::get_timer))
@@ -28,7 +24,9 @@ pub fn new() -> Router {
         .with_state(Arc::clone(&state));
 
     let admin = Router::new()
-        .route("/start", get(rest::admin::get_start))
+        .route("/duration", post(rest::admin::post_duration))
+        .route("/start", post(rest::admin::post_start))
+        .route("/stop", post(rest::admin::post_stop))
         .route("/stats", get(rest::admin::get_stats))
         .layer(middleware::from_fn(rest::layers::admin_auth))
         .with_state(Arc::clone(&state));
@@ -39,7 +37,8 @@ pub fn new() -> Router {
         .route("/favicon.ico", get(static_server::html::favicon))
         .route("/api", get(static_server::html::api))
         .nest("/api", api)
-        .nest("/admin", admin)
+        .route("/admin", get(static_server::html::admin))
+        .nest("/api/admin", admin)
         .nest("/", react)
     // .layer(TraceLayer::new_for_http())
 }

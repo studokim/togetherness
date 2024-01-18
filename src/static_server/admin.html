@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Togetherness Admin</title>
+</head>
+
+<script>
+    function submitForm(url, valueId) {
+        var value = document.querySelector(`input[id="${valueId}"]`).value;
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: value
+        })
+            .then((response) => response.json())
+            .then(response => {
+                if (response.error == "AlreadyStarted") {
+                    alert("Сначала надо остановить таймер");
+                } else if (response.error == "NotStarted") {
+                    alert("Сначала надо запустить таймер");
+                } else if (response.error == "MultiThread") {
+                    alert("Внутренняя ошибка, ничего не получилось");
+                }
+            })
+    }
+</script>
+
+<body>
+    <h1>Праздник Единения: админка</h1>
+
+    <h2>Управление</h2>
+    <form>
+        <label for="duration">Продолжительность игры:</label>
+        <input id="duration" type="number" step="1" min="1" max="240" value="30" pattern="\d+" />
+        минут.
+        <input id="save" type="button" value="Сохранить" onclick="submitForm('/api/admin/duration', 'duration')">
+    </form>
+    <p><input id="start" type="button" value="Старт" onclick="submitForm('/api/admin/start', 'start')"></p>
+    <p><input id="stop" type="button" value="Стоп" onclick="submitForm('/api/admin/stop', 'stop')"></p>
+
+    <h2>Статистика</h2>
+    <!-- [Stats] -->
+    <h3>Фракции</h3>
+    <!-- [By Faction] -->
+    <!-- Количество игроков -->
+    <!-- Количество золота -->
+    <h3>Взаимодействия</h3>
+    <!-- [By Action] -->
+    <!-- Объятия: количество -->
+    <!-- Подслушивания: количество -->
+    <!-- Шантаж: количество -->
+    <!-- Слухи: количество -->
+    <!-- Преступления: количество -->
+</body>
+
+</html>
