@@ -232,7 +232,7 @@ fn new_player_status_tuple(
     state: &crate::state::AppState,
 ) -> types::PlayerStatusTuple {
     types::PlayerStatusTuple {
-        action_id: model::ActionType::Crime.into(),
+        action_id: action.into(),
         as_subject: state.count_actions(Some(id.clone()), None, Some(action.clone())),
         as_object: state.count_actions(None, Some(id.clone()), Some(action.clone())),
     }
