@@ -102,6 +102,30 @@ pub async fn post_action(
         action.subject_id,
         action.object_id
     );
+    match state.read() {
+        Ok(state) => match state.timer.get() {
+            GetTimerResult::Remaining(_) => {}
+            GetTimerResult::NotStarted => {
+                return Json(types::DefaultResponse {
+                    ok: false,
+                    error: types::Error::NotStarted,
+                })
+            }
+            GetTimerResult::Expired => {
+                return Json(types::DefaultResponse {
+                    ok: false,
+                    error: types::Error::AlreadyFinished,
+                })
+            }
+        },
+        Err(err) => {
+            log::debug!("Error::MultiThread: {}", err);
+            return Json(types::DefaultResponse {
+                ok: false,
+                error: types::Error::MultiThread,
+            });
+        }
+    };
     let action = model::Action {
         action: action.action_id.into(),
         object_id: action.object_id.clone(),

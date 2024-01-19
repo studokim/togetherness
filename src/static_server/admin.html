@@ -38,19 +38,24 @@
 <body>
     <h1>Праздник Единения: админка</h1>
 
-    <h2>Таймер: <i>{{timer.minutes}}:{{timer.seconds}}</i> *</h2>
+    <h2>Таймер: <i>{{timer}}</i> *</h2>
     <p>* Страница была загружена, когда до окончания Ночи оставалось столько. Чтобы увидеть текущее состояние таймера,
         обновите страницу.</p>
 
     <h2>Управление</h2>
     <form>
         <label for="duration">Продолжительность игры:</label>
-        <input id="duration" type="number" step="1" min="1" max="240" value="30" pattern="\d+" />
+        <input id="duration" type="number" step="1" min="1" max="240" placeholder="1–240" size="6" pattern="\d+" />
         минут.
-        <input id="save" type="button" value="Сохранить" onclick="submitForm('/api/admin/duration', 'duration')">
+        <input id="save" type="button" value="Установить" onclick="submitForm('/api/admin/duration', 'duration')">
     </form>
-    <p><input id="start" type="button" value="Старт" onclick="submitForm('/api/admin/start', 'start')"></p>
-    <p><input id="stop" type="button" value="Стоп" onclick="submitForm('/api/admin/stop', 'stop')"></p>
+    <p>
+        <input id="start" type="button" value="Старт" onclick="submitForm('/api/admin/start', 'start')">
+        <input id="stop" type="button" value="Экстренный стоп" onclick="submitForm('/api/admin/stop', 'stop')"> *
+    </p>
+    <p>* Игроки не смогут взаимодействовать до повторного нажатия кнопки «старт», состояние таймера будет сброшено.
+        Профили игроков и история взаимодействий будут сохранены. Не забудьте сократить время игры, прежде чем снова
+        нажимать «старт».</p>
 
     <h2>Статистика</h2>
     <h3>Фракции</h3>
