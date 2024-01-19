@@ -20,6 +20,10 @@ pub async fn post_start(State(state): State<SharedState>) -> Json<types::Default
                 ok: false,
                 error: types::Error::AlreadyStarted,
             }),
+            StartTimerResult::SetToZero => Json(types::DefaultResponse {
+                ok: false,
+                error: types::Error::SetToZero,
+            }),
         },
         Err(err) => {
             log::debug!("Error::MultiThread: {}", err);

@@ -14,6 +14,7 @@ pub enum Error {
     AlreadyStarted,
     AlreadyFinished,
     AlreadyActed,
+    SetToZero,
     MultiThread,
 }
 

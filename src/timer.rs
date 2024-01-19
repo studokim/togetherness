@@ -10,6 +10,7 @@ pub enum SetTimerResult {
 pub enum StartTimerResult {
     Ok,
     AlreadyStarted,
+    SetToZero,
 }
 
 pub enum StopTimerResult {
@@ -44,8 +45,12 @@ impl Timer {
         match self.started {
             Some(_) => StartTimerResult::AlreadyStarted,
             None => {
-                self.started = Some(time::OffsetDateTime::now_utc());
-                StartTimerResult::Ok
+                if self.duration.whole_seconds() > 0 {
+                    self.started = Some(time::OffsetDateTime::now_utc());
+                    StartTimerResult::Ok
+                } else {
+                    StartTimerResult::SetToZero
+                }
             }
         }
     }
