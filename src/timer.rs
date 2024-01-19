@@ -43,7 +43,16 @@ impl Timer {
 
     pub fn start(&mut self) -> StartTimerResult {
         match self.started {
-            Some(_) => StartTimerResult::AlreadyStarted,
+            Some(started) => {
+                let seconds =
+                    (started + self.duration - time::OffsetDateTime::now_utc()).whole_seconds();
+                if seconds > 0 {
+                    StartTimerResult::AlreadyStarted
+                } else {
+                    self.started = Some(time::OffsetDateTime::now_utc());
+                    StartTimerResult::Ok
+                }
+            }
             None => {
                 if self.duration.whole_seconds() > 0 {
                     self.started = Some(time::OffsetDateTime::now_utc());
