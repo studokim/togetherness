@@ -94,4 +94,19 @@ impl AppState {
             })
             .count()
     }
+
+    pub fn count_members(&self, id: FactionId) -> Count {
+        self.registered_players
+            .values()
+            .filter(|player| player.lock().unwrap().faction_id == id)
+            .count()
+    }
+
+    pub fn count_gold(&self, id: FactionId) -> Count {
+        self.registered_players
+            .values()
+            .filter(|player| player.lock().unwrap().faction_id == id)
+            .map(|player| player.lock().unwrap().gold)
+            .sum()
+    }
 }

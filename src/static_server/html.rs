@@ -5,7 +5,7 @@ use axum::{
 };
 use minijinja::render;
 
-use crate::{log, model::ActionType, rest::shared_state::SharedState, static_server::template};
+use crate::{log, model, rest::shared_state::SharedState, static_server::template};
 
 // Files below are included in compile time.
 // The macro is relative to current `html.rs` file.
@@ -22,15 +22,29 @@ pub async fn admin(State(state): State<SharedState>) -> Html<String> {
         Ok(state) => {
             let timer = template::Timer::new(&state.timer);
             let stats = template::Stats {
-                hug: state.count_actions(None, None, Some(ActionType::Hug)),
-                eavesdropping: state.count_actions(None, None, Some(ActionType::Eavesdropping)),
-                blackmail: state.count_actions(None, None, Some(ActionType::Blackmail)),
-                gossip: state.count_actions(None, None, Some(ActionType::Gossip)),
-                crime: state.count_actions(None, None, Some(ActionType::Crime)),
+                hug: state.count_actions(None, None, Some(model::ActionType::Hug)),
+                eavesdropping: state.count_actions(
+                    None,
+                    None,
+                    Some(model::ActionType::Eavesdropping),
+                ),
+                blackmail: state.count_actions(None, None, Some(model::ActionType::Blackmail)),
+                gossip: state.count_actions(None, None, Some(model::ActionType::Gossip)),
+                crime: state.count_actions(None, None, Some(model::ActionType::Crime)),
             };
-            Html(render!(html, timer => timer, stats => stats))
+            let factions: Vec<model::Faction> = (0..4)
+                .map(|id: model::FactionId| model::Faction {
+                    id,
+                    name: model::Faction::name(id),
+                    members: state.count_members(id),
+                    gold: state.count_gold(id),
+                })
+                .collect();
+            Html(
+                render!(html, timer => timer, stats => stats, factions => factions, status => "Ok"),
+            )
         }
-        Err(_) => Html(html.to_string()),
+        Err(err) => Html(render!(html, status => err.to_string())),
     }
 }
 

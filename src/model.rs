@@ -101,9 +101,24 @@ impl Hash for Player {
     }
 }
 
-pub enum Role {
-    Subject,
-    Object,
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Faction {
+    pub id: FactionId,
+    pub name: String,
+    pub members: Count,
+    pub gold: Count,
+}
+
+impl Faction {
+    pub fn name(id: FactionId) -> String {
+        match id {
+            0 => "Принцесса".to_string(),
+            1 => "Герцог".to_string(),
+            2 => "Солдат".to_string(),
+            3 => "Шут".to_string(),
+            _ => panic!("Существует только 4 фракции"),
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Hash, Clone)]

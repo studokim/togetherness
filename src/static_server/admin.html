@@ -7,9 +7,38 @@
     <title>Togetherness Admin</title>
 </head>
 
+<style>
+    #status {
+        line-height: 1.6rem;
+        padding: 0.25rem 0.5rem;
+        border: none;
+        border-radius: 0.25rem;
+    }
+
+    .alert-success {
+        color: #155724;
+        background-color: #d4edda;
+    }
+
+    .alert-error {
+        color: #721c24;
+        background-color: #f8d7da;
+    }
+
+    .alert-info {
+        color: #0c5460;
+        background-color: #d1ecf1;
+    }
+</style>
+
 <script>
     function submitForm(url, valueId) {
         var value = document.querySelector(`input[id="${valueId}"]`).value;
+        if (value == null || value == "") {
+            setStatus("Пустое значение", "error");
+            return;
+        }
+        setStatus("...");
         fetch(url, {
             method: 'POST',
             headers: {
@@ -21,22 +50,41 @@
             .then((response) => response.json())
             .then(response => {
                 if (response.error == "AlreadyStarted") {
-                    alert("Сначала надо остановить таймер");
+                    setStatus("Сначала надо остановить таймер", "error");
                 } else if (response.error == "NotStarted") {
-                    alert("Сначала надо запустить таймер");
+                    setStatus("Сначала надо запустить таймер", "error");
                 } else if (response.error == "SetToZero") {
-                    alert("Сначала надо задать продолжительность ночи");
+                    setStatus("Сначала надо задать продолжительность ночи", "error");
                 } else if (response.error == "MultiThread") {
-                    alert("Внутренняя ошибка, ничего не получилось");
+                    setStatus("Внутренняя ошибка, ничего не получилось", "error");
                 } else if (response.error == "None") {
-                    alert("Ok");
+                    setStatus("Ok", "success");
+                } else {
+                    setStatus(response.error, "error");
                 }
             })
+    }
+    function setStatus(value, type) {
+        let status = document.querySelector("#status");
+        if (type == "success") {
+            status.classList = "alert-success";
+        } else if (type == "error") {
+            status.classList = "alert-error";
+        } else {
+            status.classList = "alert-info";
+        }
+        status.textContent = value;
     }
 </script>
 
 <body>
     <h1>Праздник Единения: админка</h1>
+
+    <p>
+        <hr>
+        Страница загружена: <a id="status" class="alert-info">{{status}}</a>.
+        <hr>
+    </p>
 
     <h2>Таймер: <i>{{timer}}</i> *</h2>
     <p>* Страница была загружена, когда до окончания Ночи оставалось столько. Чтобы увидеть текущее состояние таймера,
@@ -59,8 +107,24 @@
 
     <h2>Статистика</h2>
     <h3>Фракции</h3>
-    <!-- Количество игроков -->
-    <!-- Количество золота -->
+    <table>
+        <thead>
+            <tr>
+                <th>Фракция</th>
+                <th>Число членов</th>
+                <th>Золото</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for faction in factions %}
+            <tr>
+                <td>{{faction.name}}</td>
+                <td>{{faction.members}}</td>
+                <td>{{faction.gold}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     <h3>Взаимодействия</h3>
     За прошедшее время игроки проделали друг с другом следующее:
     <ul>
