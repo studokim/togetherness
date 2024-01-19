@@ -5,7 +5,7 @@ use axum::{
 };
 use minijinja::render;
 
-use crate::{log, rest::shared_state::SharedState, static_server::template};
+use crate::{log, model::ActionType, rest::shared_state::SharedState, static_server::template};
 
 // Files below are included in compile time.
 // The macro is relative to current `html.rs` file.
@@ -21,13 +21,16 @@ pub async fn admin(State(state): State<SharedState>) -> Html<String> {
     match state.read() {
         Ok(state) => {
             let timer = template::Timer::new(&state.timer);
-            log::debug!("Timer ok: {}:{}", timer.minutes, timer.seconds);
-            Html(render!(html, timer => timer))
+            let stats = template::Stats {
+                hug: state.count_actions(None, None, Some(ActionType::Hug)),
+                eavesdropping: state.count_actions(None, None, Some(ActionType::Eavesdropping)),
+                blackmail: state.count_actions(None, None, Some(ActionType::Blackmail)),
+                gossip: state.count_actions(None, None, Some(ActionType::Gossip)),
+                crime: state.count_actions(None, None, Some(ActionType::Crime)),
+            };
+            Html(render!(html, timer => timer, stats => stats))
         }
-        Err(_) => {
-            log::debug!("Timer not ok");
-            Html(html.to_string())
-        }
+        Err(_) => Html(html.to_string()),
     }
 }
 

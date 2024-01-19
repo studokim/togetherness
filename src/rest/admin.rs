@@ -88,11 +88,11 @@ pub async fn get_stats(State(state): State<SharedState>) -> Json<types::StatsRes
     log::debug!("Returning stats");
     match state.read() {
         Ok(state) => Json(types::StatsResponse {
-            hug: state.count_actions_of_type(ActionType::Hug),
-            eavesdropping: state.count_actions_of_type(ActionType::Eavesdropping),
-            blackmail: state.count_actions_of_type(ActionType::Blackmail),
-            gossip: state.count_actions_of_type(ActionType::Gossip),
-            crime: state.count_actions_of_type(ActionType::Crime),
+            hug: state.count_actions(None, None, Some(ActionType::Hug)),
+            eavesdropping: state.count_actions(None, None, Some(ActionType::Eavesdropping)),
+            blackmail: state.count_actions(None, None, Some(ActionType::Blackmail)),
+            gossip: state.count_actions(None, None, Some(ActionType::Gossip)),
+            crime: state.count_actions(None, None, Some(ActionType::Crime)),
             error: types::Error::None,
         }),
         Err(err) => {

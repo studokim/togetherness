@@ -1,4 +1,4 @@
-use crate::timer;
+use crate::{model::Count, timer};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -20,4 +20,13 @@ impl Timer {
             },
         }
     }
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Stats {
+    pub hug: Count,
+    pub eavesdropping: Count,
+    pub blackmail: Count,
+    pub gossip: Count,
+    pub crime: Count,
 }

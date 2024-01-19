@@ -79,13 +79,6 @@ impl AppState {
         }
     }
 
-    pub fn count_actions_of_type(&self, action_type: ActionType) -> Count {
-        self.actions
-            .iter()
-            .filter(|action| action.action == action_type)
-            .count()
-    }
-
     pub fn count_actions(
         &self,
         subject_id: Option<PlayerId>,
