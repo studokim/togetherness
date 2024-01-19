@@ -32,13 +32,25 @@
 </style>
 
 <script>
+    function setRepeatedActions() {
+        let checked = document.getElementById('repeated_actions').checked;
+        submitValue('/api/admin/repeated_actions', checked);
+        if (checked) {
+            document.getElementById('repeated_actions_value').textContent = "Разрешены";
+        } else {
+            document.getElementById('repeated_actions_value').textContent = "Запрещены";
+        }
+    }
     function submitForm(url, valueId) {
-        var value = document.querySelector(`input[id="${valueId}"]`).value;
+        let value = document.getElementById(valueId).value;
         if (value == null || value == "") {
             setStatus("Пустое значение", "error");
             return;
         }
         setStatus("...");
+        submitValue(url, value);
+    }
+    function submitValue(url, value) {
         fetch(url, {
             method: 'POST',
             headers: {
@@ -98,12 +110,16 @@
         <input id="save" type="button" value="Установить" onclick="submitForm('/api/admin/duration', 'duration')">
     </form>
     <p>
-        <input id="start" type="button" value="Старт" onclick="submitForm('/api/admin/start', 'start')">
-        <input id="stop" type="button" value="Экстренный стоп" onclick="submitForm('/api/admin/stop', 'stop')"> *
+        <input id="start" type="button" value="Старт" onclick="submitValue('/api/admin/start', null)">
+        <input id="stop" type="button" value="Экстренный стоп" onclick="submitValue('/api/admin/stop', null)"> *
     </p>
     <p>* Игроки не смогут взаимодействовать до повторного нажатия кнопки «старт», состояние таймера будет сброшено.
         Профили игроков и история взаимодействий будут сохранены. Не забудьте сократить время игры, прежде чем снова
         нажимать «старт».</p>
+    <p>Повторные взаимодействия с тем же игроком:
+        <input id="repeated_actions" type="checkbox" {{repeated_actions.checked}} onclick="setRepeatedActions()">
+        (сейчас <a id="repeated_actions_value">{{repeated_actions.string}}</a>).
+    </p>
 
     <h2>Статистика</h2>
     <h3>Фракции</h3>

@@ -58,6 +58,33 @@ pub async fn post_stop(State(state): State<SharedState>) -> Json<types::DefaultR
     }
 }
 
+pub async fn post_repeated_actions(
+    State(state): State<SharedState>,
+    Json(repeated_actions): Json<bool>,
+) -> Json<types::DefaultResponse> {
+    log::debug!("Modifying repeated_actions setting");
+    match state.write() {
+        Ok(mut state) => {
+            if repeated_actions {
+                state.allow_repeated_actions();
+            } else {
+                state.forbid_repeated_actions();
+            }
+            Json(types::DefaultResponse {
+                ok: true,
+                error: types::Error::None,
+            })
+        }
+        Err(err) => {
+            log::debug!("Error::MultiThread: {}", err);
+            Json(types::DefaultResponse {
+                ok: false,
+                error: types::Error::MultiThread,
+            })
+        }
+    }
+}
+
 pub async fn post_duration(
     State(state): State<SharedState>,
     Json(minutes): Json<crate::timer::Seconds>,

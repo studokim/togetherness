@@ -133,11 +133,12 @@ pub async fn post_action(
     };
     match state.write() {
         Ok(mut state) => {
-            if state.count_actions(
-                Some(action.subject_id.clone()),
-                Some(action.object_id.clone()),
-                None,
-            ) >= 1
+            if !state.repeated_actions_allowed()
+                && state.count_actions(
+                    Some(action.subject_id.clone()),
+                    Some(action.object_id.clone()),
+                    None,
+                ) >= 1
             {
                 return Json(types::DefaultResponse {
                     ok: false,

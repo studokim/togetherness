@@ -40,8 +40,19 @@ pub async fn admin(State(state): State<SharedState>) -> Html<String> {
                     gold: state.count_gold(id),
                 })
                 .collect();
+            let repeated_actions = if state.repeated_actions_allowed() {
+                template::RepeatedActions {
+                    string: "Разрешены".to_string(),
+                    checked: Some("checked".to_string()),
+                }
+            } else {
+                template::RepeatedActions {
+                    string: "Запрещены".to_string(),
+                    checked: None,
+                }
+            };
             Html(
-                render!(html, timer => timer, stats => stats, factions => factions, status => "Ok"),
+                render!(html, timer => timer, stats => stats, factions => factions, status => "Ok", repeated_actions => repeated_actions),
             )
         }
         Err(err) => Html(render!(html, status => err.to_string())),

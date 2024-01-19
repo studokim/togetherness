@@ -36,6 +36,10 @@ pub fn new() -> Router {
                 .route("/duration", post(rest::admin::post_duration))
                 .route("/start", post(rest::admin::post_start))
                 .route("/stop", post(rest::admin::post_stop))
+                .route(
+                    "/repeated_actions",
+                    post(rest::admin::post_repeated_actions),
+                )
                 .route("/stats", get(rest::admin::get_stats))
                 .layer(middleware::from_fn(rest::layers::admin_auth)),
         )

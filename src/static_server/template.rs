@@ -26,3 +26,9 @@ pub struct Stats {
     pub gossip: Count,
     pub crime: Count,
 }
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct RepeatedActions {
+    pub checked: Option<String>,
+    pub string: String,
+}

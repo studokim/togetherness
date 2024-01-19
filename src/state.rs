@@ -21,6 +21,7 @@ pub enum ActResult {
 #[derive(Default)]
 pub struct AppState {
     pub timer: Timer,
+    repeated_actions: bool, // default = false
     registered_players: HashMap<PlayerId, Mutex<Player>>,
     actions: Vec<Action>,
 }
@@ -108,5 +109,17 @@ impl AppState {
             .filter(|player| player.lock().unwrap().faction_id == id)
             .map(|player| player.lock().unwrap().gold)
             .sum()
+    }
+
+    pub fn allow_repeated_actions(&mut self) {
+        self.repeated_actions = true;
+    }
+
+    pub fn forbid_repeated_actions(&mut self) {
+        self.repeated_actions = false;
+    }
+
+    pub fn repeated_actions_allowed(&self) -> bool {
+        self.repeated_actions
     }
 }
