@@ -41,10 +41,10 @@ pub type ActionId = u8;
 impl Into<ActionId> for ActionType {
     fn into(self) -> ActionId {
         match self {
-            ActionType::Hug => 0,
-            ActionType::Eavesdropping => 1,
-            ActionType::Blackmail => 2,
-            ActionType::Gossip => 3,
+            ActionType::Hug => 1,
+            ActionType::Eavesdropping => 2,
+            ActionType::Blackmail => 3,
+            ActionType::Gossip => 4,
             ActionType::Crime => 4,
         }
     }
@@ -53,11 +53,11 @@ impl Into<ActionId> for ActionType {
 impl Into<ActionType> for ActionId {
     fn into(self) -> ActionType {
         match self {
-            0 => ActionType::Hug,
-            1 => ActionType::Eavesdropping,
-            2 => ActionType::Blackmail,
-            3 => ActionType::Gossip,
-            4 => ActionType::Crime,
+            1 => ActionType::Hug,
+            2 => ActionType::Eavesdropping,
+            3 => ActionType::Blackmail,
+            4 => ActionType::Gossip,
+            5 => ActionType::Crime,
             _ => panic!("There are only 5 available actions"), // TODO: use ActionType::Undefined instead
         }
     }

@@ -112,10 +112,10 @@ pub struct Faction {
 impl Faction {
     pub fn name(id: FactionId) -> String {
         match id {
-            0 => "Принцесса".to_string(),
-            1 => "Герцог".to_string(),
-            2 => "Солдат".to_string(),
-            3 => "Шут".to_string(),
+            1 => "Принцесса".to_string(),
+            2 => "Герцог".to_string(),
+            3 => "Солдат".to_string(),
+            4 => "Шут".to_string(),
             _ => panic!("Существует только 4 фракции"),
         }
     }

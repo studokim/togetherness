@@ -136,7 +136,7 @@ pub async fn post_action(
             if state.count_actions(
                 Some(action.subject_id.clone()),
                 Some(action.object_id.clone()),
-                Some(action.action.clone()),
+                None,
             ) >= 1
             {
                 return Json(types::DefaultResponse {

@@ -32,7 +32,7 @@ pub async fn admin(State(state): State<SharedState>) -> Html<String> {
                 gossip: state.count_actions(None, None, Some(model::ActionType::Gossip)),
                 crime: state.count_actions(None, None, Some(model::ActionType::Crime)),
             };
-            let factions: Vec<model::Faction> = (0..4)
+            let factions: Vec<model::Faction> = (1..5)
                 .map(|id: model::FactionId| model::Faction {
                     id,
                     name: model::Faction::name(id),
