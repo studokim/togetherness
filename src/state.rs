@@ -122,4 +122,11 @@ impl AppState {
     pub fn repeated_actions_allowed(&self) -> bool {
         self.repeated_actions
     }
+
+    pub fn reset(&mut self) {
+        self.timer = Timer::default();
+        self.repeated_actions = false;
+        self.registered_players.clear();
+        self.actions.clear();
+    }
 }

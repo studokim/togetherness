@@ -120,6 +120,8 @@
         <input id="repeated_actions" type="checkbox" {{repeated_actions.checked}} onclick="setRepeatedActions()">
         (сейчас <a id="repeated_actions_value">{{repeated_actions.string}}</a>).
     </p>
+    <p><input id="reset" type="button" value="Сбросить всё" onclick="submitValue('/api/admin/reset', null)">:
+        все профили игроков будут удалены, взаимодействия забыты, таймер сброшен.</p>
 
     <h2>Статистика</h2>
     <h3>Фракции</h3>

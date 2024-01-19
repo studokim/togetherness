@@ -36,6 +36,7 @@ pub fn new() -> Router {
                 .route("/duration", post(rest::admin::post_duration))
                 .route("/start", post(rest::admin::post_start))
                 .route("/stop", post(rest::admin::post_stop))
+                .route("/reset", post(rest::admin::post_reset))
                 .route(
                     "/repeated_actions",
                     post(rest::admin::post_repeated_actions),
