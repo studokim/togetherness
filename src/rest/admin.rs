@@ -61,13 +61,19 @@ pub async fn post_stop(State(state): State<SharedState>) -> Json<types::DefaultR
 pub async fn post_reset(State(state): State<SharedState>) -> Json<types::DefaultResponse> {
     log::debug!("Game reset");
     match state.write() {
-        Ok(mut state) => {
-            state.reset();
-            Json(types::DefaultResponse {
-                ok: true,
-                error: types::Error::None,
-            })
-        }
+        Ok(mut state) => match state.timer.get() {
+            GetTimerResult::NotStarted | GetTimerResult::Expired => {
+                state.reset();
+                Json(types::DefaultResponse {
+                    ok: true,
+                    error: types::Error::None,
+                })
+            }
+            GetTimerResult::Remaining(_) => Json(types::DefaultResponse {
+                ok: false,
+                error: types::Error::AlreadyStarted,
+            }),
+        },
         Err(err) => {
             log::debug!("Error::MultiThread: {}", err);
             Json(types::DefaultResponse {

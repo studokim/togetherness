@@ -58,6 +58,21 @@
         setStatus("...");
         submitValue(url, value);
     }
+    function showResponseError(error) {
+        if (error == "AlreadyStarted") {
+            setStatus("Сначала надо остановить таймер", "error");
+        } else if (error == "NotStarted") {
+            setStatus("Сначала надо запустить таймер", "error");
+        } else if (error == "SetToZero") {
+            setStatus("Сначала надо задать продолжительность ночи", "error");
+        } else if (error == "MultiThread") {
+            setStatus("Внутренняя ошибка, ничего не получилось", "error");
+        } else if (error == "None") {
+            setStatus("Ok", "success");
+        } else {
+            setStatus(error, "error");
+        }
+    }
     function submitValue(url, value) {
         fetch(url, {
             method: 'POST',
@@ -69,18 +84,10 @@
         })
             .then((response) => response.json())
             .then(response => {
-                if (response.error == "AlreadyStarted") {
-                    setStatus("Сначала надо остановить таймер", "error");
-                } else if (response.error == "NotStarted") {
-                    setStatus("Сначала надо запустить таймер", "error");
-                } else if (response.error == "SetToZero") {
-                    setStatus("Сначала надо задать продолжительность ночи", "error");
-                } else if (response.error == "MultiThread") {
-                    setStatus("Внутренняя ошибка, ничего не получилось", "error");
-                } else if (response.error == "None") {
-                    setStatus("Ok", "success");
+                if (url == "/api/admin/reset" && response.error == "None") {
+                    setStatus("Вся информация удалена", "error");
                 } else {
-                    setStatus(response.error, "error");
+                    showResponseError(response.error);
                 }
             })
     }
