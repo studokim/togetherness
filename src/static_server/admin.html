@@ -8,6 +8,14 @@
 </head>
 
 <style>
+    .danger {
+        padding: 0.25rem 0.5rem;
+        border: none;
+        border-radius: 0.25rem;
+        color: #721c24;
+        background-color: #f8d7da;
+    }
+
     #status {
         line-height: 1.6rem;
         padding: 0.25rem 0.5rem;
@@ -120,8 +128,14 @@
         <input id="repeated_actions" type="checkbox" {{repeated_actions.checked}} onclick="setRepeatedActions()">
         (сейчас <a id="repeated_actions_value">{{repeated_actions.string}}</a>).
     </p>
-    <p><input id="reset" type="button" value="Сбросить всё" onclick="submitValue('/api/admin/reset', null)">:
-        все профили игроков будут удалены, взаимодействия забыты, таймер сброшен.</p>
+    <details>
+        <summary>Опасная зона</summary>
+        <div class="danger">
+            Все профили игроков будут удалены, взаимодействия забыты, таймер сброшен.
+            <input id="reset" type="button" value="Сбросить всё" onclick="submitValue('/api/admin/reset', null)">
+        </div>
+    </details>
+
 
     <h2>Статистика</h2>
     <h3>Фракции</h3>
