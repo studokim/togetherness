@@ -5,104 +5,38 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Togetherness Admin</title>
+    <style>
+        .danger {
+            padding: 0.25rem 0.5rem;
+            border: none;
+            border-radius: 0.25rem;
+            color: #721c24;
+            background-color: #f8d7da;
+        }
+
+        #status {
+            line-height: 1.6rem;
+            padding: 0.25rem 0.5rem;
+            border: none;
+            border-radius: 0.25rem;
+        }
+
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+        }
+
+        .alert-error {
+            color: #721c24;
+            background-color: #f8d7da;
+        }
+
+        .alert-info {
+            color: #0c5460;
+            background-color: #d1ecf1;
+        }
+    </style>
 </head>
-
-<style>
-    .danger {
-        padding: 0.25rem 0.5rem;
-        border: none;
-        border-radius: 0.25rem;
-        color: #721c24;
-        background-color: #f8d7da;
-    }
-
-    #status {
-        line-height: 1.6rem;
-        padding: 0.25rem 0.5rem;
-        border: none;
-        border-radius: 0.25rem;
-    }
-
-    .alert-success {
-        color: #155724;
-        background-color: #d4edda;
-    }
-
-    .alert-error {
-        color: #721c24;
-        background-color: #f8d7da;
-    }
-
-    .alert-info {
-        color: #0c5460;
-        background-color: #d1ecf1;
-    }
-</style>
-
-<script>
-    function setRepeatedActions() {
-        let checked = document.getElementById('repeated_actions').checked;
-        submitValue('/api/admin/repeated_actions', checked);
-        if (checked) {
-            document.getElementById('repeated_actions_value').textContent = "Разрешены";
-        } else {
-            document.getElementById('repeated_actions_value').textContent = "Запрещены";
-        }
-    }
-    function submitForm(url, valueId) {
-        let value = document.getElementById(valueId).value;
-        if (value == null || value == "") {
-            setStatus("Пустое значение", "error");
-            return;
-        }
-        setStatus("...");
-        submitValue(url, value);
-    }
-    function showResponseError(error) {
-        if (error == "AlreadyStarted") {
-            setStatus("Сначала надо остановить таймер", "error");
-        } else if (error == "NotStarted") {
-            setStatus("Сначала надо запустить таймер", "error");
-        } else if (error == "SetToZero") {
-            setStatus("Сначала надо задать продолжительность ночи", "error");
-        } else if (error == "MultiThread") {
-            setStatus("Внутренняя ошибка, ничего не получилось", "error");
-        } else if (error == "None") {
-            setStatus("Ok", "success");
-        } else {
-            setStatus(error, "error");
-        }
-    }
-    function submitValue(url, value) {
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: value
-        })
-            .then((response) => response.json())
-            .then(response => {
-                if (url == "/api/admin/reset" && response.error == "None") {
-                    setStatus("Вся информация удалена", "error");
-                } else {
-                    showResponseError(response.error);
-                }
-            })
-    }
-    function setStatus(value, type) {
-        let status = document.querySelector("#status");
-        if (type == "success") {
-            status.classList = "alert-success";
-        } else if (type == "error") {
-            status.classList = "alert-error";
-        } else {
-            status.classList = "alert-info";
-        }
-        status.textContent = value;
-    }
-</script>
 
 <body>
     <h1>Праздник Единения: админка</h1>
@@ -173,6 +107,71 @@
         <li>Пустили слухи: <i>{{stats.gossip}}</i> раз</li>
         <li>Совершили преступление: <i>{{stats.crime}}</i> раз</li>
     </ul>
+
+    <script>
+        function setRepeatedActions() {
+            let checked = document.getElementById('repeated_actions').checked;
+            submitValue('/api/admin/repeated_actions', checked);
+            if (checked) {
+                document.getElementById('repeated_actions_value').textContent = "Разрешены";
+            } else {
+                document.getElementById('repeated_actions_value').textContent = "Запрещены";
+            }
+        }
+        function submitForm(url, valueId) {
+            let value = document.getElementById(valueId).value;
+            if (value == null || value == "") {
+                setStatus("Пустое значение", "error");
+                return;
+            }
+            setStatus("...");
+            submitValue(url, value);
+        }
+        function showResponseError(error) {
+            if (error == "AlreadyStarted") {
+                setStatus("Сначала надо остановить таймер", "error");
+            } else if (error == "NotStarted") {
+                setStatus("Сначала надо запустить таймер", "error");
+            } else if (error == "SetToZero") {
+                setStatus("Сначала надо задать продолжительность ночи", "error");
+            } else if (error == "MultiThread") {
+                setStatus("Внутренняя ошибка, ничего не получилось", "error");
+            } else if (error == "None") {
+                setStatus("Ok", "success");
+            } else {
+                setStatus(error, "error");
+            }
+        }
+        function submitValue(url, value) {
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: value
+            })
+                .then((response) => response.json())
+                .then(response => {
+                    if (url == "/api/admin/reset" && response.error == "None") {
+                        setStatus("Вся информация удалена", "error");
+                    } else {
+                        showResponseError(response.error);
+                    }
+                })
+        }
+        function setStatus(value, type) {
+            let status = document.querySelector("#status");
+            if (type == "success") {
+                status.classList = "alert-success";
+            } else if (type == "error") {
+                status.classList = "alert-error";
+            } else {
+                status.classList = "alert-info";
+            }
+            status.textContent = value;
+        }
+    </script>
 </body>
 
 </html>
