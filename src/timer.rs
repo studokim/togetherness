@@ -33,7 +33,16 @@ pub struct Timer {
 impl Timer {
     pub fn set(&mut self, duration: Duration) -> SetTimerResult {
         match self.started {
-            Some(_) => SetTimerResult::AlreadyStarted,
+            Some(started) => {
+                let seconds =
+                    (started + self.duration - time::OffsetDateTime::now_utc()).whole_seconds();
+                if seconds > 0 {
+                    SetTimerResult::AlreadyStarted
+                } else {
+                    self.duration = duration;
+                    SetTimerResult::Ok
+                }
+            }
             None => {
                 self.duration = duration;
                 SetTimerResult::Ok
