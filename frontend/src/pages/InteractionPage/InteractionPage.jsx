@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import "./InteractionPage.scss"
 import CustomButton from '../../UI/CustomButton/CustomButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { createAction, getPerson } from '../../redux/status';
+import { actionEnabled, createAction, getPerson } from '../../redux/status';
 
 const InteractionPage = ({ targetId, close, id }) => {
 
+    const [interractionEnebled, setInterractionEnebled] = useState(null);
     const fractionImg = useSelector(state => state.status.fractionsImgs);
     const myFractionId = useSelector(state => state.status.fraction);
     const [target, setTarget] = useState({ name: null, avatarId: null, targetId: targetId, fractionId: null });
@@ -16,7 +17,8 @@ const InteractionPage = ({ targetId, close, id }) => {
         if (targetId !== null) {
             dispatch(getPerson({
                 targetId, callback: (name, uuuuu, avatarId, fractionId) => {//при получении данных 
-                    setTarget({ name: name, avatarId: avatarId, targetId: targetId, fractionId: fractionId })
+                    setTarget({ name: name, avatarId: avatarId, targetId: targetId, fractionId: fractionId });
+                    dispatch(actionEnabled((val) => setInterractionEnebled(val)));
                 }
             }));
         }
@@ -47,14 +49,26 @@ const InteractionPage = ({ targetId, close, id }) => {
                     null}
             </div>
             {/* ________________ ВЗАИМОДЕЙСТВИЯ ____________________ */}
-            <div className='interractions'>
-                <CustomButton onClick={() => { action(1) }}>Обнять +1/+1</CustomButton>
-                <CustomButton onClick={() => { action(2) }}>Подслушать +2/0</CustomButton>
-                <CustomButton onClick={() => { action(3) }}>Шанатажировать +3/-1</CustomButton>
-                <CustomButton onClick={() => { action(4) }}>Пустить слухи +3/0</CustomButton>
-                <CustomButton onClick={() => { action(5) }}>Преступление +4/-2</CustomButton>
-                <CustomButton onClick={() => { close() }}>Уйти</CustomButton>
-            </div>
+            {interractionEnebled === null //еще не загрузились данные
+                ?
+                null
+                :
+                interractionEnebled === true //можно взаимодействовать
+                    ?
+                    < div className='interractions'>
+                        <CustomButton onClick={() => { action(1) }}>Обнять +1/+1</CustomButton>
+                        <CustomButton onClick={() => { action(2) }}>Подслушать +2/0</CustomButton>
+                        <CustomButton onClick={() => { action(3) }}>Шанатажировать +3/-1</CustomButton>
+                        <CustomButton onClick={() => { action(4) }}>Пустить слухи +3/0</CustomButton>
+                        <CustomButton onClick={() => { action(5) }}>Преступление +4/-2</CustomButton>
+                        <CustomButton onClick={() => { close() }}>Уйти</CustomButton>
+                    </div>
+                    : //нельзя взаимодействовать
+                    <>
+                        <h1>Больше ничего нельзя сделать</h1>
+                        <CustomButton onClick={() => { close() }}>Уйти</CustomButton>
+                    </>
+            }
         </div >
     );
 }

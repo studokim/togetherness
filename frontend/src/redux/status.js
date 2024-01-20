@@ -178,9 +178,10 @@ export const status = createSlice({
     actionEnabled: (state, action) => {
       axios.get(`${ADDR}/action?subject_id=${state.id}&object_id=${action.payload.targetId}`)
         .then(res => {
-          const actions = res.data.count;
-          console.log(actions);
-          action.payload.callback(actions);
+          const possible = res.data.possible;
+          console.log(possible);
+          console.log(res.data.error);
+          action.payload.callback(possible);
         })
         .catch(error => {
           console.log(error);

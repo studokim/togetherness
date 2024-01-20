@@ -38,7 +38,7 @@ export default function MainPage() {
     return (
         <div className='MainPage'>
             {//_______ ОТОБРАЖАЕМ ЛИБО СТРАНИЦУ ВЗАИМОДЕЙСТВИЯ ЛИБО ГЛАВНУЮ СТРАНИЦУ _________//
-                targetId !== null   //если получили шв другого игроока
+                targetId !== null   //если получили id другого игроока
                     ?
                     <InteractionPage
                         targetId={targetId}
