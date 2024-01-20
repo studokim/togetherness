@@ -116,7 +116,7 @@ impl Helper {
     }
 
     pub async fn reset_game(&self, repeated_actions_allowed: bool) {
-        let stop_timer = self
+        let _stop_timer = self
             .client
             .post(self.make_url(Url::AdminStopTimer))
             .send()
@@ -125,7 +125,8 @@ impl Helper {
             .json::<types::DefaultResponse>()
             .await
             .unwrap();
-        assert!(matches!(stop_timer.error, types::Error::None));
+        // assert!(matches!(stop_timer.error, types::Error::None));
+        // The request fails if already stopped, but that's fine for our case.
         let reset = self
             .client
             .post(self.make_url(Url::AdminReset))
