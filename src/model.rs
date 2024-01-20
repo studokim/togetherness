@@ -7,6 +7,7 @@ pub type PlayerId = String;
 pub type FactionId = u32;
 pub type AvatarId = u32;
 pub type Count = usize;
+pub type DifferenceInGold = i32;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Player {
@@ -128,6 +129,29 @@ pub enum ActionType {
     Blackmail,
     Gossip,
     Crime,
+}
+
+// TODO: combine duplicated logic
+impl ActionType {
+    pub fn as_subject(&self) -> DifferenceInGold {
+        match self {
+            ActionType::Hug => 1,
+            ActionType::Eavesdropping => 2,
+            ActionType::Blackmail => 3,
+            ActionType::Gossip => 3,
+            ActionType::Crime => 4,
+        }
+    }
+
+    pub fn as_object(&self) -> DifferenceInGold {
+        match self {
+            ActionType::Hug => 1,
+            ActionType::Eavesdropping => 0,
+            ActionType::Blackmail => -1,
+            ActionType::Gossip => 0,
+            ActionType::Crime => -2,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Hash, Clone)]

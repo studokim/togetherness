@@ -6,25 +6,38 @@ use common::*;
 
 #[tokio::test]
 async fn test_async() {
-    log::configure(tracing::Level::INFO);
+    log::configure(tracing::Level::INFO, false);
 
-    let root = "https://togetherness.muravev.keenetic.name/";
-    let root = reqwest::Url::parse(root).unwrap();
-    let settings = scenario::Settings {
-        root,
-        repeated_actions_allowed: false,
-        game_started: false,
-        iterations: 500,
-    };
+    const PLAYERS: usize = 100;
+    const ROOT: &'static str = "https://togetherness.muravev.keenetic.name/";
+    let root = reqwest::Url::parse(ROOT).unwrap();
     let client = Arc::new(reqwest::Client::new());
+    let settings = scenario::Settings {
+        root: root.clone(),
+        game_started: true,
+        players: PLAYERS,
+        iterations: 100,
+        delays_between_iterations: true,
+        check_gold: false,
+        repeated_actions_allowed: false,
+    };
 
-    const INSTANCES: usize = 1;
-    let mut futures = Vec::with_capacity(INSTANCES);
-    let mut handles = Vec::with_capacity(INSTANCES);
-    let mut results = Vec::with_capacity(INSTANCES);
+    let mut futures = Vec::with_capacity(PLAYERS);
+    let mut handles = Vec::with_capacity(PLAYERS);
+    let mut results = Vec::with_capacity(PLAYERS);
 
-    for _ in 0..INSTANCES {
-        let instance = scenario::run(settings.clone(), client.clone());
+    // reset game
+    helper::Helper::new(root.clone(), client.clone())
+        .reset_game(settings.repeated_actions_allowed)
+        .await;
+    // register all players (sync)
+    for id in 0..PLAYERS {
+        scenario::register_player(id, root.clone(), client.clone()).await;
+    }
+    // start acting (async)
+    for id in 0..PLAYERS {
+        let id: model::PlayerId = id.to_string();
+        let instance = scenario::run(id, settings.clone(), client.clone());
         futures.push(instance);
     }
     for fut in futures {

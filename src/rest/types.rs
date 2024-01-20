@@ -45,7 +45,7 @@ impl Into<ActionId> for ActionType {
             ActionType::Eavesdropping => 2,
             ActionType::Blackmail => 3,
             ActionType::Gossip => 4,
-            ActionType::Crime => 4,
+            ActionType::Crime => 5,
         }
     }
 }
