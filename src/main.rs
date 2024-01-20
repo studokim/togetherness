@@ -32,7 +32,7 @@ pub struct Args {
 
 #[tokio::main]
 async fn main() {
-    log::configure();
+    log::configure(tracing::Level::DEBUG);
 
     let args = Args::parse();
     if args.database_url == None {
