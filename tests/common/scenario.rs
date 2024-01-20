@@ -29,7 +29,7 @@ pub async fn register_player(id: usize, root: reqwest::Url, client: Arc<reqwest:
         id: id.to_string(),
         name: id.to_string(),
         avatar_id: 0,
-        faction_id: (id % 5 + 1).try_into().unwrap(),
+        faction_id: (id % 4 + 1).try_into().unwrap(),
         gold: 0,
     };
     let response = helper.post_player(player).await.unwrap();
@@ -117,7 +117,7 @@ async fn act_test(d: &mut Data) {
     {
         Ok(response) => {
             if d.settings.check_gold {
-                log::info!(
+                log::debug!(
                     "Checking difference in gold {}->{}...",
                     subject_id.clone(),
                     object_id.clone()
@@ -138,7 +138,7 @@ async fn act_test(d: &mut Data) {
                 assert_eq!(gold_actual, gold_expected);
                 assert_eq!(their_gold_actual, their_gold_expected);
             } else {
-                log::info!("Difference in gold is not checked");
+                log::debug!("Difference in gold is not checked");
                 assert!(true)
             }
         }
