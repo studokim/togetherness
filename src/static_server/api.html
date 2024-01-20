@@ -20,17 +20,10 @@
             — получаем данные игрока-объекта при взаимодействии</li>
         <li><code>POST /api/action {action={subject_id, object_id, action_id}} -> {ok, error}</code>
             — взаимодействуем</li>
-        <li><code>GET /api/action[?subject_id=id][&object_id=id][&action_id=id] -> {count, error}</code>
-            — показываем количество взаимодействий. Параметры <code>subject_id</code>, <code>object_id</code> и
-            <code>action_id</code> работают как фильтр пересечения (логическое «И»). Примеры использования:
-            <ul>
-                <li><code>?subject_id=id&object_id=id</code> — если <code>count=1</code>, значит игроки уже
-                    взаимодействовали и повторное взаимодействие (в этих же ролях) запрещено</li>
-                <li><code>?subject_id=id&action_id=id</code> — показать игроку, сколько раз он совершал действия этого
-                    типа</li>
-                <li><code>?object_id=id</code> — показать игроку, сколько раз он был жертвой действий любого типа</li>
-            </ul>
-        </li>
+        <li><code>GET /api/action?subject_id=id&object_id=id -> {possible, error}</code>
+            — показываем, возможно ли взаимодействие между этими игроками. Оно возможно, только если они ещё не
+            взаимодействовали в этих ролях, либо на сервере разрешены повторные взаимодействия.
+            Оба параметра обязательны.</li>
         <li><code>GET /api/gold/:id -> {count, error}</code>
             — показываем количество золота</li>
         <li><code>GET /api/status/:id -> {status={action_id, as_subject, as_object}, error}</code>
@@ -69,18 +62,18 @@
             <ul>
                 <li><code>SubjectNotFound</code> — игрок-субъект с таким id не зарегистрирован</li>
                 <li><code>ObjectNotFound</code> — игрок-объект с таким id не зарегистрирован</li>
-                <li><code>ActionNotFound</code> — некорректный id взаимодействия // пока не реализовано, вызывает
-                    падение сервера</li>
-                <li><code>AlreadyActed</code> — игроки уже взаимодействовали в этих ролях</li>
+                <li><code>ActionNotFound</code> — некорректный id взаимодействия // пока не реализовано,
+                    весь запрос игнорируется</li>
+                <li><code>AlreadyActed</code> — игроки уже взаимодействовали в этих ролях
+                    и повторные взаимодействия запрещены</li>
                 <li><code>MultiThread</code>
             </ul>
         </li>
         <li>
-            <code>GET /api/action[?subject_id=id][&object_id=id][&action_id=id]</code>
+            <code>GET /api/action?subject_id=id&object_id=id</code>
             <ul>
                 <li><code>SubjectNotFound</code></li>
                 <li><code>ObjectNotFound</code></li>
-                <li><code>ActionNotFound</code> // пока не реализовано, вызывает падение сервера</li>
                 <li><code>MultiThread</code>
             </ul>
         </li>

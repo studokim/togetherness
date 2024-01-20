@@ -133,13 +133,7 @@ pub async fn post_action(
     };
     match state.write() {
         Ok(mut state) => {
-            if !state.repeated_actions_allowed()
-                && state.count_actions(
-                    Some(action.subject_id.clone()),
-                    Some(action.object_id.clone()),
-                    None,
-                ) >= 1
-            {
+            if !state.action_allowed(action.subject_id.clone(), action.object_id.clone()) {
                 return Json(types::DefaultResponse {
                     ok: false,
                     error: types::Error::AlreadyActed,
@@ -174,51 +168,37 @@ pub async fn get_action(
     State(state): State<SharedState>,
     filter: Query<types::GetActionRequest>,
 ) -> Json<types::ActionResponse> {
-    log::debug!(
-        "Returning filtered actions: subject_id={:?}, object_id={:?}, action_id={:?}",
-        filter.subject_id,
-        filter.object_id,
-        filter.action_id
-    );
-    let action_type: Option<model::ActionType> = match filter.action_id {
-        Some(action_id) => Some(action_id.into()),
-        None => None,
-    };
     match state.read() {
         Ok(state) => {
-            let subject_id = match &filter.subject_id {
-                Some(subject_id) => match state.get_player(&subject_id) {
-                    GetPlayerResult::Ok(_) => Some(subject_id.clone()),
-                    GetPlayerResult::NotFound => {
-                        return Json(types::ActionResponse {
-                            count: None,
-                            error: types::Error::SubjectNotFound,
-                        })
-                    }
-                },
-                None => None,
+            match state.get_player(&filter.subject_id) {
+                GetPlayerResult::Ok(_) => {}
+                GetPlayerResult::NotFound => {
+                    return Json(types::ActionResponse {
+                        possible: None,
+                        error: types::Error::SubjectNotFound,
+                    })
+                }
             };
-            let object_id = match &filter.object_id {
-                Some(object_id) => match state.get_player(&object_id) {
-                    GetPlayerResult::Ok(_) => Some(object_id.clone()),
-                    GetPlayerResult::NotFound => {
-                        return Json(types::ActionResponse {
-                            count: None,
-                            error: types::Error::ObjectNotFound,
-                        })
-                    }
-                },
-                None => None,
+            match state.get_player(&filter.object_id) {
+                GetPlayerResult::Ok(_) => {}
+                GetPlayerResult::NotFound => {
+                    return Json(types::ActionResponse {
+                        possible: None,
+                        error: types::Error::ObjectNotFound,
+                    })
+                }
             };
             Json(types::ActionResponse {
-                count: Some(state.count_actions(subject_id, object_id, action_type)),
+                possible: Some(
+                    state.action_allowed(filter.subject_id.clone(), filter.object_id.clone()),
+                ),
                 error: types::Error::None,
             })
         }
         Err(err) => {
             log::debug!("Error::MultiThread: {}", err);
             Json(types::ActionResponse {
-                count: None,
+                possible: None,
                 error: types::Error::MultiThread,
             })
         }

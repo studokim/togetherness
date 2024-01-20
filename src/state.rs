@@ -80,6 +80,11 @@ impl AppState {
         }
     }
 
+    pub fn action_allowed(&self, subject_id: PlayerId, object_id: PlayerId) -> bool {
+        self.repeated_actions_allowed()
+            || self.count_actions(Some(subject_id), Some(object_id), None) < 1
+    }
+
     pub fn count_actions(
         &self,
         subject_id: Option<PlayerId>,

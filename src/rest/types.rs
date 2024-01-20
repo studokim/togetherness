@@ -65,7 +65,7 @@ impl Into<ActionType> for ActionId {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ActionResponse {
-    pub count: Option<Count>,
+    pub possible: Option<bool>,
     pub error: Error,
 }
 
@@ -128,7 +128,6 @@ pub struct PostActionRequest {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct GetActionRequest {
-    pub subject_id: Option<PlayerId>,
-    pub object_id: Option<PlayerId>,
-    pub action_id: Option<ActionId>,
+    pub subject_id: PlayerId,
+    pub object_id: PlayerId,
 }
