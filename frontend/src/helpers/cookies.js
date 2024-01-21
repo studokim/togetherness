@@ -9,6 +9,8 @@ export function setCookie(name, value, options = {}) {
 
     options = {
         path: '/',
+        "max-age": 10800,
+
         // при необходимости добавьте другие значения по умолчанию
         ...options
     };
