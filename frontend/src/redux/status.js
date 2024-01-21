@@ -86,6 +86,7 @@ export const status = createSlice({
       console.log(action.payload)
       state.objectActions = action.payload;
     },
+    
     createPerson: (state, action) => {
       const id = new Date().getTime().toString();
       axios.post(`${ADDR}/player`,

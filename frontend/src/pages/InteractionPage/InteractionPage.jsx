@@ -9,6 +9,9 @@ const InteractionPage = ({ targetId, close, id }) => {
     const [interractionEnebled, setInterractionEnebled] = useState(null);
     const fractionImg = useSelector(state => state.status.fractionsImgs);
     const myFractionId = useSelector(state => state.status.fraction);
+    const avatars = useSelector(state => state.status.avatars);
+
+
     const [target, setTarget] = useState({ name: null, avatarId: null, targetId: targetId, fractionId: null });
     const dispatch = useDispatch();
 
@@ -38,12 +41,12 @@ const InteractionPage = ({ targetId, close, id }) => {
             <div className='targetName'>{target.name}</div>
             {/* ________________ АВАТАР С ФРАКИЦЕЙ ____________________ */}
             <div className='imgContainer'>
-                <img className='targetAvatar' src={`/images/unicorn.jpg`} />
+                <img className='targetAvatar' src={target.avatarId !== null ? avatars[target.avatarId] : `/images/unicorn.jpg`} />
 
                 {target.fractionId === myFractionId
                     ?
                     <div className='fractionImg'>
-                        <img src={`${fractionImg[target.fractionId]}`} />
+                        <img src={`${fractionImg[Number(target.fractionId) - 1]}`} />
                     </div>
                     :
                     null}
