@@ -42,7 +42,7 @@ pub async fn post_player(
     let player = model::Player::new(
         &player.id,
         &player.name,
-        player.,
+        player.avatar_id,
         player.faction_id,
     );
     match state.write() {

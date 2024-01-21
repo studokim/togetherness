@@ -5,11 +5,11 @@ import { useSelector } from 'react-redux'
 
 function getStringAction(id) {
     switch (id) {
-        case 0: return "Объятий";
-        case 1: return "Подслушано";
-        case 2: return "Шантаж";
-        case 3: return "Слухов пущено";
-        case 4: return "Преступления";
+        case 1: return "Объятий";
+        case 2: return "Подслушано";
+        case 3: return "Шантаж";
+        case 4: return "Слухов пущено";
+        case 5: return "Преступления";
         default: return "Неизвестное действие";
     }
 
