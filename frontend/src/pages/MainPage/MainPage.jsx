@@ -11,6 +11,7 @@ import InteractionPage from '../InteractionPage/InteractionPage';
 import { Timer } from './Timer/Timer';
 import { useGold } from './useGold';
 import { getObjectActions, getSubjectActions, setObjectActions, setSubjectActions, getActions, setActions } from '../../redux/status';
+import Message from './Message/Message';
 
 
 export default function MainPage() {
@@ -18,22 +19,27 @@ export default function MainPage() {
     const [visibility, setVisibility] = useState({
         qrCode: false,
         qrScaner: false,
+        message: false,
         // ineraction: false,
     })
     const id = useSelector((state) => state.status.id);
     const name = useSelector((state) => state.status.name);
     const avatars = useSelector((state) => state.status.avatars);
     const selectedAvatar = useSelector((state) => state.status.selectedAvatar);
+    const messageAboutStart = useSelector(state => state.status.messageAboutStart);
     const [targetId, setTargetId] = useState(null);
+    // const [messageVisible, setMessageVisible] = useState(false);
     const gold = useGold();
     const dispatch = useDispatch();
     const navigator = useNavigate();
-
-    const status = eval()
-
+    console.log(messageAboutStart)
     useEffect(() => {
         console.log("ID", id)
     }, [id])
+
+    useEffect(() => {
+        console.log("visibility", visibility)
+    }, [visibility])
 
     return (
         <div className='MainPage'>
@@ -72,6 +78,14 @@ export default function MainPage() {
                                 null
                         }
 
+                        {
+                            visibility.message
+                                ?
+                                <Message message={messageAboutStart} close={() => setVisibility({ ...visibility, message: false })} />
+                                :
+                                null
+                        }
+
                         <Timer />
 
                         <h1>{name}</h1>
@@ -87,16 +101,24 @@ export default function MainPage() {
 
                         <div className='goldCount'><span>{gold === null ? "...и ваши карманы пусты" : gold + " g"}</span></div>
 
-                        <CustomButton onClick={() => { setVisibility({ ...visibility, qrScaner: true }); }}>
+                        <CustomButton
+                            onClick={() => {
+                                if (messageAboutStart === 0) {
+                                    setVisibility({ ...visibility, qrScaner: true });
+                                }
+                                else setVisibility({ ...visibility, message: true });
+                            }}
+                        >
                             Взаимодействовать
                         </CustomButton>
 
                         <CustomButton
                             onClick={() => {
-                                dispatch(getActions({ callback: (actions) => dispatch(setActions(actions)) }));
-                                // dispatch(getSubjectActions({ callback: (actions) => dispatch(setSubjectActions(actions)) }));
-                                // dispatch(getObjectActions({ callback: (actions) => dispatch(setObjectActions(actions)) }));
-                                navigator("/status");
+                                if (messageAboutStart === 1) {
+                                    dispatch(getActions({ callback: (actions) => dispatch(setActions(actions)) }));
+                                    navigator("/status");
+                                }
+                                else { setVisibility({ ...visibility, message: true }); }
                             }}
                         >
                             STATUS

@@ -31,6 +31,7 @@ export const status = createSlice({
     actions: null,
     subjectActions: null,       //действия совершенные игроком
     objectActions: null,        //действия совершенные над игроком
+    messageAboutStart: -1,    //индикатор о том началась игра или закончилась (если игра идет = 0)
   },
   reducers: {
     setName: (state, action) => {
@@ -45,10 +46,23 @@ export const status = createSlice({
       console.log(action.payload)
       state.selectedAvatar = action.payload;
     },
+
     setTimer: (state, action) => {
       // console.log("setTimer", action.payload)
-      state.timer = action.payload;
+      if (action.payload === -1) {
+        state.timer = null;
+        state.messageAboutStart = -1; //еще не началась
+      }
+      else if (action.payload === 0) {
+        state.timer = null;
+        state.messageAboutStart = 1;  //закончилась
+      }
+      else {
+        state.timer = action.payload;
+        state.messageAboutStart = 0;  //в процессе
+      }
     },
+
     setId: (state, action) => {
       console.log(action.payload)
       state.id = action.payload;
@@ -131,8 +145,16 @@ export const status = createSlice({
     getTimer: (state, action) => {
       axios.get(`${ADDR}/timer`)
         .then(res => {
-          const timer = res.data.seconds;
-          action.payload.callback(timer);
+          if (res.data.seconds !== null) { //игра идёт
+            const timer = res.data.seconds;
+            action.payload.callback(timer);
+          }
+          else if (res.data.error === "notStarted") { //игра не началась
+            action.payload.callback(-1);
+          }
+          else if (res.data.error === "AlreadyFinished") { //игра закончилась
+            action.payload.callback(0);
+          }
         })
         .catch(error => {
           console.log(error);

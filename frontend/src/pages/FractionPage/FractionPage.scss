@@ -13,6 +13,8 @@
 
     .fractionContainer {
         min-height: 280px;
+        max-width: 500px;
+        max-height: 500px;
         width: 100%;
         display: grid;
         grid-template-columns: 50% 50%;

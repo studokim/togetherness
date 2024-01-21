@@ -1,0 +1,28 @@
+.darkArea {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.295);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+
+    .MessageContainer {
+        height: 25%;
+        width: 80%;
+        max-width: 700px;
+        background-color: rgb(189, 161, 72);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        span {
+            font-size: 25px;
+            font-family: "BadScript";
+        }
+    }
+}
