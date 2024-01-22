@@ -19,7 +19,7 @@ const InteractionPage = ({ targetId, close, id }) => {
 
         if (targetId !== null) {
             dispatch(getPerson({
-                targetId, callback: (name, uuuuu, avatarId, fractionId) => {//при получении данных 
+                id: targetId, callback: (name, uuuuu, avatarId, fractionId) => {//при получении данных 
                     setTarget({ name: name, avatarId: avatarId, targetId: targetId, fractionId: fractionId });
                     dispatch(actionEnabled((val) => setInterractionEnebled(val)));
                 }

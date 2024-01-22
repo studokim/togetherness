@@ -5,7 +5,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: url("../../../public/images/paper3.avif") no-repeat;
+    // background: url("../../../public/images/paper3.avif") no-repeat;
+    // background: url("../../../public/images/paper3.avif") no-repeat;
     background-size: 100% 100%;
 
     .nameInputLabel {
@@ -22,6 +23,8 @@
             // rotate: 180deg;
             background: url("../../../public/images/arrow.svg") no-repeat;
             background-size: 100% 100%;
+            border: none;
+            box-shadow: 0 0 4px red;
         }
 
         .left {
