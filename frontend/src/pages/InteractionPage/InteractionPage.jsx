@@ -21,7 +21,7 @@ const InteractionPage = ({ targetId, close, id }) => {
             dispatch(getPerson({
                 id: targetId, callback: (name, uuuuu, avatarId, fractionId) => {//при получении данных 
                     setTarget({ name: name, avatarId: avatarId, targetId: targetId, fractionId: fractionId });
-                    dispatch(actionEnabled((val) => setInterractionEnebled(val)));
+                    dispatch(actionEnabled({ targetId: targetId, callback: (val) => setInterractionEnebled(val) }));
                 }
             }));
         }
