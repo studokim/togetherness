@@ -32,6 +32,10 @@ const InteractionPage = ({ targetId, close, id }) => {
         dispatch(createAction({ targetId, actionId }));
         close();
     }
+    console.log("target.fractionId, ", target.fractionId);
+    console.log("myFractionId, ", myFractionId);
+    console.log("Number(target.fractionId) - 1, ", Number(target.fractionId) - 1);
+    console.log("fractionImg[Number(target.fractionId) - 1], ", fractionImg[Number(target.fractionId) - 1]);
 
     return (
         <div className='InteractionPage'>

@@ -14,7 +14,7 @@ export const useGold = () => {
         console.log("GOLD");
         const interval = setInterval(() => {
             dispatch(getGold({ id, callback: (val) => { dispatch(setGold(val)) } }))
-            console.log("gold", gold);
+            // console.log("gold", gold);
         }, 1000);
 
         return () => clearInterval(interval);
