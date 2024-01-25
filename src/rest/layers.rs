@@ -4,7 +4,9 @@ use axum::{
     middleware::Next,
     response::{IntoResponse, Redirect, Response},
 };
+use clap::Parser;
 
+use crate::config::Args;
 use crate::log;
 use crate::rest::shared_state::AdminState;
 
@@ -13,10 +15,10 @@ pub async fn admin_auth(State(state): State<AdminState>, request: Request, next:
     let password_from_cookies = match request.headers()["Cookie"].to_str() {
         Ok(cookie) => match cookie.find("password=") {
             Some(begin) => {
-                let begin = begin + "password=".len();
-                match &cookie[begin..].find(" ") {
-                    Some(end) => Some(&cookie[begin..*end]),
-                    None => Some(&cookie[begin..]),
+                let shift = "password=".len();
+                match &cookie[begin + shift..].find(";") {
+                    Some(end) => Some(&cookie[begin + shift..*end + shift]),
+                    None => Some(&cookie[begin + shift..]),
                 }
             }
             None => None,
@@ -51,6 +53,9 @@ pub async fn admin_auth(State(state): State<AdminState>, request: Request, next:
         response
     } else {
         log::debug!("denied access to `{}`", request.uri());
-        Redirect::temporary("/admin/auth").into_response()
+        match Args::parse().root_url {
+            Some(root) => Redirect::temporary(&format!("{}/admin/auth", root)).into_response(),
+            None => Redirect::temporary("/admin/auth").into_response(),
+        }
     }
 }

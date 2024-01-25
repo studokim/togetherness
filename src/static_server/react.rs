@@ -3,8 +3,8 @@ use clap::Parser;
 use tower_http::services::ServeDir;
 use tower_http::services::ServeFile;
 
+use crate::config::Args;
 use crate::log;
-use crate::Args;
 
 pub fn assets() -> Router {
     let dir = Args::parse().front_dir;

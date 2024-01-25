@@ -1,3 +1,4 @@
+mod config;
 pub mod log;
 pub mod model;
 mod rest;

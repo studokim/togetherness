@@ -10,6 +10,8 @@ services:
       - TOGETHERNESS_IP=0.0.0.0
       - TOGETHERNESS_PORT=5000
       - FRONT_DIR=/srv/front
+      - ROOT_URL=http://localhost:3000
+      - ADMIN_PASSWORD=changeme
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://localhost:5000/"]
       start_period: 20s

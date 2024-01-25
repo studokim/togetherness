@@ -1,5 +1,7 @@
+use clap::Parser;
 use std::sync::{Arc, RwLock};
 
+use crate::config::Args;
 use crate::state;
 
 type Password = String;
@@ -11,7 +13,7 @@ pub struct AdminAccount {
 impl Default for AdminAccount {
     fn default() -> Self {
         Self {
-            password: "changeme".to_string(),
+            password: Args::parse().admin_password,
         }
     }
 }
