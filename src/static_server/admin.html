@@ -56,11 +56,11 @@
         <label for="duration">Продолжительность игры:</label>
         <input id="duration" type="number" step="1" min="1" max="240" placeholder="1–240" size="6" pattern="\d+" />
         минут.
-        <input id="save" type="button" value="Установить" onclick="submitForm('/api/admin/duration', 'duration')">
+        <input id="save" type="button" value="Установить" onclick="submitForm('/admin/api/duration', 'duration')">
     </form>
     <p>
-        <input id="start" type="button" value="Старт" onclick="submitValue('/api/admin/start', null)">
-        <input id="stop" type="button" value="Экстренный стоп" onclick="submitValue('/api/admin/stop', null)"> *
+        <input id="start" type="button" value="Старт" onclick="submitValue('/admin/api/start', null)">
+        <input id="stop" type="button" value="Экстренный стоп" onclick="submitValue('/admin/api/stop', null)"> *
     </p>
     <p>* Игроки не смогут ни взаимодействовать, ни увидеть статистику до повторного нажатия кнопки «старт».
         Состояние таймера будет сброшено. Профили игроков и история взаимодействий будут сохранены.
@@ -73,7 +73,7 @@
         <summary>Опасная зона</summary>
         <div class="danger">
             Все профили игроков будут удалены, взаимодействия забыты, таймер сброшен.
-            <input id="reset" type="button" value="Сбросить всё" onclick="submitValue('/api/admin/reset', null)">
+            <input id="reset" type="button" value="Сбросить всё" onclick="submitValue('/admin/api/reset', null)">
         </div>
     </details>
 
@@ -111,7 +111,7 @@
     <script>
         function setRepeatedActions() {
             let checked = document.getElementById('repeated_actions').checked;
-            submitValue('/api/admin/repeated_actions', checked);
+            submitValue('/admin/api/repeated_actions', checked);
             if (checked) {
                 document.getElementById('repeated_actions_value').textContent = "Разрешены";
             } else {
@@ -153,7 +153,7 @@
             })
                 .then((response) => response.json())
                 .then(response => {
-                    if (url == "/api/admin/reset" && response.error == "None") {
+                    if (url == "/admin/api/reset" && response.error == "None") {
                         setStatus("Вся информация удалена", "error");
                     } else {
                         showResponseError(response.error);

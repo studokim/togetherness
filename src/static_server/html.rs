@@ -5,7 +5,7 @@ use axum::{
 };
 use minijinja::render;
 
-use crate::{log, model, rest::shared_state::SharedState, static_server::template};
+use crate::{log, model, rest::shared_state::AppState, static_server::template};
 
 // Files below are included in compile time.
 // The macro is relative to current `html.rs` file.
@@ -15,7 +15,7 @@ pub async fn api() -> Html<&'static str> {
     Html(include_str!("api.html"))
 }
 
-pub async fn admin(State(state): State<SharedState>) -> Html<String> {
+pub async fn admin(State(state): State<AppState>) -> Html<String> {
     log::debug!("admin.html");
     let html = include_str!("admin.html");
     match state.read() {
@@ -57,6 +57,12 @@ pub async fn admin(State(state): State<SharedState>) -> Html<String> {
         }
         Err(err) => Html(render!(html, status => err.to_string())),
     }
+}
+
+pub async fn password() -> Html<String> {
+    log::debug!("password.html");
+    let html = include_str!("password.html");
+    Html(render!(html, status => "Ok"))
 }
 
 pub async fn favicon() -> impl IntoResponse {

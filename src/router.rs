@@ -3,15 +3,15 @@ use axum::{
     routing::{get, post},
     Router,
 };
-use std::sync::Arc;
 use tower_http::trace::TraceLayer;
 
 use crate::rest;
-use crate::rest::shared_state::SharedState;
+use crate::rest::shared_state::{AdminState, AppState};
 use crate::static_server;
 
 pub fn new() -> Router {
-    let state = SharedState::default();
+    let state = AppState::default();
+    let admin_state = AdminState::default();
 
     let api = Router::new()
         .route("/api", get(static_server::html::api))
@@ -25,13 +25,13 @@ pub fn new() -> Router {
                 .route("/action", get(rest::api::get_action))
                 .route("/gold/:id", get(rest::api::get_gold))
                 .route("/status/:id", get(rest::api::get_status))
-                .with_state(Arc::clone(&state)),
+                .with_state(state.clone()),
         );
 
     let admin = Router::new()
         .route("/admin", get(static_server::html::admin))
         .nest(
-            "/api/admin",
+            "/admin/api",
             Router::new()
                 .route("/duration", post(rest::admin::post_duration))
                 .route("/start", post(rest::admin::post_start))
@@ -41,10 +41,14 @@ pub fn new() -> Router {
                     "/repeated_actions",
                     post(rest::admin::post_repeated_actions),
                 )
-                .route("/stats", get(rest::admin::get_stats))
-                .layer(middleware::from_fn(rest::layers::admin_auth)),
+                .route("/stats", get(rest::admin::get_stats)),
         )
-        .with_state(Arc::clone(&state));
+        .layer(middleware::from_fn_with_state(
+            admin_state.clone(),
+            rest::layers::admin_auth,
+        ))
+        .with_state(state.clone())
+        .route("/admin/password", get(static_server::html::password));
 
     let react = static_server::react::assets();
 

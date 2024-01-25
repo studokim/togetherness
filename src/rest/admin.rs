@@ -4,11 +4,11 @@ use time::Duration;
 
 use crate::log;
 use crate::model::ActionType;
-use crate::rest::shared_state::SharedState;
+use crate::rest::shared_state::AppState;
 use crate::rest::types;
 use crate::timer::*;
 
-pub async fn post_start(State(state): State<SharedState>) -> Json<types::DefaultResponse> {
+pub async fn post_start(State(state): State<AppState>) -> Json<types::DefaultResponse> {
     log::debug!("Game started");
     match state.write() {
         Ok(mut state) => match state.timer.start() {
@@ -35,7 +35,7 @@ pub async fn post_start(State(state): State<SharedState>) -> Json<types::Default
     }
 }
 
-pub async fn post_stop(State(state): State<SharedState>) -> Json<types::DefaultResponse> {
+pub async fn post_stop(State(state): State<AppState>) -> Json<types::DefaultResponse> {
     log::debug!("Game stopped");
     match state.write() {
         Ok(mut state) => match state.timer.stop() {
@@ -58,7 +58,7 @@ pub async fn post_stop(State(state): State<SharedState>) -> Json<types::DefaultR
     }
 }
 
-pub async fn post_reset(State(state): State<SharedState>) -> Json<types::DefaultResponse> {
+pub async fn post_reset(State(state): State<AppState>) -> Json<types::DefaultResponse> {
     log::debug!("Game reset");
     match state.write() {
         Ok(mut state) => match state.timer.get() {
@@ -85,7 +85,7 @@ pub async fn post_reset(State(state): State<SharedState>) -> Json<types::Default
 }
 
 pub async fn post_repeated_actions(
-    State(state): State<SharedState>,
+    State(state): State<AppState>,
     Json(repeated_actions): Json<bool>,
 ) -> Json<types::DefaultResponse> {
     log::debug!("Modifying repeated_actions setting");
@@ -112,7 +112,7 @@ pub async fn post_repeated_actions(
 }
 
 pub async fn post_duration(
-    State(state): State<SharedState>,
+    State(state): State<AppState>,
     Json(minutes): Json<crate::timer::Seconds>,
 ) -> Json<types::DefaultResponse> {
     log::debug!("Set game duration={}", minutes);
@@ -137,7 +137,7 @@ pub async fn post_duration(
     }
 }
 
-pub async fn get_stats(State(state): State<SharedState>) -> Json<types::StatsResponse> {
+pub async fn get_stats(State(state): State<AppState>) -> Json<types::StatsResponse> {
     log::debug!("Returning stats");
     match state.read() {
         Ok(state) => Json(types::StatsResponse {

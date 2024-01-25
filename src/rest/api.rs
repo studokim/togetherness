@@ -1,13 +1,13 @@
 use axum::extract::{Query, State};
 use axum::{extract::Path, Json};
 
-use crate::rest::shared_state::SharedState;
+use crate::rest::shared_state::AppState;
 use crate::rest::types;
 use crate::state::{ActResult, GetPlayerResult, RegisterResult};
 use crate::timer::GetTimerResult;
 use crate::{log, model};
 
-pub async fn get_timer(State(state): State<SharedState>) -> Json<types::TimerResponse> {
+pub async fn get_timer(State(state): State<AppState>) -> Json<types::TimerResponse> {
     // log::debug!("Returning timer");
     match state.read() {
         Ok(state) => match state.timer.get() {
@@ -35,7 +35,7 @@ pub async fn get_timer(State(state): State<SharedState>) -> Json<types::TimerRes
 }
 
 pub async fn post_player(
-    State(state): State<SharedState>,
+    State(state): State<AppState>,
     player: Json<types::PostPlayerRequest>,
 ) -> Json<types::DefaultResponse> {
     log::debug!("Registering player: name={}, id={}", player.name, player.id);
@@ -67,7 +67,7 @@ pub async fn post_player(
 }
 
 pub async fn get_player(
-    State(state): State<SharedState>,
+    State(state): State<AppState>,
     Path(id): Path<String>,
 ) -> Json<types::PlayerResponse> {
     log::debug!("Returning player: id={}", id);
@@ -93,7 +93,7 @@ pub async fn get_player(
 }
 
 pub async fn post_action(
-    State(state): State<SharedState>,
+    State(state): State<AppState>,
     action: Json<types::PostActionRequest>,
 ) -> Json<types::DefaultResponse> {
     log::debug!(
@@ -165,7 +165,7 @@ pub async fn post_action(
 }
 
 pub async fn get_action(
-    State(state): State<SharedState>,
+    State(state): State<AppState>,
     filter: Query<types::GetActionRequest>,
 ) -> Json<types::ActionResponse> {
     match state.read() {
@@ -206,7 +206,7 @@ pub async fn get_action(
 }
 
 pub async fn get_gold(
-    State(state): State<SharedState>,
+    State(state): State<AppState>,
     Path(id): Path<String>,
 ) -> Json<types::GoldResponse> {
     // log::debug!("Returning gold of player: id={}", id);
@@ -260,7 +260,7 @@ fn new_player_status_response(
 }
 
 pub async fn get_status(
-    State(state): State<SharedState>,
+    State(state): State<AppState>,
     Path(player_id): Path<String>,
 ) -> Json<types::PlayerStatusResponse> {
     match state.read() {
