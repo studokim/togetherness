@@ -48,7 +48,7 @@ pub fn new() -> Router {
             rest::layers::admin_auth,
         ))
         .with_state(state.clone())
-        .route("/admin/password", get(static_server::html::password));
+        .route("/admin/auth", get(static_server::html::auth));
 
     let react = static_server::react::assets();
 

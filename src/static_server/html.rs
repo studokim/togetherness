@@ -59,10 +59,10 @@ pub async fn admin(State(state): State<AppState>) -> Html<String> {
     }
 }
 
-pub async fn password() -> Html<String> {
-    log::debug!("password.html");
-    let html = include_str!("password.html");
-    Html(render!(html, status => "Ok"))
+pub async fn auth() -> Html<String> {
+    log::debug!("auth.html");
+    let html = include_str!("auth.html");
+    Html(render!(html, status => "Доступ запрещён"))
 }
 
 pub async fn favicon() -> impl IntoResponse {

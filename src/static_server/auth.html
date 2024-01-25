@@ -39,11 +39,30 @@
         <hr>
     </p>
 
-    <h2>Пароль</h2>
-
-
+    <h2>Авторизация</h2>
+    <form>
+        <label for="password">Пароль:</label>
+        <input id="password" type="text" placeholder="******" size="12" />
+        <input id="save" type="button" value="Ввести" onclick="tryAuth()">
+    </form>
 
     <script>
+        function tryAuth() {
+            setCookie('password', document.getElementById('password').value, 3);
+            setStatus('Верный пароль', 'success');
+            window.location.replace('/admin');
+        }
+
+        function setCookie(name, value, hours) {
+            var expires = "";
+            if (hours) {
+                var date = new Date();
+                date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/" + "; SameSite=Strict";
+        }
+
         function setStatus(value, type) {
             let status = document.querySelector("#status");
             if (type == "success") {

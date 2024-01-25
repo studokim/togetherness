@@ -2,7 +2,7 @@ use axum::{
     extract::{Request, State},
     http::StatusCode,
     middleware::Next,
-    response::{IntoResponse, Response},
+    response::{IntoResponse, Redirect, Response},
 };
 
 use crate::log;
@@ -51,6 +51,6 @@ pub async fn admin_auth(State(state): State<AdminState>, request: Request, next:
         response
     } else {
         log::debug!("denied access to `{}`", request.uri());
-        StatusCode::UNAUTHORIZED.into_response()
+        Redirect::temporary("/admin/auth").into_response()
     }
 }
