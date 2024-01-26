@@ -2,13 +2,12 @@ use axum::{
     extract::{Request, State},
     http::StatusCode,
     middleware::Next,
-    response::{IntoResponse, Redirect, Response},
+    response::{IntoResponse, Response},
 };
-use clap::Parser;
 
-use crate::config::Args;
 use crate::log;
 use crate::rest::shared_state::AdminState;
+use crate::static_server::html::auth;
 
 pub async fn admin_auth(State(state): State<AdminState>, request: Request, next: Next) -> Response {
     // do something with `request`...
@@ -53,9 +52,6 @@ pub async fn admin_auth(State(state): State<AdminState>, request: Request, next:
         response
     } else {
         log::debug!("denied access to `{}`", request.uri());
-        match Args::parse().root_url {
-            Some(root) => Redirect::temporary(&format!("{}/admin/auth", root)).into_response(),
-            None => Redirect::temporary("/admin/auth").into_response(),
-        }
+        auth().await.into_response()
     }
 }

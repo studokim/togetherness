@@ -17,9 +17,6 @@ pub struct Args {
     #[arg(env, short, long, help = "directory with the compiled React frontend")]
     pub front_dir: PathBuf,
 
-    #[arg(env, short, long, help = "URL, used as the base for redirects")]
-    pub root_url: Option<String>,
-
     #[arg(env, short, long)]
     pub admin_password: String,
 }

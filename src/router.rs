@@ -5,9 +5,9 @@ use axum::{
 };
 use tower_http::trace::TraceLayer;
 
-use crate::rest;
 use crate::rest::shared_state::{AdminState, AppState};
 use crate::static_server;
+use crate::{layers, rest};
 
 pub fn new() -> Router {
     let state = AppState::default();
@@ -45,10 +45,9 @@ pub fn new() -> Router {
         )
         .layer(middleware::from_fn_with_state(
             admin_state.clone(),
-            rest::layers::admin_auth,
+            layers::admin_auth,
         ))
-        .with_state(state.clone())
-        .route("/admin/auth", get(static_server::html::auth));
+        .with_state(state.clone());
 
     let react = static_server::react::assets();
 

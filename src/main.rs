@@ -2,6 +2,7 @@ use clap::Parser;
 use std::net::SocketAddr;
 
 mod config;
+mod layers;
 mod log;
 mod model;
 mod rest;
@@ -19,9 +20,6 @@ async fn main() {
     let args = Args::parse();
     if args.database_url == None {
         log::warn!("DATABASE_URL is not set, limited functionality")
-    }
-    if args.root_url == None {
-        log::warn!("ROOT_URL is not set, some redirects under /admin may fail")
     }
     let addr = SocketAddr::from((args.ip, args.port));
 
