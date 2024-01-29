@@ -11,18 +11,22 @@ use crate::static_server::html::auth;
 
 pub async fn admin_auth(State(state): State<AdminState>, request: Request, next: Next) -> Response {
     // do something with `request`...
-    let password_from_cookies = match request.headers()["Cookie"].to_str() {
-        Ok(cookie) => match cookie.find("password=") {
-            Some(begin) => {
-                let shift = "password=".len();
-                match &cookie[begin + shift..].find(";") {
-                    Some(end) => Some(&cookie[begin + shift..*end + shift]),
-                    None => Some(&cookie[begin + shift..]),
+    let password_from_cookies = if request.headers().contains_key("Cookie") {
+        match request.headers()["Cookie"].to_str() {
+            Ok(cookie) => match cookie.find("password=") {
+                Some(begin) => {
+                    let shift = "password=".len();
+                    match &cookie[begin + shift..].find(";") {
+                        Some(end) => Some(&cookie[begin + shift..*end + shift]),
+                        None => Some(&cookie[begin + shift..]),
+                    }
                 }
-            }
-            None => None,
-        },
-        Err(_) => None,
+                None => None,
+            },
+            Err(_) => None,
+        }
+    } else {
+        None
     };
     let authorized = match state.read() {
         Ok(state) => match password_from_cookies {
