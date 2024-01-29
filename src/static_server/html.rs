@@ -52,7 +52,7 @@ pub async fn admin(State(state): State<AppState>) -> Html<String> {
                 }
             };
             Html(
-                render!(html, timer => timer, stats => stats, factions => factions, status => "Ok", repeated_actions => repeated_actions),
+                render!(html, timer => timer, stats => stats, factions => factions, status => "Страница загружена", repeated_actions => repeated_actions),
             )
         }
         Err(err) => Html(render!(html, status => err.to_string())),
