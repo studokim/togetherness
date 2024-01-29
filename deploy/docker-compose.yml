@@ -22,8 +22,18 @@ services:
     #     condition: service_healthy
     networks:
       - togetherness
+  togetherness_caddy:
+    image: caddy:alpine
+    container_name: togetherness_caddy
     ports:
-      - "0.0.0.0:8080:5000"
+      - "0.0.0.0:5000:5000"
+      - "0.0.0.0:443:443"
+    networks:
+      - togetherness
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ../target/togetherness_caddy/data:/data
+      - ../target/togetherness_caddy/config:/config
   # db:
   #   image: postgres:latest
   #   container_name: togetherness_db
