@@ -1,4 +1,4 @@
-import { Route, Routes, BrowserRouter } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import './App.scss';
 import { LoginPage } from './pages/LoginPage/LoginPage';
 import MainPage from './pages/MainPage/MainPage';
@@ -12,6 +12,8 @@ import { StatusPage } from './pages/StatusPage/StatusPage';
 function App() {
 
   const dispatch = useDispatch();
+  const navigator = useNavigate();
+
   useEffect(() => {
     const id = getCookie("togethernessId");
     console.log(id);
@@ -23,9 +25,17 @@ function App() {
           dispatch(setId(id));
           dispatch(setFraction(fractionId));
           dispatch(setAvatar(avatarId));
+          navigator("/main");
+        },
+        errorHandler: (error) => {
+          console.log("Пользователь не зарегистрирован. ", error);
+          navigator("/");
         }
       }));
       console.log("Обновление");
+    }
+    else {
+      navigator("/");
     }
   }, [])
 
@@ -33,15 +43,13 @@ function App() {
 
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path='*' element={<LoginPage />} />
-          <Route path='/*' element={<LoginPage />} />
-          <Route path='/fraction' element={<FractionPage />} />
-          <Route path='/main' element={<MainPage />} />
-          <Route path='/status' element={<StatusPage />} />
-        </Routes>
-      </BrowserRouter>
+      <Routes>
+        <Route path='*' element={<LoginPage />} />
+        <Route path='/*' element={<LoginPage />} />
+        <Route path='/fraction' element={<FractionPage />} />
+        <Route path='/main' element={<MainPage />} />
+        <Route path='/status' element={<StatusPage />} />
+      </Routes>
     </div>
   );
 }

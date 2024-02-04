@@ -91,8 +91,11 @@ export default function MainPage() {
                         <h1>{name}</h1>
 
                         <div className='avatar'>
-
-                            <img className='avatarImage' src={`${avatars[selectedAvatar]}`} />
+                            {
+                                selectedAvatar === null ?
+                                    <div className='avatarImage'><img src={`images/loader.svg`} /></div> :
+                                    <img className='avatarImage' src={`${avatars[selectedAvatar]}`} />
+                            }
                             <div className='qr-code-btn' onClick={() => { setVisibility({ ...visibility, qrCode: true }); }}>
                                 <img src={'./images/qrCodeIcon.svg'} />
                             </div>

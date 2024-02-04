@@ -26,7 +26,7 @@ export const status = createSlice({
       'images/fractions/dog.jpg',
       'images/fractions/nothing.png',
     ],
-    selectedAvatar: 0,
+    selectedAvatar: null,
     gold: null,
     actions: null,
     subjectActions: null,       //действия совершенные игроком
@@ -114,6 +114,7 @@ export const status = createSlice({
           action.payload.callback(res.data.player.name, res.data.player.id, res.data.player.avatar_id, res.data.player.faction_id)
         })
         .catch(error => {
+          action.payload.errorHandler(error);
           console.log(error);
         })
     },

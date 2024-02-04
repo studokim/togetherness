@@ -22,7 +22,8 @@ const InteractionPage = ({ targetId, close, id }) => {
                 id: targetId, callback: (name, uuuuu, avatarId, fractionId) => {//при получении данных 
                     setTarget({ name: name, avatarId: avatarId, targetId: targetId, fractionId: fractionId });
                     dispatch(actionEnabled({ targetId: targetId, callback: (val) => setInterractionEnebled(val) }));
-                }
+                },
+                errorHandler: () => { }
             }));
         }
         console.log("targetId", targetId)

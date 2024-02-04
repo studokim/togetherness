@@ -4,14 +4,14 @@ import CustomInput from '../../UI/CustomInput/CustomInput'
 import CustomButton from '../../UI/CustomButton/CustomButton';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'
-import { setName, setAvatar, getPerson } from '../../redux/status'
+import { setName, setAvatar } from '../../redux/status'
 import { getCookie } from "../../helpers/cookies.js"
 
 export function LoginPage() {
     const navigator = useNavigate();
     const name = useSelector((state) => state.status.name);
     const avatars = useSelector(state => state.status.avatars);
-    const selectedAvatar = useSelector(state => state.status.selectedAvatar);
+    const selectedAvatar = useSelector(state => Number(state.status.selectedAvatar));
     const dispatch = useDispatch();
 
 
