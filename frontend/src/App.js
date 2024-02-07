@@ -14,6 +14,8 @@ function App() {
   const dispatch = useDispatch();
   const navigator = useNavigate();
 
+
+  
   useEffect(() => {
     const id = getCookie("togethernessId");
     console.log(id);

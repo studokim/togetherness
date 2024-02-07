@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import "./FractionPage.scss";
 import CustomButton from '../../UI/CustomButton/CustomButton';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +11,32 @@ const FractionPage = () => {
     const fraction = useSelector((state) => state.status.fraction);
     const dispatch = useDispatch();
     // const currentFraction = useSelector((state)=>state.status.fraction)
+
+    // useEffect(() => {
+    //     const id = getCookie("togethernessId");
+    //     console.log(id);
+    //     //Если в куках есть id
+    //     if (id !== undefined) {
+    //       dispatch(getPerson({
+    //         id, callback: (name, id, avatarId, fractionId, timer) => {
+    //           dispatch(setName(name));
+    //           dispatch(setId(id));
+    //           dispatch(setFraction(fractionId));
+    //           dispatch(setAvatar(avatarId));
+    //           navigator("/main");
+    //         },
+    //         errorHandler: (error) => {
+    //           console.log("Пользователь не зарегистрирован. ", error);
+    //           navigator("/");
+    //         }
+    //       }));
+    //       console.log("Обновление");
+    //     }
+    //     else {
+    //       navigator("/");
+    //     }
+    //   }, [])
+
 
     return (
         <div className='FractionPage'>

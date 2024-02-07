@@ -41,7 +41,7 @@ const InteractionPage = ({ targetId, close, id }) => {
     return (
         <div className='InteractionPage'>
 
-            <div>{targetId}</div>
+            {/* <div>{targetId}</div> */}
             {/* ________________ ИМЯ ЦЕЛИ ДЛЯ ВЗАИМОДЕЙСТВИЯ ____________________ */}
             <div className='targetName'>{target.name}</div>
             {/* ________________ АВАТАР С ФРАКИЦЕЙ ____________________ */}
