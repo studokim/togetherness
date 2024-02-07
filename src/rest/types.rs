@@ -10,6 +10,7 @@ pub enum Error {
     SubjectNotFound,
     ObjectNotFound,
     ActionNotFound,
+    NotEnoughGold,
     NotStarted,
     AlreadyStarted,
     AlreadyFinished,

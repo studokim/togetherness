@@ -152,6 +152,10 @@ pub async fn post_action(
                     ok: false,
                     error: types::Error::ObjectNotFound,
                 }),
+                ActResult::NotEnoughGold => Json(types::DefaultResponse {
+                    ok: false,
+                    error: types::Error::NotEnoughGold,
+                }),
             }
         }
         Err(err) => {

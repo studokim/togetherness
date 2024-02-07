@@ -16,6 +16,7 @@ pub enum ActResult {
     Ok,
     SubjectNotFound,
     ObjectNotFound,
+    NotEnoughGold,
 }
 
 #[derive(Default)]
@@ -63,9 +64,11 @@ impl AppState {
                     Some(object) => {
                         log::debug!("Found object id={}", action.object_id);
                         let mut subject = subject.lock().unwrap();
-                        subject.act(&action.action, object.lock().as_mut().unwrap());
                         self.actions.push(action.clone());
-                        ActResult::Ok
+                        match subject.act(&action.action, object.lock().as_mut().unwrap()) {
+                            ActionError::None => ActResult::Ok,
+                            ActionError::NotEnoughGold => ActResult::NotEnoughGold,
+                        }
                     }
                     None => {
                         log::debug!("Object id={} not found", action.object_id);

@@ -9,6 +9,11 @@ pub type AvatarId = u32;
 pub type Count = usize;
 pub type DifferenceInGold = i32;
 
+pub enum ActionError {
+    None,
+    NotEnoughGold,
+}
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Player {
     pub id: PlayerId,
@@ -30,7 +35,7 @@ impl Player {
         }
     }
 
-    pub fn act(&mut self, action: &ActionType, object: &mut Player) {
+    pub fn act(&mut self, action: &ActionType, object: &mut Player) -> ActionError {
         log::debug!(
             "Acted: player={}, object_id={}, action={:?}",
             self.id,
@@ -41,28 +46,41 @@ impl Player {
             ActionType::Hug => {
                 self.give_gold(1);
                 object.give_gold(1);
+                ActionError::None
             }
-            ActionType::Stealing => match object.gold {
-                0 => {}
-                1 => {
-                    self.give_gold(1);
-                    object.take_gold(1);
-                }
+            ActionType::Stealing => {
+                match object.gold {
+                    0 => {}
+                    1 => {
+                        self.give_gold(1);
+                        object.take_gold(1);
+                    }
+                    _ => {
+                        self.give_gold(2);
+                        object.take_gold(2);
+                    }
+                };
+                ActionError::None
+            }
+            ActionType::Blackmail => match self.gold {
+                0 => ActionError::NotEnoughGold,
                 _ => {
-                    self.give_gold(2);
-                    object.take_gold(2);
+                    self.take_gold(1);
+                    object.take_gold(4);
+                    ActionError::None
                 }
             },
-            ActionType::Blackmail => {
-                self.take_gold(1);
-                object.take_gold(4);
-            }
-            ActionType::Bribery => {
-                self.take_gold(1);
-                object.give_gold(3);
-            }
+            ActionType::Bribery => match self.gold {
+                0 => ActionError::NotEnoughGold,
+                _ => {
+                    self.take_gold(1);
+                    object.give_gold(3);
+                    ActionError::None
+                }
+            },
             ActionType::Lobbying => {
                 object.give_gold(2);
+                ActionError::None
             }
         }
     }
