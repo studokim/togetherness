@@ -23,14 +23,10 @@ pub async fn admin(State(state): State<AppState>) -> Html<String> {
             let timer = template::Timer::new(&state.timer);
             let stats = template::Stats {
                 hug: state.count_actions(None, None, Some(model::ActionType::Hug)),
-                eavesdropping: state.count_actions(
-                    None,
-                    None,
-                    Some(model::ActionType::Eavesdropping),
-                ),
+                stealing: state.count_actions(None, None, Some(model::ActionType::Stealing)),
                 blackmail: state.count_actions(None, None, Some(model::ActionType::Blackmail)),
-                gossip: state.count_actions(None, None, Some(model::ActionType::Gossip)),
-                crime: state.count_actions(None, None, Some(model::ActionType::Crime)),
+                bribery: state.count_actions(None, None, Some(model::ActionType::Bribery)),
+                lobbying: state.count_actions(None, None, Some(model::ActionType::Lobbying)),
             };
             let factions: Vec<model::Faction> = (1..5)
                 .map(|id: model::FactionId| model::Faction {

@@ -142,10 +142,10 @@ pub async fn get_stats(State(state): State<AppState>) -> Json<types::StatsRespon
     match state.read() {
         Ok(state) => Json(types::StatsResponse {
             hug: state.count_actions(None, None, Some(ActionType::Hug)),
-            eavesdropping: state.count_actions(None, None, Some(ActionType::Eavesdropping)),
+            stealing: state.count_actions(None, None, Some(ActionType::Stealing)),
             blackmail: state.count_actions(None, None, Some(ActionType::Blackmail)),
-            gossip: state.count_actions(None, None, Some(ActionType::Gossip)),
-            crime: state.count_actions(None, None, Some(ActionType::Crime)),
+            bribery: state.count_actions(None, None, Some(ActionType::Bribery)),
+            lobbying: state.count_actions(None, None, Some(ActionType::Lobbying)),
             error: types::Error::None,
         }),
         Err(err) => {

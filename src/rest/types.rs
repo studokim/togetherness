@@ -42,10 +42,10 @@ impl Into<ActionId> for ActionType {
     fn into(self) -> ActionId {
         match self {
             ActionType::Hug => 1,
-            ActionType::Eavesdropping => 2,
+            ActionType::Stealing => 2,
             ActionType::Blackmail => 3,
-            ActionType::Gossip => 4,
-            ActionType::Crime => 5,
+            ActionType::Bribery => 4,
+            ActionType::Lobbying => 5,
         }
     }
 }
@@ -54,10 +54,10 @@ impl Into<ActionType> for ActionId {
     fn into(self) -> ActionType {
         match self {
             1 => ActionType::Hug,
-            2 => ActionType::Eavesdropping,
+            2 => ActionType::Stealing,
             3 => ActionType::Blackmail,
-            4 => ActionType::Gossip,
-            5 => ActionType::Crime,
+            4 => ActionType::Bribery,
+            5 => ActionType::Lobbying,
             _ => panic!("There are only 5 available actions"), // TODO: use ActionType::Undefined instead
         }
     }
@@ -78,10 +78,10 @@ pub struct GoldResponse {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct StatsResponse {
     pub hug: Count,
-    pub eavesdropping: Count,
+    pub stealing: Count,
     pub blackmail: Count,
-    pub gossip: Count,
-    pub crime: Count,
+    pub bribery: Count,
+    pub lobbying: Count,
     pub error: Error,
 }
 
@@ -89,10 +89,10 @@ impl StatsResponse {
     pub fn default(error: Error) -> Self {
         Self {
             hug: 0,
-            eavesdropping: 0,
+            stealing: 0,
             blackmail: 0,
-            gossip: 0,
-            crime: 0,
+            bribery: 0,
+            lobbying: 0,
             error,
         }
     }

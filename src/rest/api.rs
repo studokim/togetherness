@@ -250,10 +250,10 @@ fn new_player_status_response(
     types::PlayerStatusResponse {
         status: Some([
             new_player_status_tuple(id, model::ActionType::Hug, state),
-            new_player_status_tuple(id, model::ActionType::Eavesdropping, state),
+            new_player_status_tuple(id, model::ActionType::Stealing, state),
             new_player_status_tuple(id, model::ActionType::Blackmail, state),
-            new_player_status_tuple(id, model::ActionType::Gossip, state),
-            new_player_status_tuple(id, model::ActionType::Crime, state),
+            new_player_status_tuple(id, model::ActionType::Bribery, state),
+            new_player_status_tuple(id, model::ActionType::Lobbying, state),
         ]),
         error: types::Error::None,
     }

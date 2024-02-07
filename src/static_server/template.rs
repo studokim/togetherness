@@ -21,10 +21,10 @@ impl Timer {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Stats {
     pub hug: Count,
-    pub eavesdropping: Count,
+    pub stealing: Count,
     pub blackmail: Count,
-    pub gossip: Count,
-    pub crime: Count,
+    pub bribery: Count,
+    pub lobbying: Count,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

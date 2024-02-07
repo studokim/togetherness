@@ -42,19 +42,27 @@ impl Player {
                 self.give_gold(1);
                 object.give_gold(1);
             }
-            ActionType::Eavesdropping => {
-                self.give_gold(2);
-            }
+            ActionType::Stealing => match object.gold {
+                0 => {}
+                1 => {
+                    self.give_gold(1);
+                    object.take_gold(1);
+                }
+                _ => {
+                    self.give_gold(2);
+                    object.take_gold(2);
+                }
+            },
             ActionType::Blackmail => {
-                self.give_gold(3);
-                object.take_gold(1);
+                self.take_gold(1);
+                object.take_gold(4);
             }
-            ActionType::Gossip => {
-                self.give_gold(3);
+            ActionType::Bribery => {
+                self.take_gold(1);
+                object.give_gold(3);
             }
-            ActionType::Crime => {
-                self.give_gold(4);
-                object.take_gold(2);
+            ActionType::Lobbying => {
+                object.give_gold(2);
             }
         }
     }
@@ -125,10 +133,10 @@ impl Faction {
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Hash, Clone)]
 pub enum ActionType {
     Hug,
-    Eavesdropping,
+    Stealing,
     Blackmail,
-    Gossip,
-    Crime,
+    Bribery,
+    Lobbying,
 }
 
 // TODO: combine duplicated logic
@@ -136,20 +144,20 @@ impl ActionType {
     pub fn as_subject(&self) -> DifferenceInGold {
         match self {
             ActionType::Hug => 1,
-            ActionType::Eavesdropping => 2,
+            ActionType::Stealing => 2,
             ActionType::Blackmail => 3,
-            ActionType::Gossip => 3,
-            ActionType::Crime => 4,
+            ActionType::Bribery => 3,
+            ActionType::Lobbying => 4,
         }
     }
 
     pub fn as_object(&self) -> DifferenceInGold {
         match self {
             ActionType::Hug => 1,
-            ActionType::Eavesdropping => 0,
+            ActionType::Stealing => 0,
             ActionType::Blackmail => -1,
-            ActionType::Gossip => 0,
-            ActionType::Crime => -2,
+            ActionType::Bribery => 0,
+            ActionType::Lobbying => -2,
         }
     }
 }
