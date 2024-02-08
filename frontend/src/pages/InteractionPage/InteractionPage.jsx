@@ -3,6 +3,7 @@ import "./InteractionPage.scss"
 import CustomButton from '../../UI/CustomButton/CustomButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionEnabled, createAction, getPerson } from '../../redux/status';
+import Message from '../MainPage/Message/Message';
 
 const InteractionPage = ({ targetId, close, id }) => {
 
@@ -10,7 +11,7 @@ const InteractionPage = ({ targetId, close, id }) => {
     const fractionImg = useSelector(state => state.status.fractionsImgs);
     const myFractionId = useSelector(state => state.status.fraction);
     const avatars = useSelector(state => state.status.avatars);
-
+    const [notEnoughGold, setNotEnoughGold] = useState(false);
 
     const [target, setTarget] = useState({ name: null, avatarId: null, targetId: targetId, fractionId: null });
     const dispatch = useDispatch();
@@ -30,8 +31,11 @@ const InteractionPage = ({ targetId, close, id }) => {
     }, [targetId])
 
     function action(actionId) {
-        dispatch(createAction({ targetId, actionId }));
-        close();
+        dispatch(createAction({
+            targetId, actionId,
+            callback: () => { close() },
+            errorHandler: () => { console.log("Попали в errorHandler по notEnoughGold"); setNotEnoughGold(true) }
+        }));
     }
     console.log("target.fractionId, ", target.fractionId);
     console.log("myFractionId, ", myFractionId);
@@ -40,7 +44,7 @@ const InteractionPage = ({ targetId, close, id }) => {
 
     return (
         <div className='InteractionPage'>
-
+            {notEnoughGold ? <Message message="У цели недостаточно средств.." close={() => { setNotEnoughGold(false); close(); }} /> : null}
             {/* <div>{targetId}</div> */}
             {/* ________________ ИМЯ ЦЕЛИ ДЛЯ ВЗАИМОДЕЙСТВИЯ ____________________ */}
             <div className='targetName'>{target.name}</div>

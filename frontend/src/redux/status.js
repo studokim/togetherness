@@ -132,6 +132,13 @@ export const status = createSlice({
           if (res.data.ok) {
             console.log("action success", action.payload)
           }
+          else {
+            if (res.data.error === "NotEnoughGold") action.payload.errorHandler();
+          }
+        })
+        .catch(error => {
+          if (error.data === "NotEnoughGold") action.payload.errorHandler();
+          console.log(error);
         })
     },
     getGold: (state, action) => {
