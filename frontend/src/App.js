@@ -1,4 +1,4 @@
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import './App.scss';
 import { LoginPage } from './pages/LoginPage/LoginPage';
 import MainPage from './pages/MainPage/MainPage';
@@ -13,9 +13,9 @@ function App() {
 
   const dispatch = useDispatch();
   const navigator = useNavigate();
+  const location = useLocation();
 
-
-  
+  console.log(location.pathname)
   useEffect(() => {
     const id = getCookie("togethernessId");
     console.log(id);
@@ -27,19 +27,21 @@ function App() {
           dispatch(setId(id));
           dispatch(setFraction(fractionId));
           dispatch(setAvatar(avatarId));
-          navigator("/main");
+
+          if (location.pathname === "/" || location.pathname === "/fraction") navigator("/main");
         },
         errorHandler: (error) => {
           console.log("Пользователь не зарегистрирован. ", error);
-          navigator("/");
+          if (location.pathname !== "/fraction" && location.pathname !== "/") navigator("/");
         }
       }));
       console.log("Обновление");
     }
     else {
-      navigator("/");
+      console.log("cookies === ?");
+      if (location.pathname !== "/fraction" && location.pathname !== "/") { navigator("/"); console.log("cookies === undefinied"); }
     }
-  }, [])
+  }, [location.pathname])
 
   console.log(process.env.REACT_APP_ADDR);
 

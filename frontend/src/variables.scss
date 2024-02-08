@@ -1,0 +1,12 @@
+$main-c: gold;
+$sub-main-c: rgb(52, 110, 219);
+
+:root[data-theme='light'] {
+    --text-color: #121212;
+    --background: #FFFFFF;
+  }
+  
+  :root[data-theme='dark'] {
+    --text-color: #FFFFFF;
+    --background: #121212;
+  }
