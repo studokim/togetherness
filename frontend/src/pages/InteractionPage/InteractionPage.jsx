@@ -65,10 +65,10 @@ const InteractionPage = ({ targetId, close, id }) => {
                     ?
                     < div className='interractions'>
                         <CustomButton onClick={() => { action(1) }}>Обнять +1/+1</CustomButton>
-                        <CustomButton onClick={() => { action(2) }}>Подслушать +2/0</CustomButton>
-                        <CustomButton onClick={() => { action(3) }}>Шанатажировать +3/-1</CustomButton>
-                        <CustomButton onClick={() => { action(4) }}>Пустить слухи +3/0</CustomButton>
-                        <CustomButton onClick={() => { action(5) }}>Преступление +4/-2</CustomButton>
+                        <CustomButton onClick={() => { action(2) }}>Обокрасть +2/-2</CustomButton>
+                        <CustomButton onClick={() => { action(3) }}>Шантажировать -1/-4</CustomButton>
+                        <CustomButton onClick={() => { action(4) }}>Подкупить -1/+3</CustomButton>
+                        <CustomButton onClick={() => { action(5) }}>Лоббировать 0/-2</CustomButton>
                         <CustomButton onClick={() => { close() }}>Уйти</CustomButton>
                     </div>
                     : //нельзя взаимодействовать
