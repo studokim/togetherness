@@ -5,7 +5,7 @@ import CustomButton from '../../UI/CustomButton/CustomButton';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'
 import { setName, setAvatar } from '../../redux/status'
-import { getCookie } from "../../helpers/cookies.js"
+// import { getCookie } from "../../helpers/cookies.js"
 
 export function LoginPage() {
     const navigator = useNavigate();
@@ -35,7 +35,13 @@ export function LoginPage() {
                 <img src={avatars[selectedAvatar]} alt='none'></img>
                 <button className='arrow' onClick={() => incrementAvatar()}></button>
             </div>
-            <CustomButton onClick={() => { if (name !== "") navigator("fraction") }} disabled={name === ""}>Далее</CustomButton>
+            <CustomButton onClick={() => {
+                if (name !== "") {
+                    console.log("selectedAvatar ", selectedAvatar)
+                    if (selectedAvatar === null) {dispatch(setAvatar(0)); console.log("selectedAvatar setted to 0 ")}
+                    navigator("fraction");
+                }
+            }} disabled={name === ""}>Далее</CustomButton>
         </div >
     )
 }

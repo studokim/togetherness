@@ -51,7 +51,7 @@ const FractionPage = () => {
                 onClick={() => {
                     //если запускаем в ДОКЕР(есть переменная окружения), то есть проверка выбора фракции.
                     if (process.env.REACT_APP_ADDR) {
-                        if (fraction !== null) navigator("/main"); dispatch(createPerson({ callback: (id) => { dispatch(setId(id)); } }))
+                        if (fraction !== null) dispatch(createPerson({ callback: (id) => { dispatch(setId(id)); navigator("/main"); } }))
                     }
                     //если запускаем локально или на хостинге, то просто перходим в main
                     else navigator("/main");
