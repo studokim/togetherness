@@ -3,6 +3,10 @@
 .App {
   text-align: center;
   background-color: $main-c;
+  color: white;
+  background: url("./images/backgrounds/1_страничка_игра-01.jpg") no-repeat;
+  background-size: 100% 100%;
+  // background-repeat: ;
   height: 100%;
   width: 100%;
   min-width: 320px;
@@ -13,7 +17,8 @@
 
 @font-face {
   font-family: "BadScript";
-  src: url("./font/BadScript-Regular.ttf");
+  // src: url("./font/BadScript-Regular.ttf");
+  src: url("./font/ofont.ru_BlagovestFourSerifC.ttf");
   font-style: normal;
   font-weight: 200;
   /* font-variation-settings: "wdth" 1000; */

@@ -1,12 +1,17 @@
 $main-c: gold;
 $sub-main-c: rgb(52, 110, 219);
+$buttons-blue: #93A7CB;
+$buttons-purple: #C8A4C1;
+$ocantovka: #FBCB9A;
+
+
 
 :root[data-theme='light'] {
-    --text-color: #121212;
-    --background: #FFFFFF;
-  }
-  
-  :root[data-theme='dark'] {
-    --text-color: #FFFFFF;
-    --background: #121212;
-  }
+  --text-color: #121212;
+  --background: #FFFFFF;
+}
+
+:root[data-theme='dark'] {
+  --text-color: #FFFFFF;
+  --background: #121212;
+}
