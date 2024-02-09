@@ -46,6 +46,8 @@ const InteractionPage = ({ targetId, close, id }) => {
     console.log("myFractionId, ", myFractionId);
     console.log("Number(target.fractionId) - 1, ", Number(target.fractionId) - 1);
     console.log("fractionImg[Number(target.fractionId) - 1], ", fractionImg[Number(target.fractionId) - 1]);
+    console.log("messageAboutStart, ", messageAboutStart);
+
 
     return (
         <div className='InteractionPage'>
@@ -67,8 +69,11 @@ const InteractionPage = ({ targetId, close, id }) => {
                     <div className='targetName'>{target.name}</div>
                     {/* ________________ АВАТАР С ФРАКИЦЕЙ ____________________ */}
                     <div className='imgContainer'>
-                        <img className='targetAvatar' src={target.avatarId !== null ? avatars[target.avatarId] : `/images/unicorn.jpg`} />
-
+                        {target.avatarId !== null ?
+                            <img className='targetAvatar' src={avatars[target.avatarId]} />
+                            :
+                            <img src={`images/loader.svg`} />
+                        }
                         {target.fractionId === myFractionId
                             ?
                             <div className='fractionImg'>

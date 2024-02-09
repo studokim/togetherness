@@ -58,7 +58,7 @@ export const status = createSlice({
     },
 
     setTimer: (state, action) => {
-      // console.log("setTimer", action.payload)
+      console.log("setTimer", action.payload)
       if (action.payload === -1) {
         state.timer = null;
         state.messageAboutStart = -1; //еще не началась
