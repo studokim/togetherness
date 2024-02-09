@@ -49,6 +49,17 @@ const InteractionPage = ({ targetId, close, id }) => {
     console.log("messageAboutStart, ", messageAboutStart);
 
 
+    const timer = useSelector((state) => state.status.timer);
+
+    useEffect(() => {
+        const interval = setInterval((timer) => {
+            dispatch(getTimer({ callback: (timer) => dispatch(setTimer(timer)) }));
+        }, 1000);
+
+        return () => clearInterval(interval);
+
+    }, [timer]);
+
     return (
         <div className='InteractionPage'>
             <div className='InteractionPageInner'>
