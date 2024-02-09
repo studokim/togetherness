@@ -7,6 +7,7 @@ import Message from '../MainPage/Message/Message';
 
 const InteractionPage = ({ targetId, close, id }) => {
 
+    const messageAboutStart = useSelector(state => state.status.messageAboutStart);
     const [interractionEnebled, setInterractionEnebled] = useState(null);
     const fractionImg = useSelector(state => state.status.fractionsImgs);
     const myFractionId = useSelector(state => state.status.fraction);
@@ -33,6 +34,7 @@ const InteractionPage = ({ targetId, close, id }) => {
 
     useEffect(() => { if (setNotEnoughGold) setTimeout(() => { setNotEnoughGold(false) }, 3000) }, [notEnoughGold]) //Выключение сообщения о нехватке денег в течении 3 сек
 
+
     function action(actionId) {
         dispatch(createAction({
             targetId, actionId,
@@ -50,10 +52,12 @@ const InteractionPage = ({ targetId, close, id }) => {
             <div className='InteractionPageInner'>
 
                 {notEnoughGold ? <Message message="У вас недостаточно золота" close={() => { setNotEnoughGold(false); }} /> : null}
+                {messageAboutStart === 1 ? <Message message="Ночь интриг завершилась" close={() => { close() }} /> : null}
+
                 {/* <div>{targetId}</div> */}
                 <>
                     {/* ________________ ИМЯ ЦЕЛИ ДЛЯ ВЗАИМОДЕЙСТВИЯ ____________________ */}
-                    <div className='targetName'>{target.name}</div>                           
+                    <div className='targetName'>{target.name}</div>
                     {/* ________________ АВАТАР С ФРАКИЦЕЙ ____________________ */}
                     <div className='imgContainer'>
                         <img className='targetAvatar' src={target.avatarId !== null ? avatars[target.avatarId] : `/images/unicorn.jpg`} />
