@@ -18,7 +18,7 @@ else
     echo "Pulled changes from remote"
     docker-compose build
     systemctl restart togetherness.service
-    SINCE=$(systemctl status togetherness.service | grep since)
+    SINCE=$(systemctl status togetherness.service | grep since | sed 's/.*since //' | sed 's/;.*//')
     cat <<EOF > version.html
 <html>
 <p>Current commit is <code>$COMMIT_AFTER</code></p>
