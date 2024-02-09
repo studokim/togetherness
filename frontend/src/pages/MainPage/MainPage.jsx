@@ -14,6 +14,27 @@ import { getObjectActions, getSubjectActions, setObjectActions, setSubjectAction
 import Message from './Message/Message';
 
 
+function getGoldWord(gold) {
+
+    if (gold >= 5 && gold <= 20) return "Золотых монет";
+    const tempGold = gold % 10;
+    switch (tempGold) {
+        case 1:
+            if (gold !== 11) return "Золотая монета";
+        case 2:
+            if (gold !== 11) return "Золотые монеты";
+        case 3: return "Золотые монеты";
+        case 4: return "Золотые монеты";
+        case 5: return "Золотыx монет";
+        case 6: return "Золотыx монет";
+        case 7: return "Золотыx монет";
+        case 8: return "Золотыx монет";
+        case 9: return "Золотыx монет";
+        case 0: return "Золотыx монет";
+        default: return "Золотыx монет";
+    }
+}
+
 export default function MainPage() {
 
     const [visibility, setVisibility] = useState({
@@ -40,6 +61,7 @@ export default function MainPage() {
     useEffect(() => {
         console.log("visibility", visibility)
     }, [visibility])
+
 
     return (
         <div className='MainPage'>
@@ -103,7 +125,7 @@ export default function MainPage() {
 
                         </div>
 
-                        <div className='goldCount'><span>{gold === null ? "...и ваши карманы пусты" : gold + " з"}</span></div>
+                        <div className='goldCount'><span>{gold === null ? "...и ваши карманы пусты" : gold + " " + getGoldWord(gold)}</span></div>
 
                         <CustomButton
                             onClick={() => {

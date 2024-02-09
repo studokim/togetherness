@@ -13,7 +13,26 @@ function getStringAction(id) {
         default: return "Неизвестное действие";
     }
 }
+function getGoldWord(gold) {
 
+    if (gold >= 5 && gold <= 20) return "Золотых монет";
+    const tempGold = gold % 10;
+    switch (tempGold) {
+        case 1:
+            if (gold !== 11) return "Золотая монета";
+        case 2:
+            if (gold !== 11) return "Золотые монеты";
+        case 3: return "Золотые монеты";
+        case 4: return "Золотые монеты";
+        case 5: return "Золотыx монет";
+        case 6: return "Золотыx монет";
+        case 7: return "Золотыx монет";
+        case 8: return "Золотыx монет";
+        case 9: return "Золотыx монет";
+        case 0: return "Золотыx монет";
+        default: return "Золотыx монет";
+    }
+}
 export function StatusPage() {
 
     const name = useSelector(state => state.status.name);
@@ -27,13 +46,13 @@ export function StatusPage() {
             <div className="StatusPageInner">
                 <div>
                     <p className='gold'>Вы заработали:</p>
-                    <p className='gold'>{gold}</p>
+                    <p className='gold'>{gold + " " + getGoldWord(gold)}</p>
                 </div>
                 <table className='statusTable' rules="All">
                     <tbody>
 
                         <tr>
-                            <td>Action_id</td>
+                            <td>Взаимодействия</td>
                             <td>Вы</td>
                             <td>Вас</td>
                         </tr>
