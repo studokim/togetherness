@@ -5,9 +5,9 @@ if [ $(id -u) -ne 0 ]; then
     exit 1
 fi
 
-COMMIT_BEFORE="$(git log --pretty=format:'%h' -n 1)"
+COMMIT_BEFORE="$(sudo -u kim git log --pretty=format:'%h' -n 1)"
 sudo -u kim git pull >/dev/null
-COMMIT_AFTER="$(git log --pretty=format:'%h' -n 1)"
+COMMIT_AFTER="$(sudo -u kim git log --pretty=format:'%h' -n 1)"
 
 if [ "$COMMIT_BEFORE" == "$COMMIT_AFTER" ]; then
     echo "Already up to date"
