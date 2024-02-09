@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import "./InteractionPage.scss"
 import CustomButton from '../../UI/CustomButton/CustomButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { actionEnabled, createAction, getPerson } from '../../redux/status';
+import { actionEnabled, createAction, getPerson, getTimer, setTimer } from '../../redux/status';
 import MessageSimple from '../MainPage/Message/MessageSimple';
 
 const InteractionPage = ({ targetId, close, id }) => {
