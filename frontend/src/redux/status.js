@@ -131,13 +131,14 @@ export const status = createSlice({
           console.log(res.data);
           if (res.data.ok) {
             console.log("action success", action.payload)
+            action.payload.callback();
           }
           else {
             if (res.data.error === "NotEnoughGold") action.payload.errorHandler();
           }
         })
         .catch(error => {
-          if (error.data === "NotEnoughGold") action.payload.errorHandler();
+          // if (error.data === "NotEnoughGold") action.payload.errorHandler();
           console.log(error);
         })
     },

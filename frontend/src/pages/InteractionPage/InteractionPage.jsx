@@ -30,6 +30,9 @@ const InteractionPage = ({ targetId, close, id }) => {
         console.log("targetId", targetId)
     }, [targetId])
 
+
+    useEffect(() => { if (setNotEnoughGold) setTimeout(() => { setNotEnoughGold(false) }, 3000) }, [notEnoughGold]) //Выключение сообщения о нехватке денег в течении 3 сек
+
     function action(actionId) {
         dispatch(createAction({
             targetId, actionId,
@@ -44,7 +47,7 @@ const InteractionPage = ({ targetId, close, id }) => {
 
     return (
         <div className='InteractionPage'>
-            {notEnoughGold ? <Message message="У цели недостаточно средств.." close={() => { setNotEnoughGold(false); close(); }} /> : null}
+            {notEnoughGold ? <Message message="У вас недостаточно золота" close={() => { setNotEnoughGold(false); }} /> : null}
             {/* <div>{targetId}</div> */}
             {/* ________________ ИМЯ ЦЕЛИ ДЛЯ ВЗАИМОДЕЙСТВИЯ ____________________ */}
             <div className='targetName'>{target.name}</div>
