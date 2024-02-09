@@ -6,10 +6,10 @@ if [ $(id -u) -ne 0 ]; then
 fi
 
 COMMIT_BEFORE="$(sudo -u kim git log --pretty=format:'%h' -n 1)"
-sudo -u kim \
-git stash save && \
-git pull >/dev/null && \
-git stash pop
+sudo -u kim bash -c \
+"git stash save && \
+GIT_SSH_COMMAND='ssh -i /home/kim/.ssh/id_rsa' git pull >/dev/null && \
+git stash pop"
 COMMIT_AFTER="$(sudo -u kim git log --pretty=format:'%h' -n 1)"
 
 if [ "$COMMIT_BEFORE" == "$COMMIT_AFTER" ]; then
