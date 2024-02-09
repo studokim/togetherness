@@ -3,7 +3,7 @@ import "./InteractionPage.scss"
 import CustomButton from '../../UI/CustomButton/CustomButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { actionEnabled, createAction, getPerson } from '../../redux/status';
-import Message from '../MainPage/Message/Message';
+import MessageSimple from '../MainPage/Message/MessageSimple';
 
 const InteractionPage = ({ targetId, close, id }) => {
 
@@ -51,8 +51,8 @@ const InteractionPage = ({ targetId, close, id }) => {
         <div className='InteractionPage'>
             <div className='InteractionPageInner'>
 
-                {notEnoughGold ? <Message message="У вас недостаточно золота" close={() => { setNotEnoughGold(false); }} /> : null}
-                {messageAboutStart === 1 ? <Message message="Ночь интриг завершилась" close={() => { close() }} /> : null}
+                {notEnoughGold ? <MessageSimple message="У вас недостаточно золота" close={() => { setNotEnoughGold(false); }} /> : null}
+                {messageAboutStart === 1 ? <MessageSimple message="Ночь интриг завершилась" close={() => { close() }} /> : null}
 
                 {/* <div>{targetId}</div> */}
                 <>
