@@ -25,7 +25,9 @@ else
 <html>
 <p>Current commit is <code>$COMMIT_AFTER</code></p>
 <p>Updating...</p>
-</html>    docker-compose build
+</html>
+EOF
+    docker-compose build
     systemctl restart togetherness.service
     SINCE=$(systemctl status togetherness.service | grep since | sed 's/.*since //' | sed 's/;.*//')
     cat <<EOF > version.html
