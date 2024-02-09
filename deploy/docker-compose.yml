@@ -22,7 +22,7 @@ services:
     #     condition: service_healthy
     networks:
       - togetherness
-  togetherness_caddy:
+  caddy:
     image: caddy:alpine
     container_name: togetherness_caddy
     ports:
@@ -32,6 +32,7 @@ services:
       - togetherness
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./version.html:/var/www/version.html
       - ../target/togetherness_caddy/data:/data
       - ../target/togetherness_caddy/config:/config
   # db:
