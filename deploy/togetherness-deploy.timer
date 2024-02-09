@@ -3,11 +3,11 @@
 # sudo systemctl edit --full --force togetherness-deploy.timer
 
 [Unit]
-Description=Run togetherness-deploy.service every 5 minutes
+Description=Run togetherness-deploy.service every 1 minute
 
 [Timer]
 OnBootSec=15min
-OnUnitActiveSec=5min
+OnUnitActiveSec=1min
 
 [Install]
 WantedBy=timers.target
