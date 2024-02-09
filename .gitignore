@@ -2,3 +2,4 @@ tmp/
 target/
 .vscode/
 Cargo.lock
+deploy/version.html
