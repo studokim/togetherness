@@ -165,15 +165,18 @@ export const status = createSlice({
     getTimer: (state, action) => {
       axios.get(`${ADDR}/timer`)
         .then(res => {
+          console.log("getTimer ", res.data)
           if (res.data.seconds !== null) { //игра идёт
             const timer = res.data.seconds;
             action.payload.callback(timer);
           }
           else if (res.data.error === "notStarted") { //игра не началась
+            console.log("ngetTimer otStarted");
             action.payload.callback(-1);
           }
           else if (res.data.error === "AlreadyFinished") { //игра закончилась
             action.payload.callback(0);
+            console.log("getTimer AlreadyFinished");
           }
         })
         .catch(error => {
