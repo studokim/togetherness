@@ -1,10 +1,12 @@
 import "./CustomButton.scss"
 
-const CustomButton = ({children, ...props}) => {
+const CustomButton = ({ children, someClass, ...props }) => {
     return (
-        <button className='CustomButton' {...props}>
-            {children}
-        </button>
+        <div className='buttonContainer'>
+            <button className={`CustomButton ${someClass}`} {...props}>
+                {children}
+            </button>
+        </div>
     );
 }
 

@@ -33,7 +33,7 @@ export function Timer({ message }) {
             {timer !== null ?
                 <span>{timerString.minutes + ":" + timerString.seconds}</span>
                 :
-                <span>XX:XX</span>
+                <span style={{fontSize: "35px"}}>ХХ:ХХ</span>
             }
         </div>
     )

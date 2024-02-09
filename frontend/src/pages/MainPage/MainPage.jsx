@@ -44,7 +44,7 @@ export default function MainPage() {
     return (
         <div className='MainPage'>
             {//_______ ОТОБРАЖАЕМ ЛИБО СТРАНИЦУ ВЗАИМОДЕЙСТВИЯ ЛИБО ГЛАВНУЮ СТРАНИЦУ _________//
-                targetId !== null   //если получили id другого игроока
+                targetId !== null   //если получили id другого игроока 
                     ?
                     <InteractionPage
                         targetId={targetId}
@@ -95,6 +95,7 @@ export default function MainPage() {
                                 selectedAvatar === null ?
                                     <div className='avatarImage'><img src={`images/loader.svg`} /></div> :
                                     <img className='avatarImage' src={`${avatars[selectedAvatar]}`} />
+                                // <img className='avatarImage' src={`${avatars[3]}`} />
                             }
                             <div className='qr-code-btn' onClick={() => { setVisibility({ ...visibility, qrCode: true }); }}>
                                 <img src={'./images/qrCodeIcon.svg'} />
@@ -102,7 +103,7 @@ export default function MainPage() {
 
                         </div>
 
-                        <div className='goldCount'><span>{gold === null ? "...и ваши карманы пусты" : gold + " g"}</span></div>
+                        <div className='goldCount'><span>{gold === null ? "...и ваши карманы пусты" : gold + " з"}</span></div>
 
                         <CustomButton
                             onClick={() => {
@@ -124,7 +125,7 @@ export default function MainPage() {
                                 else { setVisibility({ ...visibility, message: true }); }
                             }}
                         >
-                            STATUS
+                            Статус
                         </CustomButton>
 
                     </>}

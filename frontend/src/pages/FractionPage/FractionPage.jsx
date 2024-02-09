@@ -40,14 +40,16 @@ const FractionPage = () => {
 
     return (
         <div className='FractionPage'>
+            {/* <div className="FractionPageInner"> */}
             <div className='header'>Выберите фракцию</div>
             <div className='fractionContainer'>
-                <OneFraction fraction={1} selected={fraction === 1} url={'/images/fractions/cat.jpg'} />
-                <OneFraction fraction={2} selected={fraction === 2} url={'/images/fractions/crash.jpeg'} />
-                <OneFraction fraction={3} selected={fraction === 3} url={'/images/fractions/dog.jpg'} />
-                <OneFraction fraction={4} selected={fraction === 4} url={'/images/fractions/nothing.png'} />
+                <OneFraction fraction={1} selected={fraction === 1} url={'/images/fractions/иконка1.jpg'} />
+                <OneFraction fraction={2} selected={fraction === 2} url={'/images/fractions/иконка2.jpg'} />
+                <OneFraction fraction={3} selected={fraction === 3} url={'/images/fractions/иконка3.jpg'} />
+                <OneFraction fraction={4} selected={fraction === 4} url={'/images/fractions/иконка4.jpg'} />
             </div>
             <CustomButton
+                someClass="red"
                 onClick={() => {
                     //если запускаем в ДОКЕР(есть переменная окружения), то есть проверка выбора фракции.
                     if (process.env.REACT_APP_ADDR) {
@@ -60,6 +62,7 @@ const FractionPage = () => {
             >
                 Далее
             </CustomButton>
+            {/* </div> */}
         </div>
     );
 }

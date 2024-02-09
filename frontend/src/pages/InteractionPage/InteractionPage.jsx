@@ -47,43 +47,48 @@ const InteractionPage = ({ targetId, close, id }) => {
 
     return (
         <div className='InteractionPage'>
-            {notEnoughGold ? <Message message="У вас недостаточно золота" close={() => { setNotEnoughGold(false); }} /> : null}
-            {/* <div>{targetId}</div> */}
-            {/* ________________ ИМЯ ЦЕЛИ ДЛЯ ВЗАИМОДЕЙСТВИЯ ____________________ */}
-            <div className='targetName'>{target.name}</div>
-            {/* ________________ АВАТАР С ФРАКИЦЕЙ ____________________ */}
-            <div className='imgContainer'>
-                <img className='targetAvatar' src={target.avatarId !== null ? avatars[target.avatarId] : `/images/unicorn.jpg`} />
+            <div className='InteractionPageInner'>
 
-                {target.fractionId === myFractionId
-                    ?
-                    <div className='fractionImg'>
-                        <img src={`${fractionImg[Number(target.fractionId) - 1]}`} />
+                {notEnoughGold ? <Message message="У вас недостаточно золота" close={() => { setNotEnoughGold(false); }} /> : null}
+                {/* <div>{targetId}</div> */}
+                <>
+                    {/* ________________ ИМЯ ЦЕЛИ ДЛЯ ВЗАИМОДЕЙСТВИЯ ____________________ */}
+                    <div className='targetName'>{target.name}</div>                           
+                    {/* ________________ АВАТАР С ФРАКИЦЕЙ ____________________ */}
+                    <div className='imgContainer'>
+                        <img className='targetAvatar' src={target.avatarId !== null ? avatars[target.avatarId] : `/images/unicorn.jpg`} />
+
+                        {target.fractionId === myFractionId
+                            ?
+                            <div className='fractionImg'>
+                                <img src={`${fractionImg[Number(target.fractionId) - 1]}`} />
+                            </div>
+                            :
+                            null}
                     </div>
+                </>
+                {/* ________________ ВЗАИМОДЕЙСТВИЯ ____________________ */}
+                {interractionEnebled === null //еще не загрузились данные 
+                    ?
+                    null
                     :
-                    null}
+                    interractionEnebled === true //можно взаимодействовать 
+                        ?
+                        <div className='interractions'>
+                            <CustomButton onClick={() => { action(1) }}>Обнять +1/+1</CustomButton>
+                            <CustomButton onClick={() => { action(2) }}>Обокрасть +2/-2</CustomButton>
+                            <CustomButton onClick={() => { action(3) }}>Шантажировать -1/-4</CustomButton>
+                            <CustomButton onClick={() => { action(4) }}>Подкупить -1/+3</CustomButton>
+                            <CustomButton onClick={() => { action(5) }}>Лоббировать 0/-2</CustomButton>
+                            <CustomButton onClick={() => { close() }}>Уйти</CustomButton>
+                        </div>
+                        : //нельзя взаимодействовать
+                        <>
+                            <h1>Больше ничего нельзя сделать</h1>
+                            <CustomButton onClick={() => { close() }}>Уйти</CustomButton>
+                        </>
+                }
             </div>
-            {/* ________________ ВЗАИМОДЕЙСТВИЯ ____________________ */}
-            {interractionEnebled === null //еще не загрузились данные
-                ?
-                null
-                :
-                interractionEnebled === true //можно взаимодействовать
-                    ?
-                    < div className='interractions'>
-                        <CustomButton onClick={() => { action(1) }}>Обнять +1/+1</CustomButton>
-                        <CustomButton onClick={() => { action(2) }}>Обокрасть +2/-2</CustomButton>
-                        <CustomButton onClick={() => { action(3) }}>Шантажировать -1/-4</CustomButton>
-                        <CustomButton onClick={() => { action(4) }}>Подкупить -1/+3</CustomButton>
-                        <CustomButton onClick={() => { action(5) }}>Лоббировать 0/-2</CustomButton>
-                        <CustomButton onClick={() => { close() }}>Уйти</CustomButton>
-                    </div>
-                    : //нельзя взаимодействовать
-                    <>
-                        <h1>Больше ничего нельзя сделать</h1>
-                        <CustomButton onClick={() => { close() }}>Уйти</CustomButton>
-                    </>
-            }
         </div >
     );
 }

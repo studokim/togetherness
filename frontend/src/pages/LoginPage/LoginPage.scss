@@ -5,36 +5,63 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    // background: url("../../../public/images/paper3.avif") no-repeat;
-    // background: url("../../../public/images/paper3.avif") no-repeat;
+    background: url("../../images/backgrounds/1_страничка_игра-01.jpg") no-repeat;
     background-size: 100% 100%;
+    // background: url("../../../public/images/paper3.avif") no-repeat;
+    // background: url("../../../public/images/paper3.avif") no-repeat;
+    // background-size: 100% 100%;
 
-    .nameInputLabel {
-        font-size: 25px;
-        font-family: BadScript;
-    }
-
-    .avatarSelector {
+    .LoginPageInner {
+        // top: 20%;
+        // position: absolute;
         display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content:space-around;
+        height: 37%;
+        // box-shadow: 0px 0px 7px 5px #444d5e;
 
-        .arrow {
-            // background-color: #c5d0ff;
-            width: 100px;
-            height: 100px;
-            // rotate: 180deg;
-            background: url("../../../public/images/arrow.svg") no-repeat;
-            background-size: 100% 100%;
-            border: none;
-            box-shadow: 0 0 4px red;
+        .nameInputLabel {
+            font-size: 25px;
+            font-family: BlagovestFourSerifC;
         }
 
-        .left {
-            rotate: 180deg;
-        }
+        .avatarSelector {
 
-        img {
-            height: 100px;
-            width: 100px;
+            display: flex;
+            margin-bottom: 10px;
+
+            .arrowWrapper {
+                box-shadow: 0px 0px 7px 5px #444d5e;
+                background-color: #93A7CB;
+                width: 100px;
+                height: 100px;
+
+                .arrow {
+                    background-color: #c5d0ff;
+                    width: 100px;
+                    height: 100px;
+                    // rotate: 180deg;
+                    background: url("../../../public/images/arrow.svg") no-repeat;
+                    background-size: 100% 100%;
+                    border: none;
+                    // box-shadow: 0 0 4px red;
+                }
+
+                .left {
+                    rotate: 180deg;
+                }
+            }
+
+            img {
+                // box-shadow: 0px 0px 5px 7px #444d5e;
+
+                z-index: 1;
+                border: 3px solid white;
+                height: 94px;
+                width: 94px;
+            }
+
         }
     }
 }
