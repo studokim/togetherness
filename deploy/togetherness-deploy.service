@@ -1,0 +1,13 @@
+# place to /etc/systemd/system/togetherness-deploy.service
+# or, better, create with
+# sudo systemctl edit --full --force togetherness-deploy.service
+
+[Unit]
+Description=Deploy updated version of Togetherness
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/srv/togetherness/deploy
+ExecStart=/srv/togetherness/deploy/deploy.sh

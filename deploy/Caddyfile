@@ -7,5 +7,11 @@ http://127.0.0.1:5000 {
 }
 
 togetherness.ru {
+ 	handle_path /version {
+		root * /var/www/
+		file_server {
+			index version.html
+		}
+	}
 	reverse_proxy togetherness_server:5000
-}
+ }
