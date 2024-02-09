@@ -52,7 +52,14 @@ const InteractionPage = ({ targetId, close, id }) => {
             <div className='InteractionPageInner'>
 
                 {notEnoughGold ? <MessageSimple message="У вас недостаточно золота" close={() => { setNotEnoughGold(false); }} /> : null}
-                {messageAboutStart === 1 ? <MessageSimple message="Ночь интриг завершилась" close={() => { close() }} /> : null}
+                {messageAboutStart !== 0
+                    ?
+                    <MessageSimple
+                        message={messageAboutStart === 1 ? "Ночь интриг завершилась" : messageAboutStart === -1 ? "Ночь интриг еще не началась" : null}
+                        close={() => { close() }}
+                    />
+                    :
+                    null}
 
                 {/* <div>{targetId}</div> */}
                 <>
