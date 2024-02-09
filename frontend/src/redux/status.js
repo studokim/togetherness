@@ -170,7 +170,7 @@ export const status = createSlice({
             const timer = res.data.seconds;
             action.payload.callback(timer);
           }
-          else if (res.data.error === "notStarted") { //игра не началась
+          if (res.data.error === "notStarted") { //игра не началась
             console.log("ngetTimer otStarted");
             action.payload.callback(-1);
           }
