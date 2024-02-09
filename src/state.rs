@@ -64,9 +64,11 @@ impl AppState {
                     Some(object) => {
                         log::debug!("Found object id={}", action.object_id);
                         let mut subject = subject.lock().unwrap();
-                        self.actions.push(action.clone());
                         match subject.act(&action.action, object.lock().as_mut().unwrap()) {
-                            ActionError::None => ActResult::Ok,
+                            ActionError::None => {
+                                self.actions.push(action.clone());
+                                ActResult::Ok
+                            }
                             ActionError::NotEnoughGold => ActResult::NotEnoughGold,
                         }
                     }
