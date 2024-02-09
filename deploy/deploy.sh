@@ -5,7 +5,7 @@ if [ $(id -u) -ne 0 ]; then
     exit 1
 fi
 
-if [ $(systemctl status togetherness-deploy.service | grep since | grep activating -c) -eq 1 ]; then
+if pgrep -x "docker-compose build"; then
     echo Already building
     exit 0
 fi
