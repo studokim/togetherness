@@ -12,9 +12,9 @@ fi
 
 COMMIT_BEFORE="$(sudo -u kim git log --pretty=format:'%h' -n 1)"
 sudo -u kim bash -c \
-"git stash save && \
+"git stash save >/dev/null && \
 GIT_SSH_COMMAND='ssh -i /home/kim/.ssh/id_rsa' git pull >/dev/null && \
-git stash pop"
+git stash pop >/dev/null"
 COMMIT_AFTER="$(sudo -u kim git log --pretty=format:'%h' -n 1)"
 
 if [ "$COMMIT_BEFORE" == "$COMMIT_AFTER" ]; then
