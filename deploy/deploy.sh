@@ -25,5 +25,5 @@ else
     docker-compose build 2>build-errors.log
     systemctl restart togetherness.service
     SINCE=$(systemctl status togetherness.service | grep since | sed 's/.*since //' | sed 's/;.*//')
-    echo "<html><p>Current commit is <code>$COMMIT_AFTER</code></p><p>Updated from <code>$COMMIT_BEFORE</code> and restarted at $SINCE</p><br><code>$(cat build-errors.log)</code></html>" >version.html
+    echo "<html><p>Current commit is <code>$COMMIT_AFTER</code></p><p>Updated from <code>$COMMIT_BEFORE</code> and restarted at $SINCE</p><pre>$(cat build-errors.log)</pre></html>" >version.html
 fi
