@@ -21,6 +21,7 @@ if [ "$COMMIT_BEFORE" == "$COMMIT_AFTER" ]; then
     echo "Already up to date"
 else
     echo "Pulled changes from remote"
+    echo "" >version.html
     cat <<EOF > version.html
 <html>
 <p>Current commit is <code>$COMMIT_AFTER</code></p>
@@ -30,6 +31,7 @@ EOF
     docker-compose build
     systemctl restart togetherness.service
     SINCE=$(systemctl status togetherness.service | grep since | sed 's/.*since //' | sed 's/;.*//')
+    echo "" >version.html
     cat <<EOF > version.html
 <html>
 <p>Current commit is <code>$COMMIT_AFTER</code></p>
