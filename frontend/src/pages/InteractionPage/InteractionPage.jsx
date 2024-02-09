@@ -83,7 +83,7 @@ const InteractionPage = ({ targetId, close, id }) => {
                             <CustomButton onClick={() => { action(2) }}>Обокрасть +2/-2</CustomButton>
                             <CustomButton onClick={() => { action(3) }}>Шантажировать -1/-4</CustomButton>
                             <CustomButton onClick={() => { action(4) }}>Подкупить -1/+3</CustomButton>
-                            <CustomButton onClick={() => { action(5) }}>Лоббировать 0/-2</CustomButton>
+                            <CustomButton onClick={() => { action(5) }}>Лоббировать 0/+2</CustomButton>
                             <CustomButton onClick={() => { close() }}>Уйти</CustomButton>
                         </div>
                         : //нельзя взаимодействовать
